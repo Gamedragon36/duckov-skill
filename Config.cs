@@ -13,8 +13,8 @@ namespace Dskill
     {
         // ----- 전역 설정 -----
         public int MaxLevel = 20;            // 스킬 최대 레벨
-        public float XpBase = 300f;          // 1레벨에 필요한 경험치
-        public float XpStep = 65f;           // 레벨마다 늘어나는 경험치
+        public float XpBase = 500f;          // 1레벨에 필요한 경험치 (0.0.7: 300 → 500)
+        public float XpStep = 200f;          // 레벨마다 늘어나는 경험치 (0.0.7: 65 → 200)
         public float XpMultiplier = 1f;      // 모든 경험치 획득 배율
         public string Hotkey = "F6";         // 스킬 창 열기 키
         public bool NotifyLevelUp = true;    // 레벨업 알림 표시
