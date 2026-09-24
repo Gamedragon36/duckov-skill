@@ -168,7 +168,11 @@ namespace Dskill
                 // 설정 파일은 배포본에 넣지 않는다.
                 // (구독자가 제작자 설정을 물려받지 않고, 자기 환경에 맞는 기본값으로 새로 시작하도록)
                 string configPath = System.IO.Path.Combine(path, "config.ini");
-                string backupPath = configPath + ".author";
+                // 백업은 모드 폴더 '밖'에 둔다 → 업로드 내용에 섞이지 않게 함
+                string parentDir = System.IO.Path.GetDirectoryName(path);
+                string backupPath = System.IO.Path.Combine(
+                    string.IsNullOrEmpty(parentDir) ? System.IO.Path.GetTempPath() : parentDir,
+                    "Dskill-config.ini.author");
                 bool moved = false;
                 try
                 {
