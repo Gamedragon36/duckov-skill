@@ -110,7 +110,7 @@ skill.recoil.name|Contrôle du recul
 skill.recoil.trigger|En tirant (2 pts par balle, 4 pts en visant)
 skill.recoil.elite|Recul vertical et horizontal -15%
 skill.marksmanship.name|Tir de précision
-skill.marksmanship.trigger|Toucher à 8 m ou plus (45 pts, +70 pour un tir à la tête)
+skill.marksmanship.trigger|Toucher à 20 m ou plus (150 pts, +200 pour un tir à la tête)
 skill.marksmanship.elite|Dégâts à la tête +10%
 skill.melee.name|Corps à corps
 skill.melee.trigger|Quand une attaque au corps à corps touche (30 pts, +60 pour une élimination)

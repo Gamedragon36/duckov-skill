@@ -110,7 +110,7 @@ skill.recoil.name|Recoil Control
 skill.recoil.trigger|When you fire a gun (2 pts per shot, 4 pts when aiming)
 skill.recoil.elite|Vertical and horizontal recoil -15%
 skill.marksmanship.name|Marksmanship
-skill.marksmanship.trigger|Hit a target from 8 m or more (45 pts, +70 for a headshot)
+skill.marksmanship.trigger|Hit a target from 20 m or more (150 pts, +200 for a headshot)
 skill.marksmanship.elite|Headshot damage +10%
 skill.melee.name|Melee Combat
 skill.melee.trigger|When a melee attack hits (30 pts, +60 for a melee kill)

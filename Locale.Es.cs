@@ -110,7 +110,7 @@ skill.recoil.name|Control del retroceso
 skill.recoil.trigger|Al disparar (2 ptos por disparo, 4 ptos apuntando)
 skill.recoil.elite|Retroceso vertical y horizontal -15%
 skill.marksmanship.name|Puntería
-skill.marksmanship.trigger|Acertar desde 8 m o más (45 ptos, +70 por disparo a la cabeza)
+skill.marksmanship.trigger|Acertar desde 20 m o más (150 ptos, +200 por disparo a la cabeza)
 skill.marksmanship.elite|Daño de disparo a la cabeza +10%
 skill.melee.name|Cuerpo a cuerpo
 skill.melee.trigger|Al acertar un golpe cuerpo a cuerpo (30 ptos, +60 por muerte)

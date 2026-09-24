@@ -110,7 +110,7 @@ skill.recoil.name|Controle de recuo
 skill.recoil.trigger|Ao disparar (2 pts por tiro, 4 pts ao mirar)
 skill.recoil.elite|Recuo vertical e horizontal -15%
 skill.marksmanship.name|Precisão
-skill.marksmanship.trigger|Acertar a 8 m ou mais (45 pts, +70 na cabeça)
+skill.marksmanship.trigger|Acertar a 20 m ou mais (150 pts, +200 na cabeça)
 skill.marksmanship.elite|Dano na cabeça +10%
 skill.melee.name|Corpo a corpo
 skill.melee.trigger|Quando um ataque corpo a corpo acerta (30 pts, +60 por abate)

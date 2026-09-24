@@ -110,7 +110,7 @@ skill.recoil.name|Контроль отдачи
 skill.recoil.trigger|При выстреле (2 очка за выстрел, 4 очка при прицеливании)
 skill.recoil.elite|Вертикальная и горизонтальная отдача -15%
 skill.marksmanship.name|Точная стрельба
-skill.marksmanship.trigger|Попадание с 8 м и далее (45 очков, +70 за выстрел в голову)
+skill.marksmanship.trigger|Попадание с 20 м и далее (150 очков, +200 за выстрел в голову)
 skill.marksmanship.elite|Урон в голову +10%
 skill.melee.name|Ближний бой
 skill.melee.trigger|При попадании в ближнем бою (30 очков, +60 за убийство)

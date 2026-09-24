@@ -50,17 +50,19 @@
 
 ## 🐞 버그 수정
 
-### 정밀사격(marksmanship)이 한 번도 오르지 않던 문제
-- 원인: "**20m 이상** 명중"만 인정 → 이 게임 교전이 대부분 20m 이내라 **XP 0 이 계속 유지**
-  (실제 세이브 확인: 사격 스킬 577회 적중 / 정밀사격 **0 XP**)
-- 수정: 기준 거리 **20m → 8m**
+### 정밀사격(marksmanship) — 20m 기준은 유지, 획득량 상향
+- 20m 기준은 **의도된 설계**(저격용 — 멀리서만 잡으라는 의미)이므로 그대로 두고, **한 발 가치를 올렸습니다.**
+- 이전: 1회 45점 / 헤드샷 +70 → **1회 150점 / 헤드샷 +200점 (약 3.3배)**
+- 참고: 실제 세이브에서 사격 577회 적중에도 정밀사격 누적이 0 이었습니다(20m 이상 조건이 좀처럼 성립하지 않음).
+  이제 같은 조건에서 한 발당 3배 이상 오르므로 저격 플레이가 보상받습니다.
+
 
 ### 0.0.6 수정 사항 포함
 - 수리 경험치 감지(장착 슬롯 + 창고), 투척·파밍 자기잠금 해제, 회복 = 치료 속도, 구르기(쿨타임·동작 시간·거리 보정)
 
 ### UI 설명 문구가 이전 수치를 그대로 쓰던 문제 (같은 0.0.7 에서 수정)
 - 스킬 창의 성장 조건·엘리트 설명이 0.0.6 이전 값을 표시하고 있었습니다. **10개 언어 전부** 최신 수치로 교체했습니다.
-  - 회복 20→**10**점 · 구르기 1회 8→**4**점 · 반동 3·6→**2·4** · 정밀사격 **20m→8m** · 투척 200→**100**점
+  - 회복 20→**10**점 · 구르기 1회 8→**4**점 · 반동 3·6→**2·4** · 정밀사격 45·70→**150·200** (20m 기준 유지) · 투척 200→**100**점
   - 거래 1,000당 10→**5** · 파밍 40·15→**20·10** · 기지 체류 초당 1→**0.5**
   - 구르기 엘리트 문구: "-20% 추가" → "쿨타임·동작 시간·스태미나 **-10% 추가**" (실제 값과 일치)
   - 구르기 효과 문구에 누락되어 있던 **동작 시간** 감소를 추가
@@ -87,14 +89,16 @@
 | Hideout | per second | 1 | **0.5** |
 
 ### 🐞 Fixes
-- **Marksmanship never gained XP**: only hits from **20 m or more** counted, but most fights in this game are
-  closer than that (verified: 577 rifle hits → 0 XP). Requirement lowered to **8 m**.
+- **Marksmanship**: the 20 m requirement is **intentional** (sniper play), so it stays — the reward per hit was raised
+  instead: 45 → **150** pts per hit, headshot +70 → **+200** (~3.3x). In a real save, 577 rifle hits still left it at
+  0 XP because 20 m+ hits are rare; now each qualifying shot is worth 3x more.
+
 - Includes the 0.0.6 fixes: repair detection (equipped slots + stash), throwing/scavenging self-lock,
   healing speed instead of amount, roll (cooldown + action time + distance compensation).
 
 ### Stale UI text (fixed in the same 0.0.7 update)
 - The skill window's trigger/elite descriptions still showed pre-0.0.6 numbers. **All 10 languages** were updated:
-  - Healing 20→**10** pts · Roll 8→**4** pts per use · Recoil 3 & 6→**2 & 4** · Marksmanship **20 m→8 m** · Throwing 200→**100**
+  - Healing 20→**10** pts · Roll 8→**4** pts per use · Recoil 3 & 6→**2 & 4** · Marksmanship 45 & 70→**150 & 200** (20 m kept) · Throwing 200→**100**
   - Barter 10→**5** per 1,000 · Scavenging 40 & 15→**20 & 10** · Hideout 1→**0.5** per second
   - Roll elite text: "-20% more" → "cooldown, action time and stamina **-10% more**" (now matches the real value)
   - Added the missing **action time** reduction to the roll effect line

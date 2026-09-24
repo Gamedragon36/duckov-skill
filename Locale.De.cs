@@ -110,7 +110,7 @@ skill.recoil.name|Rückstoßkontrolle
 skill.recoil.trigger|Wenn du schießt (2 Pkt. pro Schuss, 4 Pkt. beim Zielen)
 skill.recoil.elite|Vertikaler und horizontaler Rückstoß -15%
 skill.marksmanship.name|Präzisionsschuss
-skill.marksmanship.trigger|Treffer aus 8 m oder mehr (45 Pkt., +70 bei Kopfschuss)
+skill.marksmanship.trigger|Treffer aus 20 m oder mehr (150 Pkt., +200 bei Kopfschuss)
 skill.marksmanship.elite|Kopfschussschaden +10%
 skill.melee.name|Nahkampf
 skill.melee.trigger|Wenn ein Nahkampfangriff trifft (30 Pkt., +60 bei Nahkampf-Kill)

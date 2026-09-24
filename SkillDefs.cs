@@ -54,9 +54,9 @@ namespace Dskill
         public const float AssaultPerHit = 8f;              // 적중 시 (0.0.6: 발사 XP 를 없애고 적중에만 지급)
         public const float RecoilPerShot = 2f;              // 발사 1발 (0.0.7: 3 → 2)
         public const float RecoilPerAdsShot = 4f;           // 조준 사격 1발 (0.0.7: 6 → 4)
-        public const float MarksmanshipPerHit = 45f;        // 원거리 명중
-        public const float MarksmanshipPerCrit = 70f;       // 원거리 헤드샷 보너스
-        public const float MarksmanshipMinDistance = 8f;    // 원거리 기준 거리(m) (0.0.7: 20 → 8)
+        public const float MarksmanshipPerHit = 150f;       // 원거리 명중 (0.0.7: 20m 유지 대신 45 → 150)
+        public const float MarksmanshipPerCrit = 200f;       // 원거리 헤드샷 보너스 (0.0.7: 70 → 200)
+        public const float MarksmanshipMinDistance = 20f;   // 원거리 기준 거리(m) — 저격용으로 20m 유지(의도)
         public const float MeleePerHit = 30f;               // 근접 명중
         public const float MeleePerKill = 60f;              // 근접 처치 보너스
         public const float SurvivalPerDebuff = 300f;        // 상태이상 1회
@@ -247,7 +247,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "marksmanship", NameKo = "정밀 사격", Icon = "◎", Category = "전투",
-                TriggerKo = "8m 이상 거리에서 명중 (1회 45점, 헤드샷은 +70점)",
+                TriggerKo = "20m 이상 거리에서 명중 (1회 150점, 헤드샷은 +200점)",
                 EliteKo = "헤드샷 대미지 +10%",
                 Effects = new[]
                 {

@@ -110,7 +110,7 @@ skill.recoil.name|后坐力控制
 skill.recoil.trigger|开枪时（每发 2 点，瞄准射击 4 点）
 skill.recoil.elite|垂直、水平后坐力 -15%
 skill.marksmanship.name|精准射击
-skill.marksmanship.trigger|在 8 米以上距离命中（每次 45 点，爆头 +70 点）
+skill.marksmanship.trigger|在 20 米以上距离命中（每次 150 点，爆头 +200 点）
 skill.marksmanship.elite|爆头伤害 +10%
 skill.melee.name|近战
 skill.melee.trigger|近战攻击命中时（每次 30 点，近战击杀 +60 点）

@@ -110,7 +110,7 @@ skill.recoil.name|反動制御
 skill.recoil.trigger|銃を発砲したとき（1 発 2 点、照準射撃は 4 点）
 skill.recoil.elite|縦・横反動 -15%
 skill.marksmanship.name|精密射撃
-skill.marksmanship.trigger|8m 以上の距離で命中（1 回 45 点、ヘッドショットは +70 点）
+skill.marksmanship.trigger|20m 以上の距離で命中（1 回 150 点、ヘッドショットは +200 点）
 skill.marksmanship.elite|ヘッドショットダメージ +10%
 skill.melee.name|近接戦闘
 skill.melee.trigger|近接攻撃が命中したとき（1 回 30 点、近接撃破 +60 点）
