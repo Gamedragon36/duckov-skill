@@ -53,6 +53,7 @@ namespace Dskill
 
         /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
         private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
+        private float _repairStorageNextScan;   // 창고(PlayerStorage) 수리 감지 스로틀
         private readonly List<Item> _itemBuffer = new List<Item>();
 
         // ------------------------------------------------------------------
@@ -421,6 +422,11 @@ namespace Dskill
                 if (!_firstTick && health > _lastHealth && windowOpen && Time.time - _levelInitTime > 3f)
                 {
                     _skills.AddXp("health", (health - _lastHealth) * Rates.HealthPerHeal);
+                    // 이 종류는 '회복 아이템'으로 학습 → 다음부터 사용 시간 감소(치료 속도) 적용
+                    if (_lastUsedItem != null)
+                    {
+                        _healingTypeIds.Add(_lastUsedItem.TypeID);
+                    }
                 }
                 _lastHealth = health;
             }
@@ -557,6 +563,29 @@ namespace Dskill
             _itemBuffer.Clear();
             CollectItems(_mainItem, _itemBuffer);
 
+            // 0.0.6: 기지에서는 '창고(PlayerStorage)'의 장비를 수리하므로 창고도 확인한다.
+            //        (캐릭터 인벤만 보면 기지 수리를 전혀 감지하지 못했다 — 수리 경험치 0 원인)
+            //        창고는 최대 16,384칸까지 커질 수 있어 2초에 한 번만 훑는다.
+            if (Time.time >= _repairStorageNextScan)
+            {
+                _repairStorageNextScan = Time.time + 2f;
+                try
+                {
+                    Inventory storage = PlayerStorage.Inventory;
+                    if (storage != null && storage.Content != null)
+                    {
+                        foreach (Item stored in storage.Content)
+                        {
+                            CollectItems(stored, _itemBuffer);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[Dskill] 창고 아이템 확인 실패(수리 경험치 누락 가능): " + e.Message);
+                }
+            }
+
             float gained = 0f;
             foreach (Item item in _itemBuffer)
             {
@@ -600,6 +629,27 @@ namespace Dskill
                 return;
             }
             result.Add(root);
+
+            // 0.0.6: **장착 슬롯(무기·방어구 등)도 포함**한다.
+            //  (장비를 직접 수리하는 경우, 슬롯은 Inventory 가 아니라 Slots 에 있어서 예전에는 감지되지 않았다)
+            try
+            {
+                var slots = root.Slots;
+                if (slots != null)
+                {
+                    foreach (var slot in slots)
+                    {
+                        if (slot != null && slot.Content != null)
+                        {
+                            CollectItems(slot.Content, result);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 슬롯 아이템 확인 실패(무시): " + e.Message);
+            }
 
             Inventory inventory = root.Inventory;
             if (inventory == null)

@@ -42,6 +42,7 @@ eff.dash|Cooldown -{0}%, stamina cost -{1}%
 eff.hideout|Trader restock cooldown -{0}%
 eff.hideoutElite|, mining time -{0}%
 eff.crafting|Extra output chance {0}%
+eff.healSpeed|Healing speed +{0}%
 eff.value|{0} {1}
 # ==== 스탯 이름 ====
 stat.MaxWeight|Max weight
@@ -82,17 +83,17 @@ stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
 # ==== 스킬 23종 ====
 skill.strength.name|Strength
-skill.strength.trigger|Move while over 70% weight (1 pt/s, 2 pts/s over 90%)
+skill.strength.trigger|Move while over 70% weight (faster the heavier you are)
 skill.strength.elite|Inventory space +5 slots, movement speed +10%
 skill.endurance.name|Endurance
-skill.endurance.trigger|While sprinting (1 pt/s)
+skill.endurance.trigger|While sprinting
 skill.endurance.elite|Stamina recovery rate +30%
 skill.vitality.name|Vitality
 skill.vitality.trigger|When you take damage (10 pts per damage)
 skill.vitality.elite|Max health +5
 skill.health.name|Healing
 skill.health.trigger|When healing items restore your health (20 pts per HP)
-skill.health.elite|Healing efficiency +10%
+skill.health.elite|Healing speed +10% (extra)
 skill.metabolism.name|Metabolism
 skill.metabolism.trigger|When food or water restores hunger/thirst (20 pts per point)
 skill.metabolism.elite|No damage even at zero hunger/thirst
@@ -103,7 +104,7 @@ skill.nightvision.name|Night Vision
 skill.nightvision.trigger|While active at night (2 pts/s)
 skill.nightvision.elite|Night vision ability +0.2 (fully cancels the night penalty)
 skill.assault.name|Rifleman
-skill.assault.trigger|When you fire a gun (4 pts per shot, +4 on hit)
+skill.assault.trigger|Only when your bullet hits
 skill.assault.elite|Gun crit chance +10%
 skill.recoil.name|Recoil Control
 skill.recoil.trigger|When you fire a gun (3 pts per shot, 6 pts when aiming)

@@ -42,6 +42,7 @@ eff.dash|Abklingzeit -{0}%, Ausdauerkosten -{1}%
 eff.hideout|Händler-Nachschub-Abklingzeit -{0}%
 eff.hideoutElite|, Abbauzeit -{0}%
 eff.crafting|Zusätzliche Ausgabechance {0}%
+eff.healSpeed|Heilgeschwindigkeit +{0}%
 eff.value|{0} {1}
 # ==== Werte ====
 stat.MaxWeight|Max. Gewicht
@@ -82,17 +83,17 @@ stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
 # ==== 23 Fertigkeiten ====
 skill.strength.name|Stärke
-skill.strength.trigger|Bewegen mit über 70% Gewicht (1 Pkt./s, 2 Pkt./s über 90%)
+skill.strength.trigger|Bewegen mit über 70% Gewicht (schneller, je schwerer)
 skill.strength.elite|Inventar +5 Plätze, Bewegungsgeschwindigkeit +10%
 skill.endurance.name|Ausdauer
-skill.endurance.trigger|Beim Rennen (1 Pkt./s)
+skill.endurance.trigger|Beim Rennen
 skill.endurance.elite|Ausdauererholung +30%
 skill.vitality.name|Vitalität
 skill.vitality.trigger|Wenn du Schaden erleidest (10 Pkt. pro Schaden)
 skill.vitality.elite|Max. Gesundheit +5
 skill.health.name|Heilung
 skill.health.trigger|Wenn Heilmittel deine Gesundheit auffüllen (20 Pkt. pro HP)
-skill.health.elite|Heileffizienz +10%
+skill.health.elite|Heilgeschwindigkeit +10% (zusätzlich)
 skill.metabolism.name|Stoffwechsel
 skill.metabolism.trigger|Wenn Essen oder Wasser Hunger/Durst füllt (20 Pkt. pro Punkt)
 skill.metabolism.elite|Kein Schaden bei Hunger/Durst 0
@@ -103,7 +104,7 @@ skill.nightvision.name|Nachtsicht
 skill.nightvision.trigger|Bei Aktivität in der Nacht (2 Pkt./s)
 skill.nightvision.elite|Nachtsichtfähigkeit +0.2 (hebt den Nachtmalus vollständig auf)
 skill.assault.name|Schütze
-skill.assault.trigger|Wenn du schießt (4 Pkt. pro Schuss, +4 bei Treffer)
+skill.assault.trigger|Nur wenn ein Schuss trifft
 skill.assault.elite|Schusswaffen-Kritchance +10%
 skill.recoil.name|Rückstoßkontrolle
 skill.recoil.trigger|Wenn du schießt (3 Pkt. pro Schuss, 6 Pkt. beim Zielen)

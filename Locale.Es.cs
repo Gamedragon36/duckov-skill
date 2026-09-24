@@ -42,6 +42,7 @@ eff.dash|Reutilización -{0}%, costo de aguante -{1}%
 eff.hideout|Reabastecimiento del comerciante -{0}%
 eff.hideoutElite|, tiempo de minado -{0}%
 eff.crafting|Probabilidad de producción extra {0}%
+eff.healSpeed|Velocidad de curación +{0}%
 eff.value|{0} {1}
 # ==== Estadísticas ====
 stat.MaxWeight|Peso máximo
@@ -82,17 +83,17 @@ stat.SenseRange|Radio de detección
 stat.HearingAbility|Oído
 # ==== 23 habilidades ====
 skill.strength.name|Fuerza
-skill.strength.trigger|Moverse con más del 70% de peso (1 pto/s, 2 ptos/s con más del 90%)
+skill.strength.trigger|Moverse con más del 70% de peso (más rápido cuanto más peso)
 skill.strength.elite|Inventario +5 espacios, velocidad de movimiento +10%
 skill.endurance.name|Aguante
-skill.endurance.trigger|Mientras corres (1 pto/s)
+skill.endurance.trigger|Mientras corres
 skill.endurance.elite|Recuperación de aguante +30%
 skill.vitality.name|Vitalidad
 skill.vitality.trigger|Al recibir daño (10 ptos por punto de daño)
 skill.vitality.elite|Salud máxima +5
 skill.health.name|Curación
 skill.health.trigger|Al recuperar salud con objetos curativos (20 ptos por punto)
-skill.health.elite|Eficiencia de curación +10%
+skill.health.elite|Velocidad de curación +10% (extra)
 skill.metabolism.name|Metabolismo
 skill.metabolism.trigger|Al llenar hambre/sed con comida o agua (20 ptos por punto)
 skill.metabolism.elite|Sin daño aunque hambre y sed estén en 0
@@ -103,7 +104,7 @@ skill.nightvision.name|Visión nocturna
 skill.nightvision.trigger|Al estar activo de noche (2 ptos/s)
 skill.nightvision.elite|Visión nocturna +0.2 (anula la penalización nocturna)
 skill.assault.name|Tiro
-skill.assault.trigger|Al disparar (4 ptos por disparo, +4 al acertar)
+skill.assault.trigger|Solo cuando tu bala acierta
 skill.assault.elite|Prob. crítica de arma +10%
 skill.recoil.name|Control del retroceso
 skill.recoil.trigger|Al disparar (3 ptos por disparo, 6 ptos apuntando)

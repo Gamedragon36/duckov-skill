@@ -42,6 +42,7 @@ eff.dash|Перезарядка -{0}%, расход выносливости -{1
 eff.hideout|Перезарядка пополнения торговца -{0}%
 eff.hideoutElite|, время добычи -{0}%
 eff.crafting|Шанс доп. продукции {0}%
+eff.healSpeed|Скорость лечения +{0}%
 eff.value|{0} {1}
 # ==== Названия параметров ====
 stat.MaxWeight|Макс. вес
@@ -82,17 +83,17 @@ stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
 # ==== 23 навыка ====
 skill.strength.name|Сила
-skill.strength.trigger|Движение при весе более 70% (1 очко/с, 2 очка/с при 90%+)
+skill.strength.trigger|Движение при весе более 70% (тем быстрее, чем тяжелее)
 skill.strength.elite|Инвентарь +5 ячеек, скорость передвижения +10%
 skill.endurance.name|Выносливость
-skill.endurance.trigger|Во время бега (1 очко/с)
+skill.endurance.trigger|Во время бега
 skill.endurance.elite|Восстановление выносливости +30%
 skill.vitality.name|Живучесть
 skill.vitality.trigger|При получении урона (10 очков за единицу урона)
 skill.vitality.elite|Макс. здоровье +5
 skill.health.name|Лечение
 skill.health.trigger|При восстановлении здоровья аптечкой (20 очков за единицу)
-skill.health.elite|Эффективность лечения +10%
+skill.health.elite|Скорость лечения +10% (дополнительно)
 skill.metabolism.name|Метаболизм
 skill.metabolism.trigger|При восстановлении сытости/воды (20 очков за единицу)
 skill.metabolism.elite|Нет урона при нулевой сытости и воде
@@ -103,7 +104,7 @@ skill.nightvision.name|Ночное зрение
 skill.nightvision.trigger|При активности ночью (2 очка/с)
 skill.nightvision.elite|Ночное зрение +0.2 (полностью снимает ночной штраф)
 skill.assault.name|Стрельба
-skill.assault.trigger|При выстреле (4 очка за выстрел, +4 при попадании)
+skill.assault.trigger|Только при попадании
 skill.assault.elite|Крит. шанс оружия +10%
 skill.recoil.name|Контроль отдачи
 skill.recoil.trigger|При выстреле (3 очка за выстрел, 6 очков при прицеливании)

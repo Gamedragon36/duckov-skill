@@ -33,19 +33,17 @@ namespace Dskill
             }
 
             // 최적화: 폭발물을 쓴 직후 6초 동안만 촘촘히(0.1초) 확인하고,
-            // 평소에는 아주 느리게(2초) 확인한다. (전체 오브젝트 검색 비용 절감)
-            _grenadeScanTimer = Time.time < _grenadeWatchUntil ? 0.1f : 2f;
+            // 평소에는 1초에 한 번 확인한다(수류탄 신관이 3초 이상이라 충분히 잡힌다).
+            _grenadeScanTimer = Time.time < _grenadeWatchUntil ? 0.1f : 1f;
 
             if (_skills == null || _main == null)
             {
                 return;
             }
 
+            // 0.0.6: 레벨 0 이어도 검사를 수행한다.
+            // 예전에는 Lv.0 이면 검사를 건너뛰어서 "첫 투척 경험치를 영영 받을 수 없는" 자기잠금 버그가 있었다.
             int level = _skills.GetLevel("throwing");
-            if (level <= 0)
-            {
-                return;
-            }
 
             // 수류탄은 레이드에서만 나오므로 기지에서는 검사를 건너뛴다(성능·호환)
             LevelManager raidCheck = LevelManager.Instance;
@@ -153,11 +151,8 @@ namespace Dskill
                 return;
             }
 
+            // 0.0.6: 레벨 0 이어도 검사한다(예전에는 Lv.0 이면 건너뛰어 첫 감지 경험치를 못 받았다).
             int level = _skills.GetLevel("looting");
-            if (level <= 0)
-            {
-                return;
-            }
 
             bool elite = _skills.IsElite("looting");
             float factor = _skills.LootingTimeFactor(level);

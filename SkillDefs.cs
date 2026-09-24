@@ -44,15 +44,14 @@ namespace Dskill
     /// <summary>경험치 획득량 (게임에서 1단위 일어날 때 얻는 점수)</summary>
     public static class Rates
     {
-        public const float StrengthPerSecond = 1f;          // 과적 상태 이동(초)
-        public const float StrengthHeavyPerSecond = 2f;     // 90% 이상 과적
-        public const float EndurancePerSecond = 1f;         // 달리기(초)
+        public const float StrengthPerSecond = 2f;          // 과적 상태 이동(초) — 0.0.6: 2배
+        public const float StrengthHeavyPerSecond = 4f;     // 90% 이상 과적 — 0.0.6: 2배
+        public const float EndurancePerSecond = 2f;         // 달리기(초) — 0.0.6: 2배
         public const float CovertPerSecond = 1f;            // 걷기(초)
         public const float VitalityPerDamage = 10f;         // 받은 피해
         public const float ArmorPerDamage = 12f;            // 방어구 착용 중 받은 피해
         public const float HealthPerHeal = 20f;             // 회복량
-        public const float AssaultPerShot = 4f;             // 발사 1발
-        public const float AssaultPerHit = 4f;              // 적중 보너스
+        public const float AssaultPerHit = 8f;              // 적중 시 (0.0.6: 발사 XP 를 없애고 적중에만 지급)
         public const float RecoilPerShot = 3f;              // 발사 1발
         public const float RecoilPerAdsShot = 6f;           // 조준 사격 1발
         public const float MarksmanshipPerHit = 45f;        // 원거리 명중
@@ -94,13 +93,18 @@ namespace Dskill
         public const float ThrowingInstantChance = 0.30f;   // 투척 엘리트: 즉시 폭발 확률
         public const float LootingSpeedPerLevel = 0.025f;   // 파밍: 레벨당 감지 시간 감소 (만렙 -50%)
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
-        public const float DashReductionPerLevel = 0.015f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -30%)
-        public const float DashEliteReduction = 0.20f;      // 구르기 엘리트: 각각 -20% 추가
+        public const float DashReductionPerLevel = 0.03f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (0.0.6: 2배 → 만렙 -60%)
+        public const float DashEliteReduction = 0.40f;      // 구르기 엘리트: 각각 -40% 추가 (0.0.6: 2배)
         public const float MerchantCooldownPerLevel = 0.025f;  // 하이드아웃: 상인 쿨타임 감소 (만렙 -50%)
         public const float MinerEliteTimeReduction = 0.20f;    // 하이드아웃 엘리트: 채굴 시간 -20%
         public const float CraftingBonusPerLevel = 0.015f;     // 제작: 레벨당 추가 생산 확률 (만렙 30%)
         public const float CraftingEliteBonus = 0.20f;         // 제작 엘리트: 확률 +20% (총 50%)
         public const float SurvivalDebuffResistPerLevel = 0.015f;  // 생존술: 디버프 저항 (만렙 30%)
+
+        /// <summary>회복: 레벨당 치료 속도(사용 시간 감소) 비율. 만렙 40%</summary>
+        public const float HealSpeedPerLevel = 0.02f;
+        /// <summary>회복 엘리트: 치료 속도 추가 10%</summary>
+        public const float HealSpeedElite = 0.10f;
 
         /// <summary>
         /// 경험치 획득 난이도(1~5단계) 배율. 게임 안 스킬 창에서 바꿀 수 있다.
@@ -119,7 +123,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "strength", NameKo = "근력", Icon = "◆", Category = "신체",
-                TriggerKo = "무게 70% 이상으로 이동 (초당 1점 / 90% 이상은 2점)",
+                TriggerKo = "무게 70% 이상으로 이동 (무거울수록 더 빠르게)",
                 EliteKo = "가방 공간 +5칸, 이동 속도 +10%",
                 Effects = new[]
                 {
@@ -137,7 +141,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "endurance", NameKo = "지구력", Icon = "▲", Category = "신체",
-                TriggerKo = "달리는 동안 (초당 1점)",
+                TriggerKo = "달리는 동안",
                 EliteKo = "스태미나 회복 속도 +30%",
                 Effects = new[]
                 {
@@ -169,15 +173,9 @@ namespace Dskill
             {
                 Id = "health", NameKo = "회복", Icon = "＋", Category = "신체",
                 TriggerKo = "회복 아이템으로 체력을 채울 때 (회복량 1당 20점)",
-                EliteKo = "치료 효율 +10%",
-                Effects = new[]
-                {
-                    new EffectDef("HealGain", StatModKind.PercentMultiply, 0.02f)   // 만렙 +40%
-                },
-                EliteEffects = new[]
-                {
-                    new EffectDef("HealGain", StatModKind.PercentMultiply, 0.10f)
-                }
+                EliteKo = "치료 속도 +10% (추가)",
+                Effects = new EffectDef[0],        // 특수 처리: 사용 시간 감소(치료 속도)
+                EliteEffects = new EffectDef[0]
             },
             new SkillDef
             {
@@ -220,7 +218,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "assault", NameKo = "사격술", Icon = "★", Category = "전투",
-                TriggerKo = "총을 발사할 때 (1발 4점, 적중하면 +4점)",
+                TriggerKo = "총알이 적중했을 때만",
                 EliteKo = "총기 치명타율 +10%",
                 Effects = new[]
                 {

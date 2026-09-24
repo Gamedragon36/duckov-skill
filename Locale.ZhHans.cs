@@ -42,6 +42,7 @@ eff.dash|冷却 -{0}%，耐力消耗 -{1}%
 eff.hideout|商人补货冷却 -{0}%
 eff.hideoutElite|，挖矿时间 -{0}%
 eff.crafting|额外产出概率 {0}%
+eff.healSpeed|治疗速度 +{0}%
 eff.value|{0} {1}
 # ==== 属性名称 ====
 stat.MaxWeight|最大负重
@@ -82,17 +83,17 @@ stat.SenseRange|感知范围
 stat.HearingAbility|听力
 # ==== 技能 23 种 ====
 skill.strength.name|力量
-skill.strength.trigger|负重 70% 以上时移动（每秒 1 点，90% 以上为 2 点）
+skill.strength.trigger|负重 70% 以上时移动（越重越快）
 skill.strength.elite|背包空间 +5 格，移动速度 +10%
 skill.endurance.name|耐力
-skill.endurance.trigger|奔跑时（每秒 1 点）
+skill.endurance.trigger|奔跑时
 skill.endurance.elite|耐力恢复速度 +30%
 skill.vitality.name|生命
 skill.vitality.trigger|受到伤害时（每点伤害 10 点）
 skill.vitality.elite|最大生命值 +5
 skill.health.name|治疗
 skill.health.trigger|用治疗物品恢复生命时（每点恢复量 20 点）
-skill.health.elite|治疗效率 +10%
+skill.health.elite|治疗速度 +10%（额外）
 skill.metabolism.name|新陈代谢
 skill.metabolism.trigger|用食物或水补充饥饿/水分时（每点 20 点）
 skill.metabolism.elite|饥饿、水分为 0 时也不会受到伤害
@@ -103,7 +104,7 @@ skill.nightvision.name|夜视
 skill.nightvision.trigger|夜晚活动时（每秒 2 点）
 skill.nightvision.elite|夜视能力 +0.2（完全抵消夜间惩罚）
 skill.assault.name|射击术
-skill.assault.trigger|开枪时（每发 4 点，命中再 +4 点）
+skill.assault.trigger|仅当子弹命中时
 skill.assault.elite|枪械暴击率 +10%
 skill.recoil.name|后坐力控制
 skill.recoil.trigger|开枪时（每发 3 点，瞄准射击 6 点）

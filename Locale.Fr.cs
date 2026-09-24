@@ -42,6 +42,7 @@ eff.dash|Recharge -{0}%, coût d'endurance -{1}%
 eff.hideout|Réapprovisionnement du marchand -{0}%
 eff.hideoutElite|, temps d'extraction -{0}%
 eff.crafting|Chance de production supplémentaire {0}%
+eff.healSpeed|Vitesse de soin +{0}%
 eff.value|{0} {1}
 # ==== Statistiques ====
 stat.MaxWeight|Poids max.
@@ -82,17 +83,17 @@ stat.SenseRange|Rayon de détection
 stat.HearingAbility|Ouïe
 # ==== 23 compétences ====
 skill.strength.name|Force
-skill.strength.trigger|Se déplacer avec plus de 70% de poids (1 pt/s, 2 pts/s au-delà de 90%)
+skill.strength.trigger|Se déplacer avec plus de 70% de poids (plus rapide si plus lourd)
 skill.strength.elite|Inventaire +5 emplacements, vitesse de déplacement +10%
 skill.endurance.name|Endurance
-skill.endurance.trigger|En courant (1 pt/s)
+skill.endurance.trigger|En courant
 skill.endurance.elite|Récupération d'endurance +30%
 skill.vitality.name|Vitalité
 skill.vitality.trigger|En subissant des dégâts (10 pts par dégât)
 skill.vitality.elite|Santé max. +5
 skill.health.name|Soin
 skill.health.trigger|En récupérant de la santé avec un soin (20 pts par point)
-skill.health.elite|Efficacité de soin +10%
+skill.health.elite|Vitesse de soin +10% (supplémentaire)
 skill.metabolism.name|Métabolisme
 skill.metabolism.trigger|En remplissant faim/soif avec nourriture ou eau (20 pts par point)
 skill.metabolism.elite|Aucun dégât même à faim/soif 0
@@ -103,7 +104,7 @@ skill.nightvision.name|Vision nocturne
 skill.nightvision.trigger|En activité la nuit (2 pts/s)
 skill.nightvision.elite|Vision nocturne +0.2 (annule totalement le malus nocturne)
 skill.assault.name|Tir
-skill.assault.trigger|En tirant (4 pts par balle, +4 à l'impact)
+skill.assault.trigger|Uniquement quand la balle touche
 skill.assault.elite|Chance de critique d'arme +10%
 skill.recoil.name|Contrôle du recul
 skill.recoil.trigger|En tirant (3 pts par balle, 6 pts en visant)

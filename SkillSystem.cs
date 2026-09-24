@@ -211,6 +211,21 @@ namespace Dskill
             }
         }
 
+        /// <summary>회복: 치료 속도 향상 비율 (0.2 = 사용 시간 20% 감소). 만렙 40% + 엘리트 10%</summary>
+        public float HealSpeedBonus(int level)
+        {
+            if (level <= 0)
+            {
+                return 0f;
+            }
+            float bonus = Specials.HealSpeedPerLevel * level;
+            if (level >= _config.MaxLevel)
+            {
+                bonus += Specials.HealSpeedElite;
+            }
+            return Mathf.Clamp(bonus, 0f, 0.8f);
+        }
+
         /// <summary>지금 장소에서 이 스킬 경험치를 받을 수 있는지 판단한다.</summary>
         private bool IsAllowedHere(string id)
         {
@@ -328,7 +343,12 @@ namespace Dskill
                 return "";
             }
 
-            // 특수 스킬 (생존술 / 수리 / 흥정 / 투척 / 파밍 / 구르기 / 하이드아웃 / 제작)
+            // 특수 스킬 (생존술 / 수리 / 흥정 / 투척 / 파밍 / 구르기 / 하이드아웃 / 제작 / 회복)
+            if (id == "health")
+            {
+                // 0.0.6: 치료 '효율' 대신 '치료 속도'(사용 시간 감소)로 표시
+                return Locale.F("eff.healSpeed", "치료 속도 +{0}%", (HealSpeedBonus(level) * 100f).ToString("0.#"));
+            }
             if (id == "survival")
             {
                 // 받는 화염·독 피해는 SkillDefs 의 효과 값을 그대로 쓴다(하드코딩하지 않음)

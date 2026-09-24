@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Duckov.Buffs;
 using Duckov.UI;
 using ItemStatsSystem;
@@ -116,7 +117,8 @@ namespace Dskill
             {
                 return;
             }
-            _skills.AddXp("assault", Rates.AssaultPerShot);
+            // 0.0.6: 사격술은 '총알이 적중했을 때만' 오른다(발사 자체로는 오르지 않음).
+            //        발사로는 반동 제어만 오른다.
             bool ads = _gun != null && _gun.IsInAds;
             _skills.AddXp("recoil", ads ? Rates.RecoilPerAdsShot : Rates.RecoilPerShot);
         }
@@ -130,10 +132,64 @@ namespace Dskill
             _skills.AddXp("reload", Rates.ReloadPerComplete);
         }
 
+        // ---- 회복 (치료 속도 = 아이템 사용 시간 감소) ----
+        private readonly HashSet<int> _healingTypeIds = new HashSet<int>();                      // 실제로 체력을 채운 아이템 종류(TypeID)
+        private readonly Dictionary<int, float> _originalUseTime = new Dictionary<int, float>(); // TypeID -> 원래 사용 시간
+        private Item _lastUsedItem;
+        private static readonly System.Reflection.FieldInfo _useTimeField =
+            typeof(UsageUtilities).GetField("useTime", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        /// <summary>회복 아이템의 '사용 시간'을 줄인다(치료 속도).
+        ///  게임에는 사용 속도 스탯이 없어서 아이템의 비공개 필드(UsageUtilities.useTime)를 바꾼다.
+        ///  아이템 인스턴스에만 적용되고(프리팹 원본 아님), 실패하면 조용히 넘어간다.</summary>
+        private void ApplyHealSpeed(Item item)
+        {
+            if (item == null || _skills == null || _useTimeField == null)
+            {
+                return;
+            }
+            if (!_healingTypeIds.Contains(item.TypeID))
+            {
+                return;   // 아직 '회복 아이템'으로 확인되지 않은 종류는 건드리지 않는다
+            }
+
+            float reduction = _skills.HealSpeedBonus(_skills.GetLevel("health"));
+            if (reduction <= 0f)
+            {
+                return;
+            }
+
+            try
+            {
+                UsageUtilities usage = item.UsageUtilities;
+                if (usage == null)
+                {
+                    return;
+                }
+                float original;
+                if (!_originalUseTime.TryGetValue(item.TypeID, out original))
+                {
+                    original = usage.UseTime;
+                    _originalUseTime[item.TypeID] = original;
+                }
+                float target = Mathf.Max(0.05f, original * (1f - reduction));
+                if (Mathf.Abs(usage.UseTime - target) > 0.001f)
+                {
+                    _useTimeField.SetValue(usage, target);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 치료 속도 적용 실패(무시): " + e.Message);
+            }
+        }
+
         private void HandleStartUseItem(Item item)
         {
             // 아이템을 사용한 직후 몇 초 동안의 체력 증가를 '회복' 경험치로 인정한다.
             _medicalUseUntil = Time.time + 6f;
+            _lastUsedItem = item;
+            ApplyHealSpeed(item);   // 회복 아이템으로 확인된 종류면 사용 시간을 줄인다(치료 속도)
             // 음식/물을 사용한 직후의 포만감·수분 증가만 '신진대사' 경험치로 인정한다.
             // (기지에서 잠만 자도 오르는 것을 막기 위함)
             _foodUseUntil = Time.time + 15f;

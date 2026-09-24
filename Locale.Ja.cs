@@ -42,6 +42,7 @@ eff.dash|クールタイム -{0}%、スタミナ消費 -{1}%
 eff.hideout|商人の補充クールタイム -{0}%
 eff.hideoutElite|、採掘時間 -{0}%
 eff.crafting|追加生産確率 {0}%
+eff.healSpeed|治療速度 +{0}%
 eff.value|{0} {1}
 # ==== ステータス名 ====
 stat.MaxWeight|最大重量
@@ -82,17 +83,17 @@ stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
 # ==== スキル 23 種 ====
 skill.strength.name|筋力
-skill.strength.trigger|重量 70% 以上で移動（毎秒 1 点、90% 以上は 2 点）
+skill.strength.trigger|重量 70% 以上で移動（重いほど速く）
 skill.strength.elite|バッグ容量 +5 枠、移動速度 +10%
 skill.endurance.name|持久力
-skill.endurance.trigger|走っている間（毎秒 1 点）
+skill.endurance.trigger|走っている間
 skill.endurance.elite|スタミナ回復速度 +30%
 skill.vitality.name|生命力
 skill.vitality.trigger|ダメージを受けたとき（ダメージ 1 につき 10 点）
 skill.vitality.elite|最大体力 +5
 skill.health.name|回復
 skill.health.trigger|回復アイテムで体力を回復したとき（回復量 1 につき 20 点）
-skill.health.elite|治療効率 +10%
+skill.health.elite|治療速度 +10%（追加）
 skill.metabolism.name|代謝
 skill.metabolism.trigger|食べ物・水で空腹/水分を回復したとき（1 につき 20 点）
 skill.metabolism.elite|空腹・水分が 0 でもダメージを受けない
@@ -103,7 +104,7 @@ skill.nightvision.name|暗視
 skill.nightvision.trigger|夜間に活動したとき（毎秒 2 点）
 skill.nightvision.elite|暗視能力 +0.2（夜間ペナルティを完全に無効化）
 skill.assault.name|射撃術
-skill.assault.trigger|銃を発砲したとき（1 発 4 点、命中で +4 点）
+skill.assault.trigger|弾が命中したときのみ
 skill.assault.elite|銃クリティカル率 +10%
 skill.recoil.name|反動制御
 skill.recoil.trigger|銃を発砲したとき（1 発 3 点、照準射撃は 6 点）
