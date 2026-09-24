@@ -666,5 +666,16 @@ namespace Dskill
             }
         }
 
+        /// <summary>모든 스킬 경험치를 0으로 초기화하고 즉시 저장한다(config.ini 의 reset_skills 요청용).</summary>
+        public void ResetAll()
+        {
+            foreach (SkillDef def in SkillDefs.All)
+            {
+                _xp[def.Id] = 0f;
+            }
+            Save();
+            Debug.Log("[Dskill] 모든 스킬 경험치를 0으로 초기화했습니다.");
+        }
+
     }
 }

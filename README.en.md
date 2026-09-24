@@ -111,7 +111,17 @@ meta_bonus_cap = 150         # maximum bonus (%)
 strength = 1.0          # per-skill XP multiplier
 endurance = 1.0
 ...
+
+# WARNING: setting this to true and launching the game once resets every skill to 0.
+# The value is set back to false automatically after the reset.
+reset_skills = false
 ```
+
+### Resetting skills (`reset_skills`)
+
+Set `reset_skills = true` and launch the game once: **every skill is reset to 0**, and the flag is
+automatically set back to `false`. The save file is written by the game/mod itself, so no manual
+save editing is needed.
 
 ## Build from source
 

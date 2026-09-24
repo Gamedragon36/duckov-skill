@@ -82,6 +82,15 @@ namespace Dskill
                 _skills.OnLevelUp += HandleLevelUp;
 
                 _skills.Load();
+
+                // config.ini 의 reset_skills = true 요청: 스킬을 모두 0으로 초기화하고 플래그를 되돌린다
+                if (_config.ResetSkills)
+                {
+                    _skills.ResetAll();
+                    _config.ClearResetFlag();
+                    Debug.Log("[Dskill] 요청에 따라 스킬 초기화를 실행했고 reset_skills 를 false 로 되돌렸습니다.");
+                }
+
                 Debug.Log("[Dskill] 모드 로드 완료 v" + Version + " (스킬 창 키: " + _toggleKeyName + ")");
             }
             catch (Exception e)

@@ -24,6 +24,9 @@ namespace Dskill
         public float MetaBonusPercent = 0.5f;        // 다른 세이브 스킬 레벨 1당 보너스 (%)
         public float MetaBonusCapPercent = 150f;     // 최대 보너스 (%)
 
+        /// <summary>true 로 두고 게임을 실행하면 모든 스킬 경험치를 1회 초기화한다(실행 후 자동으로 false)</summary>
+        public bool ResetSkills = false;
+
         /// <summary>스킬별 경험치 배율 (스킬 id -> 배율)</summary>
         public readonly Dictionary<string, float> SkillXpMultiplier = new Dictionary<string, float>();
 
@@ -100,6 +103,7 @@ namespace Dskill
                     case "meta_enabled": MetaEnabled = ParseBool(value, MetaEnabled); break;
                     case "meta_bonus_per_level": MetaBonusPercent = ParseFloat(value, MetaBonusPercent); break;
                     case "meta_bonus_cap": MetaBonusCapPercent = ParseFloat(value, MetaBonusCapPercent); break;
+                    case "reset_skills": ResetSkills = ParseBool(value, ResetSkills); break;
                     default:
                         SkillXpMultiplier[key] = ParseFloat(value, 1f);
                         break;
@@ -170,6 +174,10 @@ namespace Dskill
             lines.Add("meta_bonus_per_level = 0.5   # 다른 세이브의 스킬 레벨 1당 경험치 +0.5%");
             lines.Add("meta_bonus_cap = 150         # 최대 보너스 (%)");
             lines.Add("");
+            lines.Add("# 위험: true 로 두고 게임을 한 번 실행하면 모든 스킬 경험치가 0으로 초기화됩니다.");
+            lines.Add("# 초기화가 끝나면 이 값은 자동으로 false 로 되돌아갑니다.");
+            lines.Add("reset_skills = false");
+            lines.Add("");
             lines.Add("[skill_xp]");
             lines.Add("# 스킬별 경험치 배율 (0.5=절반 속도, 2.0=두배 속도)");
             foreach (SkillDef def in SkillDefs.All)
@@ -196,6 +204,33 @@ namespace Dskill
                 return XpMultiplier * value;
             }
             return XpMultiplier;
+        }
+
+        /// <summary>reset_skills 플래그를 false 로 되돌려 설정 파일에 다시 쓴다(1회 초기화 후 자동 해제).</summary>
+        public void ClearResetFlag()
+        {
+            ResetSkills = false;
+            try
+            {
+                if (string.IsNullOrEmpty(ConfigPath) || !File.Exists(ConfigPath))
+                {
+                    return;
+                }
+
+                string[] lines = File.ReadAllLines(ConfigPath);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].TrimStart().StartsWith("reset_skills"))
+                    {
+                        lines[i] = "reset_skills = false   # true 로 두고 실행하면 1회 초기화";
+                    }
+                }
+                File.WriteAllLines(ConfigPath, lines, new System.Text.UTF8Encoding(false));
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogWarning("[Dskill] 설정 파일 갱신 실패: " + e.Message);
+            }
         }
     }
 }

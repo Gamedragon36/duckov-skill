@@ -150,12 +150,27 @@ xp_multiplier = 1.0     # 전체 경험치 배율 (0.5=절반, 2.0=두배)
 hotkey = F6             # 스킬 창 여는 키
 notify_levelup = true   # 레벨업 알림 표시
 
+[meta]
+meta_enabled = true          # 로그라이크 계승 기능
+meta_bonus_per_level = 0.5   # 다른 세이브의 스킬 레벨 1당 경험치 +0.5%
+meta_bonus_cap = 150         # 최대 보너스 (%)
+
+# 위험: true 로 두고 게임을 한 번 실행하면 모든 스킬 경험치가 0으로 초기화됩니다.
+# 초기화가 끝나면 자동으로 false 로 되돌아갑니다.
+reset_skills = false
+
 [skill_xp]
 # 스킬별 경험치 배율 (0.5=절반 속도, 2.0=두배 속도)
 strength = 1.0          # 근력
 endurance = 1.0         # 지구력
 ...
 ```
+
+### 스킬 초기화 (`reset_skills`)
+
+`reset_skills = true` 로 바꾸고 게임을 한 번 실행하면 **모든 스킬 경험치가 0으로 초기화**됩니다.
+초기화 후에는 값이 자동으로 `false` 로 되돌아갑니다.
+> 세이브 파일을 직접 편집하지 않고 **게임/모드가 직접 저장**하는 방식이라 안전합니다.
 
 **예시**
 
