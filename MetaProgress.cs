@@ -73,13 +73,13 @@ namespace Dskill
             {
                 switch (Grade)
                 {
-                    case 6: return "전설";
-                    case 5: return "영웅";
-                    case 4: return "숙련";
-                    case 3: return "단련";
-                    case 2: return "초심";
-                    case 1: return "입문";
-                    default: return "없음";
+                    case 6: return Locale.T("grade.6", "전설");
+                    case 5: return Locale.T("grade.5", "영웅");
+                    case 4: return Locale.T("grade.4", "숙련");
+                    case 3: return Locale.T("grade.3", "단련");
+                    case 2: return Locale.T("grade.2", "초심");
+                    case 1: return Locale.T("grade.1", "입문");
+                    default: return Locale.T("grade.0", "없음");
                 }
             }
         }
@@ -164,14 +164,14 @@ namespace Dskill
         {
             if (_config == null || !_config.MetaEnabled)
             {
-                return "계승: 사용 안 함";
+                return Locale.T("meta.off", "계승: 사용 안 함");
             }
             if (!_scanned || _scannedSlots == 0)
             {
-                return "계승: 다른 세이브 기록 없음";
+                return Locale.T("meta.none", "계승: 다른 세이브 기록 없음");
             }
-            return "계승 " + GradeName + " (다른 세이브 " + _scannedSlots + "개 / Lv." + _otherTotalLevel +
-                   ") → 경험치 +" + (BonusRatio * 100f).ToString("0.#") + "%";
+            return Locale.F("meta.line", "계승 {0} (다른 세이브 {1}개 / Lv.{2}) → 경험치 +{3}%",
+                GradeName, _scannedSlots, _otherTotalLevel, (BonusRatio * 100f).ToString("0.#"));
         }
 
         /// <summary>게임 시작 시 한 번 보여줄 알림 문구 (보너스가 없으면 null)</summary>
@@ -181,7 +181,8 @@ namespace Dskill
             {
                 return null;
             }
-            return "[계승] 다른 세이브의 기록으로 경험치 +" + (BonusRatio * 100f).ToString("0.#") + "% (" + GradeName + ")";
+            return Locale.F("meta.notice", "[계승] 다른 세이브의 기록으로 경험치 +{0}% ({1})",
+                (BonusRatio * 100f).ToString("0.#"), GradeName);
         }
     }
 }

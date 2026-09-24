@@ -18,6 +18,7 @@ namespace Dskill
         public float XpMultiplier = 1f;      // 모든 경험치 획득 배율
         public string Hotkey = "F6";         // 스킬 창 열기 키
         public bool NotifyLevelUp = true;    // 레벨업 알림 표시
+        public string Language = "auto";     // 표시 언어 (auto = OS 언어를 따름)
 
         // ----- 로그라이크(메타 진행도) 설정 -----
         public bool MetaEnabled = true;              // 다른 세이브의 스킬 레벨로 경험치 보너스
@@ -104,6 +105,7 @@ namespace Dskill
                     case "meta_bonus_per_level": MetaBonusPercent = ParseFloat(value, MetaBonusPercent); break;
                     case "meta_bonus_cap": MetaBonusCapPercent = ParseFloat(value, MetaBonusCapPercent); break;
                     case "reset_skills": ResetSkills = ParseBool(value, ResetSkills); break;
+                    case "language": Language = value; break;
                     default:
                         SkillXpMultiplier[key] = ParseFloat(value, 1f);
                         break;
@@ -149,40 +151,41 @@ namespace Dskill
             return fallback;
         }
 
-        /// <summary>기본값 설정 파일을 만들어 준다(한글 설명 포함).</summary>
+        /// <summary>기본값 설정 파일을 만들어 준다(선택한 언어의 설명 포함).</summary>
         private void WriteDefault()
         {
             List<string> lines = new List<string>();
             lines.Add("# ============================================");
-            lines.Add("#  Tarkov Skills (타르코프식 스킬 시스템) 설정");
-            lines.Add("#  값을 고친 뒤 게임을 다시 시작하면 적용됩니다.");
-            lines.Add("#  '#' 뒤의 내용은 설명이므로 지워도 됩니다.");
+            lines.Add("#  " + Locale.T("cfg.header", "Tarkov Skills (타르코프식 스킬 시스템) 설정"));
+            lines.Add("#  " + Locale.T("cfg.headerNote1", "값을 고친 뒤 게임을 다시 시작하면 적용됩니다."));
+            lines.Add("#  " + Locale.T("cfg.headerNote2", "'#' 뒤의 내용은 설명이므로 지워도 됩니다."));
             lines.Add("# ============================================");
             lines.Add("");
             lines.Add("[general]");
-            lines.Add("max_level = 20        # 스킬 최대 레벨 (만렙)");
-            lines.Add("xp_base = 300         # 1레벨에 필요한 경험치");
-            lines.Add("xp_step = 65          # 레벨마다 늘어나는 경험치");
-            lines.Add("xp_multiplier = 1.0   # 전체 경험치 배율 (0.5=절반, 2.0=두배)");
-            lines.Add("hotkey = F6           # 스킬 창 여는 키 (예: F6, F7, F8)");
-            lines.Add("notify_levelup = true # 레벨업 때 알림 표시 (true/false)");
+            lines.Add("max_level = 20        # " + Locale.T("cfg.maxLevel", "스킬 최대 레벨 (만렙)"));
+            lines.Add("xp_base = 300         # " + Locale.T("cfg.xpBase", "1레벨에 필요한 경험치"));
+            lines.Add("xp_step = 65          # " + Locale.T("cfg.xpStep", "레벨마다 늘어나는 경험치"));
+            lines.Add("xp_multiplier = 1.0   # " + Locale.T("cfg.xpMultiplier", "전체 경험치 배율 (0.5=절반, 2.0=두배)"));
+            lines.Add("hotkey = F6           # " + Locale.T("cfg.hotkey", "스킬 창 여는 키 (예: F6, F7, F8)"));
+            lines.Add("notify_levelup = true # " + Locale.T("cfg.notifyLevelUp", "레벨업 때 알림 표시 (true/false)"));
+            lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto, en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br"));
             lines.Add("");
             lines.Add("[meta]");
-            lines.Add("# 로그라이크(계승): '다른 세이브'에서 키운 스킬 레벨 합계가");
-            lines.Add("# 이번에 플레이하는 세이브의 경험치 획득 속도를 올려줍니다.");
-            lines.Add("meta_enabled = true          # 기능 사용 (true/false)");
-            lines.Add("meta_bonus_per_level = 0.5   # 다른 세이브의 스킬 레벨 1당 경험치 +0.5%");
-            lines.Add("meta_bonus_cap = 150         # 최대 보너스 (%)");
+            lines.Add("# " + Locale.T("cfg.metaNote1", "로그라이크(계승): '다른 세이브'에서 키운 스킬 레벨 합계가"));
+            lines.Add("# " + Locale.T("cfg.metaNote2", "이번에 플레이하는 세이브의 경험치 획득 속도를 올려줍니다."));
+            lines.Add("meta_enabled = true          # " + Locale.T("cfg.metaEnabled", "기능 사용 (true/false)"));
+            lines.Add("meta_bonus_per_level = 0.5   # " + Locale.T("cfg.metaPerLevel", "다른 세이브의 스킬 레벨 1당 경험치 +0.5%"));
+            lines.Add("meta_bonus_cap = 150         # " + Locale.T("cfg.metaCap", "최대 보너스 (%)"));
             lines.Add("");
-            lines.Add("# 위험: true 로 두고 게임을 한 번 실행하면 모든 스킬 경험치가 0으로 초기화됩니다.");
-            lines.Add("# 초기화가 끝나면 이 값은 자동으로 false 로 되돌아갑니다.");
+            lines.Add("# " + Locale.T("cfg.resetNote1", "위험: true 로 두고 게임을 한 번 실행하면 모든 스킬 경험치가 0으로 초기화됩니다."));
+            lines.Add("# " + Locale.T("cfg.resetNote2", "초기화가 끝나면 이 값은 자동으로 false 로 되돌아갑니다."));
             lines.Add("reset_skills = false");
             lines.Add("");
             lines.Add("[skill_xp]");
-            lines.Add("# 스킬별 경험치 배율 (0.5=절반 속도, 2.0=두배 속도)");
+            lines.Add("# " + Locale.T("cfg.skillXpNote", "스킬별 경험치 배율 (0.5=절반 속도, 2.0=두배 속도)"));
             foreach (SkillDef def in SkillDefs.All)
             {
-                lines.Add(def.Id + " = 1.0   # " + def.NameKo);
+                lines.Add(def.Id + " = 1.0   # " + Locale.SkillName(def));
             }
 
             try
@@ -222,7 +225,7 @@ namespace Dskill
                 {
                     if (lines[i].TrimStart().StartsWith("reset_skills"))
                     {
-                        lines[i] = "reset_skills = false   # true 로 두고 실행하면 1회 초기화";
+                        lines[i] = "reset_skills = false   # " + Locale.T("cfg.resetSkills", "true 로 두고 실행하면 1회 초기화");
                     }
                 }
                 File.WriteAllLines(ConfigPath, lines, new System.Text.UTF8Encoding(false));

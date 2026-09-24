@@ -8,7 +8,7 @@ namespace Dskill
     /// </summary>
     public static class SkillWindow
     {
-        private const float BarWidth = 130f;
+        private const float BarWidth = 105f;
         private const float BarHeight = 12f;
 
         private static int _tab;                     // 0 = 신체, 1 = 전투, 2 = 실용
@@ -63,7 +63,7 @@ namespace Dskill
             }
 
             _windowRect = GUI.Window(WindowId, _windowRect, DrawWindow,
-                "   ★ 타르코프 스킬 시스템   —   제목줄을 마우스로 끌어서 이동");
+                "   " + Locale.T("ui.title", "★ 타르코프 스킬 시스템   —   제목줄을 마우스로 끌어서 이동"));
         }
 
         private static void DrawWindow(int id)
@@ -76,7 +76,8 @@ namespace Dskill
                 return;
             }
 
-            string category = SkillDefs.Categories[_tab];
+            string category = SkillDefs.Categories[_tab];        // 비교에 쓰는 코드 기준 값
+            string categoryLabel = Locale.Category(category);    // 화면에 보여줄 이름
             int totalLevel = 0;
             foreach (SkillDef def in SkillDefs.All)
             {
@@ -84,9 +85,9 @@ namespace Dskill
             }
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("계열: " + category, _title);
+            GUILayout.Label(Locale.F("ui.series", "계열: {0}", categoryLabel), _title);
             GUILayout.FlexibleSpace();
-            GUILayout.Label("총합 Lv." + totalLevel + " / " + (system.MaxLevel * SkillDefs.All.Length), _footerLabel);
+            GUILayout.Label(Locale.F("ui.total", "총합 Lv.{0} / {1}", totalLevel, system.MaxLevel * SkillDefs.All.Length), _footerLabel);
             GUILayout.EndHorizontal();
 
             if (_drawMeta != null)
@@ -98,13 +99,13 @@ namespace Dskill
             for (int i = 0; i < SkillDefs.Categories.Length; i++)
             {
                 string prefix = i == _tab ? "▶ " : "     ";
-                if (GUILayout.Button(prefix + SkillDefs.Categories[i], GUILayout.Width(112f)))
+                if (GUILayout.Button(prefix + Locale.Category(SkillDefs.Categories[i]), GUILayout.Width(112f)))
                 {
                     _tab = i;
                 }
             }
             GUILayout.FlexibleSpace();
-            GUILayout.Label("[F7] 계열 전환    [" + config.Hotkey + " / ESC] 닫기", _footerLabel);
+            GUILayout.Label(Locale.F("ui.tabs", "[F7] 계열 전환    [{0} / ESC] 닫기", config.Hotkey), _footerLabel);
             GUILayout.EndHorizontal();
 
             GUILayout.Space(8f);
@@ -154,7 +155,7 @@ namespace Dskill
             }
 
             DrawDivider();
-            GUILayout.Label("경험치는 게임을 저장할 때 세이브 슬롯에 함께 저장됩니다.", _footerLabel);
+            GUILayout.Label(Locale.T("ui.footer", "경험치는 게임을 저장할 때 세이브 슬롯에 함께 저장됩니다."), _footerLabel);
 
             // 제목줄을 끌면 창이 움직인다
             GUI.DragWindow(new Rect(0f, 0f, _windowRect.width, 26f));
@@ -172,7 +173,8 @@ namespace Dskill
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(def.Icon, _iconLabel, GUILayout.Width(22f));
-            GUILayout.Label(elite ? "<color=#FFD24A>" + def.NameKo + "</color>" : def.NameKo, _nameLabel, GUILayout.Width(100f));
+            string skillName = Locale.SkillName(def);
+            GUILayout.Label(elite ? "<color=#FFD24A>" + skillName + "</color>" : skillName, _nameLabel, GUILayout.Width(125f));
             GUILayout.Label(elite ? "<color=#FFD24A>★" + level + "/" + system.MaxLevel + "</color>" : level + " / " + system.MaxLevel,
                 _levelLabel, GUILayout.Width(76f));
             DrawBar(ratio);
@@ -181,7 +183,13 @@ namespace Dskill
             GUILayout.Label(system.DescribeEffects(def.Id, level), _effectLabel);
             GUILayout.EndHorizontal();
 
-            GUILayout.Label("<color=#8FA3B8>       성장: " + def.TriggerKo + "</color>", _subLabel);
+            string growthText = "<color=#8FA3B8>       " + Locale.F("ui.growth", "성장: {0}", Locale.SkillTrigger(def));
+            if (elite)
+            {
+                // 만렙이면 엘리트 효과도 함께 보여 준다
+                growthText += "   ★" + Locale.SkillElite(def);
+            }
+            GUILayout.Label(growthText + "</color>", _subLabel);
             GUILayout.Space(4f);
         }
 

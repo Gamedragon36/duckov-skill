@@ -17,7 +17,7 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.0";
+        public const string Version = "0.0.1";
 
         private Config _config;
         private MetaProgress _meta;
@@ -61,6 +61,7 @@ namespace Dskill
             try
             {
                 _config = Config.Load();
+                Locale.Setup(_config.Language);           // 표시 언어 결정 (auto = OS 언어)
                 _meta = new MetaProgress(_config);
                 _meta.Rescan(true);                       // 다른 세이브 기록으로 계승 보너스 계산
                 _skills = new SkillSystem(_config, _meta);
@@ -91,7 +92,8 @@ namespace Dskill
                     Debug.Log("[Dskill] 요청에 따라 스킬 초기화를 실행했고 reset_skills 를 false 로 되돌렸습니다.");
                 }
 
-                Debug.Log("[Dskill] 모드 로드 완료 v" + Version + " (스킬 창 키: " + _toggleKeyName + ")");
+                Debug.Log("[Dskill] 모드 로드 완료 v" + Version + " (스킬 창 키: " + _toggleKeyName +
+                          " / 언어: " + Locale.CurrentCode + (Locale.AutoDetected ? " auto" : " 지정") + ")");
             }
             catch (Exception e)
             {

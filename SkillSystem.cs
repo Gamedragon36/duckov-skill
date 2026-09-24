@@ -75,7 +75,12 @@ namespace Dskill
             { "BleedChance", "출혈 확률" },
             { "ReloadSpeedGain", "재장전 속도" },
             { "EnergyCost", "배고픔 소모" },
-            { "WaterCost", "수분 소모" }
+            { "WaterCost", "수분 소모" },
+            { "NightVisionAbility", "야간 시야" },
+            { "ViewDistance", "시야 거리" },
+            { "SenseRange", "감지 범위" },
+            { "HearingAbility", "청력" },
+            { "ElementFactor_Physics", "받는 물리 피해" }
         };
 
         public SkillSystem(Config config, MetaProgress meta)
@@ -245,14 +250,15 @@ namespace Dskill
                 return "";
             }
 
-            // 특수 스킬 (수리 / 흥정)
+            // 특수 스킬 (생존술 / 수리 / 흥정 / 투척 / 파밍 / 구르기 / 하이드아웃 / 제작)
             if (id == "survival")
             {
-                string text = "디버프 저항 " + (SurvivalDebuffResist(level) * 100f).ToString("0.#") + "%";
-                text += ", 받는 화염·독 피해 -" + (0.005f * level * 100f).ToString("0.#") + "%";
+                string text = Locale.F("eff.survival", "디버프 저항 {0}%, 받는 화염·독 피해 -{1}%",
+                    (SurvivalDebuffResist(level) * 100f).ToString("0.#"),
+                    (0.005f * level * 100f).ToString("0.#"));
                 if (level >= _config.MaxLevel)
                 {
-                    text += ", 출혈 면역";
+                    text += Locale.T("eff.survivalElite", ", 출혈 면역");
                 }
                 return text;
             }
@@ -262,38 +268,40 @@ namespace Dskill
                 if (id == "repair")
                 {
                     float reduction = RepairLossReduction(level);
-                    return "최대 내구도 감소 -" + (reduction * 100f).ToString("0.#") + "%";
+                    return Locale.F("eff.repair", "최대 내구도 감소 -{0}%", (reduction * 100f).ToString("0.#"));
                 }
                 if (id == "barter")
                 {
-                    return "판매 금액 +" + (BarterBonus(level) * 100f).ToString("0.#") + "%";
+                    return Locale.F("eff.barter", "판매 금액 +{0}%", (BarterBonus(level) * 100f).ToString("0.#"));
                 }
                 if (id == "throwing")
                 {
-                    return "투척 거리 +" + (ThrowingRangeBonus(level) * 100f).ToString("0.#") +
-                           "%, 폭발 대미지 +" + (ThrowingDamageBonus(level) * 100f).ToString("0.#") + "%";
+                    return Locale.F("eff.throwing", "투척 거리 +{0}%, 폭발 대미지 +{1}%",
+                        (ThrowingRangeBonus(level) * 100f).ToString("0.#"),
+                        (ThrowingDamageBonus(level) * 100f).ToString("0.#"));
                 }
                 if (id == "looting")
                 {
-                    return "아이템 감지 시간 -" + ((1f - LootingTimeFactor(level)) * 100f).ToString("0.#") + "%";
+                    return Locale.F("eff.looting", "아이템 감지 시간 -{0}%", ((1f - LootingTimeFactor(level)) * 100f).ToString("0.#"));
                 }
                 if (id == "dash")
                 {
                     float reduction = DashReduction(level) * 100f;
-                    return "쿨타임 -" + reduction.ToString("0.#") + "%, 스태미나 소모 -" + reduction.ToString("0.#") + "%";
+                    return Locale.F("eff.dash", "쿨타임 -{0}%, 스태미나 소모 -{1}%",
+                        reduction.ToString("0.#"), reduction.ToString("0.#"));
                 }
                 if (id == "hideout")
                 {
-                    string text = "상인 쿨타임 -" + (MerchantCooldownReduction(level) * 100f).ToString("0.#") + "%";
+                    string text = Locale.F("eff.hideout", "상인 쿨타임 -{0}%", (MerchantCooldownReduction(level) * 100f).ToString("0.#"));
                     if (level >= _config.MaxLevel)
                     {
-                        text += ", 채굴 시간 -" + (Specials.MinerEliteTimeReduction * 100f).ToString("0") + "%";
+                        text += Locale.F("eff.hideoutElite", ", 채굴 시간 -{0}%", (Specials.MinerEliteTimeReduction * 100f).ToString("0"));
                     }
                     return text;
                 }
                 if (id == "crafting")
                 {
-                    return "추가 생산 확률 " + (CraftingBonusChance(level) * 100f).ToString("0.#") + "%";
+                    return Locale.F("eff.crafting", "추가 생산 확률 {0}%", (CraftingBonusChance(level) * 100f).ToString("0.#"));
                 }
                 return "";
             }
@@ -335,17 +343,24 @@ namespace Dskill
 
         private static string FormatEffect(EffectDef effect, float value)
         {
-            string name;
-            if (!StatNamesKo.TryGetValue(effect.Key, out name))
+            string korean;
+            if (!StatNamesKo.TryGetValue(effect.Key, out korean))
             {
-                name = effect.Key;
+                korean = effect.Key;
             }
+            // 스탯 이름은 언어별 표를 거친다 (없으면 위의 한국어 이름)
+            string name = Locale.Stat(effect.Key, korean);
 
+            string amount;
             if (effect.Kind == StatModKind.Add)
             {
-                return name + " " + (value >= 0f ? "+" : "") + value.ToString("0.##");
+                amount = (value >= 0f ? "+" : "") + value.ToString("0.##");
             }
-            return name + " " + (value >= 0f ? "+" : "") + (value * 100f).ToString("0.#") + "%";
+            else
+            {
+                amount = (value >= 0f ? "+" : "") + (value * 100f).ToString("0.#") + "%";
+            }
+            return Locale.F("eff.value", "{0} {1}", name, amount);
         }
 
         /// <summary>수리 스킬의 "최대 내구도 감소" 경감 비율 (0.5 = 50% 감소)</summary>

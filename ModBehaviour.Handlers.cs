@@ -309,10 +309,10 @@ namespace Dskill
 
             try
             {
-                string text = "[스킬] " + def.NameKo + " Lv." + level;
+                string text = Locale.F("notify.levelup", "[스킬] {0} Lv.{1}", Locale.SkillName(def), level);
                 if (level >= _skills.MaxLevel)
                 {
-                    text += " ★엘리트 달성!";
+                    text += Locale.T("notify.elite", " ★엘리트 달성!");
                 }
                 NotificationText.Push(text);
             }

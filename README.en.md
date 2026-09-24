@@ -27,6 +27,7 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | Saving | XP is stored **per save slot** |
 | Inheritance | Skills earned in **other saves** boost the XP rate of the current run (roguelike) |
 | Config | All values are adjustable in `config.ini` next to the DLL |
+| Languages | All **10 languages** the game supports (Korean, English, Simplified/Traditional Chinese, Japanese, German, Russian, Spanish, French, Portuguese-BR) — follows the language you selected in the game (falls back to your OS language), or set `language` in `config.ini` |
 
 ## Skills
 
@@ -143,5 +144,5 @@ dotnet build -c Release
 
 ## Version policy
 
-- The mod version is **fixed at 0.0.0** and is only changed on request (`version` in `info.ini` and the `Version` constant in code).
+- The mod version is **0.0.1** (bump both `version` in `info.ini` and the `Version` constant in code).
 
