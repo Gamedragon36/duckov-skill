@@ -17,7 +17,7 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.2";
+        public const string Version = "0.0.3";
 
         private Config _config;
         private MetaProgress _meta;
@@ -231,6 +231,13 @@ namespace Dskill
             _lastDurability.Clear();
             _medicalUseUntil = 0f;
             _foodUseUntil = 0f;
+
+            // 레벨이 바뀌면 이전 씬의 오브젝트 추적 기록은 의미가 없으므로 비운다
+            // (개수 초과로 중간에 비울 때 이미 처리한 대상이 다시 처리되는 문제 방지)
+            _handledGrenades.Clear();
+            _inspectingSeen.Clear();
+            _knownItems.Clear();
+            _pendingInspect.Clear();
 
             // 레벨(레이드·기지)에 들어갈 때 계승 보너스를 확인한다(60초 스로틀로 파일 읽기 최소화)
             if (_meta != null)

@@ -33,8 +33,8 @@ namespace Dskill
             }
 
             // 최적화: 폭발물을 쓴 직후 6초 동안만 촘촘히(0.1초) 확인하고,
-            // 평소에는 느리게(0.5초) 확인한다. (전체 오브젝트 검색 비용 절감)
-            _grenadeScanTimer = Time.time < _grenadeWatchUntil ? 0.1f : 0.5f;
+            // 평소에는 아주 느리게(2초) 확인한다. (전체 오브젝트 검색 비용 절감)
+            _grenadeScanTimer = Time.time < _grenadeWatchUntil ? 0.1f : 2f;
 
             if (_skills == null || _main == null)
             {

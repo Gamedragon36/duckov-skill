@@ -292,7 +292,8 @@ namespace Dskill
             return map;
         }
 
-        /// <summary>문장 조회. 없으면 영어 -> 호출부의 한국어 기본값 순으로 대체한다.</summary>
+        /// <summary>문장 조회. 없으면 영어 -> 호출부의 한국어 기본값 순으로 대체한다.
+        ///  (단, 한국어는 표를 두지 않고 코드 안의 문장을 쓰므로 영어로 넘어가면 안 된다)</summary>
         public static string T(string key, string korean)
         {
             try
@@ -303,7 +304,7 @@ namespace Dskill
                 {
                     return value;
                 }
-                if (_english.TryGetValue(key, out value))
+                if (Current != Lang.Ko && _english.TryGetValue(key, out value))
                 {
                     return value;
                 }

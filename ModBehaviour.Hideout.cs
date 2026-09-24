@@ -61,6 +61,9 @@ namespace Dskill
             ApplyMinerTime();
         }
 
+        // 상인 쿨타임 검사 타이머 (전체 검색 비용 절감)
+        private float _shopNextScanTime;
+
         /// <summary>상인(상점) 재고 갱신 쿨타임을 줄인다.</summary>
         private void ApplyMerchantCooldown()
         {
@@ -77,6 +80,13 @@ namespace Dskill
 
             int level = _skills.GetLevel("hideout");
             float factor = 1f - _skills.MerchantCooldownReduction(level);
+
+            // 최적화: 쿨타임 값은 자주 바뀌지 않으므로 5초에 한 번만 전체 검색한다
+            if (Time.time < _shopNextScanTime)
+            {
+                return;
+            }
+            _shopNextScanTime = Time.time + 5f;
 
             StockShop[] shops = FindObjectsOfType<StockShop>();
             foreach (StockShop shop in shops)

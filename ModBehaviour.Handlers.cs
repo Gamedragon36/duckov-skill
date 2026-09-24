@@ -57,9 +57,14 @@ namespace Dskill
                 _skills.AddXp("throwing", damage * Rates.ThrowingPerExplosionDamage);
             }
 
-            // 내가 준 피해 (사격 / 정밀 사격)
+            // 내가 준 피해 (사격 / 정밀 사격 / 근접)
             CharacterMainControl from = info.fromCharacter;
-            if (from != null && from == _main && !IsMeleeDamage(info))
+            if (from != null && from == _main && IsMeleeDamage(info))
+            {
+                // 근접 전투: 명중할 때마다 (이전 버전에서 누락되어 있던 경험치)
+                _skills.AddXp("melee", Rates.MeleePerHit);
+            }
+            else if (from != null && from == _main)
             {
                 if (_gun != null && _gun.Item != null && info.fromWeaponItemID == _gun.Item.TypeID)
                 {
@@ -370,7 +375,17 @@ namespace Dskill
                 return;
             }
             _font = Font.CreateDynamicFontFromOSFont(
-                new[] { "Malgun Gothic", "맑은 고딕", "Gulim", "Arial Unicode MS", "Arial" }, 15);
+                new[]
+                {
+                    // 한국어
+                    "Malgun Gothic", "맑은 고딕", "Gulim", "돋움",
+                    // 중국어(간체 / 번체)
+                    "Microsoft YaHei", "微软雅黑", "SimSun", "SimHei", "Microsoft JhengHei", "MingLiU",
+                    // 일본어
+                    "Yu Gothic UI", "MS Gothic", "Meiryo", "MS PGothic",
+                    // 공용 대체 폰트
+                    "Arial Unicode MS", "Arial"
+                }, 15);
             if (_font == null)
             {
                 Debug.LogWarning("[Dskill] 한글 폰트를 찾지 못했습니다.");

@@ -84,7 +84,7 @@ namespace Dskill
             }
         }
 
-        /// <summary>다른 세이브들의 기록을 다시 계산한다(60초에 한 번만 실제로 계산).</summary>
+        /// <summary>다른 세이브들의 기록을 다시 계산한다(5분에 한 번만 실제로 계산 — 세이브 파일 읽기 부담 최소화).</summary>
         public void Rescan(bool force = false)
         {
             if (!force && Time.realtimeSinceStartup - _lastScanTime < RescanInterval)

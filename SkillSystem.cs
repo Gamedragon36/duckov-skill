@@ -39,8 +39,14 @@ namespace Dskill
         private float _originalWeaponRepairLoss;
         private float _originalEquipmentRepairLoss;
         private bool _repairLossSaved;
+        private Item _repairLossItem;
 
         public event Action<string, int> OnLevelUp;
+
+        // 효과 문장 캐시 (스킬 id -> 문장 / 문장을 만든 레벨)
+        // 스킬 창이 열려 있는 동안 매 프레임 문자열을 새로 만들지 않도록 한다(GC 부담 제거)
+        private readonly Dictionary<string, string> _effectTextCache = new Dictionary<string, string>();
+        private readonly Dictionary<string, int> _effectTextLevel = new Dictionary<string, int>();
 
         /// <summary>스탯 키 -> 화면에 보여줄 한글 이름</summary>
         private static readonly Dictionary<string, string> StatNamesKo = new Dictionary<string, string>
@@ -241,8 +247,26 @@ namespace Dskill
             }
         }
 
-        /// <summary>지금 레벨에서 받고 있는 효과를 사람이 읽을 수 있는 문장으로 만든다.</summary>
+        /// <summary>지금 레벨에서 받고 있는 효과를 사람이 읽을 수 있는 문장으로 만든다.
+        ///  같은 레벨이면 캐시된 문장을 돌려준다(매 프레임 새로 만들지 않음).</summary>
         public string DescribeEffects(string id, int level)
+        {
+            int cachedLevel;
+            string cached;
+            if (_effectTextLevel.TryGetValue(id, out cachedLevel) && cachedLevel == level &&
+                _effectTextCache.TryGetValue(id, out cached))
+            {
+                return cached;
+            }
+
+            string text = BuildEffectText(id, level);
+            _effectTextLevel[id] = level;
+            _effectTextCache[id] = text;
+            return text;
+        }
+
+        /// <summary>효과 문장을 실제로 만든다.</summary>
+        private string BuildEffectText(string id, int level)
         {
             SkillDef def = SkillDefs.Find(id);
             if (def == null)
@@ -253,9 +277,19 @@ namespace Dskill
             // 특수 스킬 (생존술 / 수리 / 흥정 / 투척 / 파밍 / 구르기 / 하이드아웃 / 제작)
             if (id == "survival")
             {
+                // 받는 화염·독 피해는 SkillDefs 의 효과 값을 그대로 쓴다(하드코딩하지 않음)
+                float elementPerLevel = 0f;
+                foreach (EffectDef elementEffect in def.Effects)
+                {
+                    if (elementEffect.Key == "ElementFactor_Fire")
+                    {
+                        elementPerLevel = elementEffect.PerLevel;
+                        break;
+                    }
+                }
                 string text = Locale.F("eff.survival", "디버프 저항 {0}%, 받는 화염·독 피해 -{1}%",
                     (SurvivalDebuffResist(level) * 100f).ToString("0.#"),
-                    (0.005f * level * 100f).ToString("0.#"));
+                    (elementPerLevel * level * 100f).ToString("0.#"));
                 if (level >= _config.MaxLevel)
                 {
                     text += Locale.T("eff.survivalElite", ", 출혈 면역");
@@ -581,10 +615,17 @@ namespace Dskill
                 return;
             }
 
+            // 아이템이 바뀌면(다른 캐릭터·다른 세이브) 이전에 읽어 둔 원래 값을 쓸 수 없다
+            if (_repairLossSaved && _repairLossItem != item)
+            {
+                _repairLossSaved = false;
+            }
+
             if (!_repairLossSaved)
             {
                 _originalWeaponRepairLoss = item.GetFloat("WeaponRepairLossFactor", 1f);
                 _originalEquipmentRepairLoss = item.GetFloat("EquipmentRepairLossFactor", 1f);
+                _repairLossItem = item;
                 _repairLossSaved = true;
             }
 
@@ -600,6 +641,9 @@ namespace Dskill
             }
             item.SetFloat("WeaponRepairLossFactor", _originalWeaponRepairLoss);
             item.SetFloat("EquipmentRepairLossFactor", _originalEquipmentRepairLoss);
+            // 보너스를 다시 적용할 때 원래 값을 새로 읽도록 초기화한다
+            _repairLossSaved = false;
+            _repairLossItem = null;
         }
 
         // ------------------------------------------------------------------
