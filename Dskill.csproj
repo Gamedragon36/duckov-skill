@@ -13,6 +13,11 @@
     <DebugType>portable</DebugType>
     <NoWarn>$(NoWarn);CS0169;CS0649</NoWarn>
 
+    <!-- 정적 분석(코드 전수조사용): 권장 규칙으로 경고를 확인한다 -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
     <!-- Escape From Duckov 설치 경로 (Duckov.exe 가 있는 폴더) -->
     <DuckovPath>D:\Steam\steamapps\common\Escape from Duckov</DuckovPath>
     <DuckovManaged>$(DuckovPath)\Duckov_Data\Managed</DuckovManaged>
@@ -41,8 +46,7 @@
     <MakeDir Directories="$(ModFolder)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModFolder)" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\info.ini" DestinationFolder="$(ModFolder)" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\preview.png" DestinationFolder="$(ModFolder)"
-          Condition="Exists('$(MSBuildProjectDirectory)\preview.png')" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\preview.png" DestinationFolder="$(ModFolder)" Condition="Exists('$(MSBuildProjectDirectory)\preview.png')" />
     <Message Importance="high" Text="[Dskill] 모드 배포 완료: $(ModFolder)" />
   </Target>
 

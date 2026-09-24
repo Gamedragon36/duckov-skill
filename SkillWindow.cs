@@ -50,8 +50,8 @@ namespace Dskill
                 CycleTab();
             }
 
-            // 창 크기는 내용에 맞춰 자동으로 늘어난다(내용이 잘리지 않게)
-            _windowRect.width = 880f;
+            // 창 크기: 계산식으로 정한다(측정값이 아니라서 창을 어디로 옮겨도 안정적)
+            _windowRect.width = Mathf.Min(880f, Mathf.Max(420f, Screen.width - 40f));
             _windowRect.height = Mathf.Max(240f, _autoHeight);
 
             // 처음 열 때는 화면 가운데 위쪽에 배치한다(다른 UI와 덜 겹치게)
@@ -121,6 +121,12 @@ namespace Dskill
             }
             float listHeight = rowCount * 46f;
             float maxListHeight = Mathf.Max(160f, Screen.height * 0.6f);
+            float displayListHeight = Mathf.Min(listHeight, maxListHeight);
+
+            // 창 높이 = 헤더/탭/푸터(약 140) + 목록 높이 (+ 계승 줄)
+            // 화면보다 커지지 않게 제한한다.
+            _autoHeight = 140f + displayListHeight + (_drawMeta != null ? 18f : 0f);
+            _autoHeight = Mathf.Min(_autoHeight, Mathf.Max(240f, Screen.height - 40f));
 
             if (listHeight > maxListHeight)
             {
@@ -149,13 +155,6 @@ namespace Dskill
 
             DrawDivider();
             GUILayout.Label("경험치는 게임을 저장할 때 세이브 슬롯에 함께 저장됩니다.", _footerLabel);
-
-            // 방금 그린 내용의 높이를 재서 다음 프레임 창 크기에 반영한다
-            float used = GUILayoutUtility.GetLastRect().yMax + 24f;
-            if (used > 80f)
-            {
-                _autoHeight = used;
-            }
 
             // 제목줄을 끌면 창이 움직인다
             GUI.DragWindow(new Rect(0f, 0f, _windowRect.width, 26f));

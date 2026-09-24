@@ -419,15 +419,20 @@ namespace Dskill
 
         public static SkillDef Find(string id)
         {
-            foreach (SkillDef def in All)
+            if (_byId == null)
             {
-                if (def.Id == id)
+                _byId = new System.Collections.Generic.Dictionary<string, SkillDef>();
+                foreach (SkillDef def in All)
                 {
-                    return def;
+                    _byId[def.Id] = def;
                 }
             }
-            return null;
+            SkillDef found;
+            return _byId.TryGetValue(id, out found) ? found : null;
         }
+
+        /// <summary>스킬 id -> 정의 (첫 호출 때 한 번만 만든다)</summary>
+        private static System.Collections.Generic.Dictionary<string, SkillDef> _byId;
 
         public static readonly string[] Categories = { "신체", "전투", "실용" };
     }
