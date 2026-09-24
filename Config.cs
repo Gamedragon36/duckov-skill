@@ -176,7 +176,7 @@ namespace Dskill
             lines.Add("xp_multiplier = 1.0   # " + Locale.T("cfg.xpMultiplier", "전체 경험치 배율 (0.5=절반, 2.0=두배)"));
             lines.Add("hotkey = F6           # " + Locale.T("cfg.hotkey", "스킬 창 여는 키 (예: F6, F7, F8)"));
             lines.Add("notify_levelup = true # " + Locale.T("cfg.notifyLevelUp", "레벨업 때 알림 표시 (true/false)"));
-            lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto, en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br"));
+            lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto(게임에서 고른 언어) / ko / en / zh / zh-hant / ja / de / ru / es / fr / pt-br"));
             lines.Add("xp_stage = 5          # " + Locale.T("cfg.xpStage", "경험치 난이도 1~5 (1=가장 빠름, 5=기본)"));
             lines.Add("upload_now = false    # " + Locale.T("cfg.uploadNow", "true 로 두고 실행하면 창작마당 업로드를 1회 실행 (제작자용)"));
             lines.Add("");

@@ -11,6 +11,7 @@
 | 3 | 수리 스킬: 캐릭터·세이브를 바꾸면 **다른 아이템의 수리 값이 잘못 적용**될 수 있음 | 원래 값을 아이템별이 아니라 모드 전체에서 한 번만 저장 | 아이템이 바뀌면 원래 값을 다시 읽도록 수정 |
 | 4 | 아주 긴 레이드에서 **처리한 수류탄·아이템이 다시 처리**될 수 있음 (중복 대미지·중복 경험치) | 추적 목록을 '개수 초과'로 비울 때 중복 위험 | 레벨(맵) 이동 시 추적 목록을 확실히 초기화 |
 | 5 | 생존술 효과 문장의 화염·독 피해 수치가 **실제 밸런스 값과 따로 하드코딩**되어 어긋날 수 있음 | `0.005` 하드코딩 | `SkillDefs` 의 실제 효과 값을 읽어 표시 |
+| 6 | **창작마당 업로드에 제작자의 `config.ini` 가 함께 배포**되어, 구독자가 제작자 설정(예: 경험치 난이도 1단계)을 물려받음 | 업로드가 모드 폴더를 통째로 묶어 올림 | 업로드 동안 `config.ini` 를 잠시 빼고 올린 뒤 되돌리도록 수정 → **구독자는 자기 환경에 맞는 기본값(게임에서 고른 언어 자동 + 난이도 5단계)으로 새로 시작** |
 
 ### 최적화 (프레임·렌더링 부담 감소)
 
@@ -38,6 +39,7 @@
 | 3 | The repair skill could apply the **wrong repair value after changing character or save** | The original value was stored once per mod instance instead of per item | The originals are re-read whenever the item changes |
 | 4 | In very long raids, handled grenades/items could be **processed twice** (double damage / double XP) | Tracking sets were cleared by size, allowing re-processing | Tracking sets are now cleared reliably on level change |
 | 5 | The survival effect text used a **hardcoded fire/poison value** that could drift from the real balance value | Hardcoded `0.005` | Reads the real effect value from `SkillDefs` |
+| 6 | **The workshop upload shipped the author's `config.ini`**, so subscribers inherited the author's settings (e.g. XP difficulty stage 1) | The upload packs the whole mod folder | The mod moves `config.ini` aside during the upload and restores it right after → **every subscriber starts from their own defaults (their in-game language, difficulty stage 5)** |
 
 ### Optimizations (less frame/render work)
 

@@ -169,7 +169,7 @@ cfg.resetNote1|DANGER: set true and start the game once to reset all skill XP.
 cfg.resetNote2|The value automatically returns to false after the reset.
 cfg.resetSkills|true = reset all skill XP once on the next launch
 cfg.skillXpNote|Per-skill XP multiplier (0.5 = half speed, 2.0 = double speed)
-cfg.language|UI language: auto, en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br
+cfg.language|UI language: auto (follows the language you chose in the game), or en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br
 cfg.xpStage|XP gain difficulty stage 1-5 (1 = fastest, 5 = default rate)
 cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Workshop once
 

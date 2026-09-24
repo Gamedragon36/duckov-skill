@@ -169,7 +169,7 @@ cfg.resetNote1|危險：設為 true 並啟動遊戲一次，所有技能經驗�
 cfg.resetNote2|清零完成後該值會自動變回 false。
 cfg.resetSkills|true = 下次啟動時清零所有技能經驗
 cfg.skillXpNote|各技能經驗倍率（0.5=一半速度，2.0=兩倍速度）
-cfg.language|介面語言：auto、en、ko、zh、zh-hant、ja、de、ru、es、fr、pt-br
+cfg.language|介面語言：auto（跟隨遊戲內選擇的語言），或 en、ko、zh、zh-hant、ja、de、ru、es、fr、pt-br
 cfg.xpStage|經驗倍率檔位 1~5（1=最快，5=預設）
 cfg.uploadNow|作者專用：設為 true 並啟動遊戲可上傳一次到工作坊
 

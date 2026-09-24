@@ -164,11 +164,58 @@ namespace Dskill
                 }
 
                 Debug.Log("[Dskill] 창작마당 업로드를 요청합니다: " + path);
+
+                // 설정 파일은 배포본에 넣지 않는다.
+                // (구독자가 제작자 설정을 물려받지 않고, 자기 환경에 맞는 기본값으로 새로 시작하도록)
+                string configPath = System.IO.Path.Combine(path, "config.ini");
+                string backupPath = configPath + ".author";
+                bool moved = false;
+                try
+                {
+                    if (System.IO.File.Exists(backupPath))
+                    {
+                        System.IO.File.Delete(backupPath);
+                    }
+                    if (System.IO.File.Exists(configPath))
+                    {
+                        System.IO.File.Move(configPath, backupPath);
+                        moved = true;
+                        Debug.Log("[Dskill] 업로드 동안 설정 파일을 잠시 제외합니다: " + configPath);
+                    }
+                }
+                catch (Exception moveError)
+                {
+                    Debug.LogWarning("[Dskill] 설정 파일 제외 실패(그대로 업로드됩니다): " + moveError.Message);
+                }
+
                 method.Invoke(manager, new object[] { path, "Duckov Skill " + Version });
+
+                if (moved)
+                {
+                    StartCoroutine(RestoreConfigAfterUpload(configPath, backupPath));
+                }
             }
             catch (Exception e)
             {
                 Debug.LogWarning("[Dskill] 업로드 요청 실패: " + e.Message);
+            }
+        }
+
+        /// <summary>업로드가 끝날 때까지 기다렸다가 설정 파일을 원래 자리로 되돌린다.</summary>
+        private System.Collections.IEnumerator RestoreConfigAfterUpload(string configPath, string backupPath)
+        {
+            yield return new WaitForSeconds(45f);   // 업로드(약 5~10초) + 여유
+            try
+            {
+                if (System.IO.File.Exists(backupPath) && !System.IO.File.Exists(configPath))
+                {
+                    System.IO.File.Move(backupPath, configPath);
+                    Debug.Log("[Dskill] 업로드 후 설정 파일을 되돌렸습니다.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 설정 파일 복구 실패: " + e.Message);
             }
         }
 
