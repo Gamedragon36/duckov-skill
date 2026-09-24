@@ -1,0 +1,477 @@
+using System;
+using System.Collections.Generic;
+using Duckov.Buffs;
+using ItemStatsSystem;
+using Saves;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Dskill
+{
+    /// <summary>
+    /// 타르코프식 스킬 시스템 (v0.2.0)
+    /// - 게임에서 특정 행동을 하면 스킬 경험치가 쌓인다.
+    /// - 레벨이 오르면 캐릭터 스탯 보너스가 자동으로 붙는다.
+    /// - F6 키로 스킬 창을 열 수 있다.
+    /// (이 파일은 뼈대와 주기 처리 / 실제 경험치 처리와 화면은 ModBehaviour.Handlers.cs)
+    /// </summary>
+    public partial class ModBehaviour : Duckov.Modding.ModBehaviour
+    {
+        public const string Version = "0.0.0";
+
+        private Config _config;
+        private MetaProgress _meta;
+        private SkillSystem _skills;
+        private bool _metaNoticeShown;
+
+        private Key _toggleKey = Key.F6;
+        private string _toggleKeyName = "F6";
+        private bool _panelVisible;
+        private Font _font;
+
+        // 캐릭터 / 무기 참조 (레벨이 바뀌면 갱신)
+        private CharacterMainControl _main;
+        private Item _mainItem;
+        private ItemAgent_Gun _gun;
+        private ItemAgent_MeleeWeapon _melee;
+        private CharacterBuffManager _buffManager;
+
+        // 주기 처리용
+        private float _tickTimer;
+        private float _saveTimer;
+        private Vector3 _lastPosition;
+        private float _lastHealth;
+        private float _lastEnergy;
+        private float _lastWater;
+        private float _levelInitTime;
+        private float _medicalUseUntil;
+        private float _foodUseUntil;
+        private bool _firstTick = true;
+
+        /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
+        private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
+        private readonly List<Item> _itemBuffer = new List<Item>();
+
+        // ------------------------------------------------------------------
+        // 시작 / 종료
+        // ------------------------------------------------------------------
+
+        protected override void OnAfterSetup()
+        {
+            try
+            {
+                _config = Config.Load();
+                _meta = new MetaProgress(_config);
+                _meta.Rescan(true);                       // 다른 세이브 기록으로 계승 보너스 계산
+                _skills = new SkillSystem(_config, _meta);
+                ParseHotkey(_config.Hotkey);
+
+                LevelManager.OnLevelInitialized += HandleLevelInitialized;
+                Health.OnHurt += HandleHurt;
+                Health.OnDead += HandleDead;
+                CharacterMainControl.OnMainCharacterStartUseItem += HandleStartUseItem;
+                SavesSystem.OnSetFile += HandleSetFile;
+                SavesSystem.OnCollectSaveData += HandleCollectSaveData;
+                Duckov.Economy.StockShop.OnItemSoldByPlayer += HandleItemSold;
+                Duckov.Economy.StockShop.OnItemPurchased += HandleItemPurchased;
+                Duckov.BlackMarkets.BlackMarket.onRequestRefreshTime += HandleBlackMarketRefresh;
+                Duckov.Buildings.BuildingManager.OnBuildingBuilt += HandleBuildingBuilt;
+                AIMainBrain.OnPlayerHearSound += HandlePlayerHearSound;
+                CraftingManager.OnItemCrafted += HandleItemCrafted;
+                CraftingManager.OnFormulaUnlocked += HandleFormulaUnlocked;
+                _skills.OnLevelUp += HandleLevelUp;
+
+                _skills.Load();
+                Debug.Log("[Dskill] 모드 로드 완료 v" + Version + " (스킬 창 키: " + _toggleKeyName + ")");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("[Dskill] 초기화 실패: " + e);
+            }
+        }
+
+        protected override void OnBeforeDeactivate()
+        {
+            try
+            {
+                LevelManager.OnLevelInitialized -= HandleLevelInitialized;
+                Health.OnHurt -= HandleHurt;
+                Health.OnDead -= HandleDead;
+                CharacterMainControl.OnMainCharacterStartUseItem -= HandleStartUseItem;
+                SavesSystem.OnSetFile -= HandleSetFile;
+                SavesSystem.OnCollectSaveData -= HandleCollectSaveData;
+                Duckov.Economy.StockShop.OnItemSoldByPlayer -= HandleItemSold;
+                Duckov.Economy.StockShop.OnItemPurchased -= HandleItemPurchased;
+                Duckov.BlackMarkets.BlackMarket.onRequestRefreshTime -= HandleBlackMarketRefresh;
+                Duckov.Buildings.BuildingManager.OnBuildingBuilt -= HandleBuildingBuilt;
+                AIMainBrain.OnPlayerHearSound -= HandlePlayerHearSound;
+                CraftingManager.OnItemCrafted -= HandleItemCrafted;
+                CraftingManager.OnFormulaUnlocked -= HandleFormulaUnlocked;
+
+                if (_gun != null)
+                {
+                    _gun.OnShootEvent -= HandleShoot;
+                    _gun.OnLoadedEvent -= HandleLoaded;
+                    _gun = null;
+                }
+                UnsubscribeBuffs();
+                RestoreDash();
+                RestoreHideoutEffects();
+
+                if (_skills != null)
+                {
+                    _skills.OnLevelUp -= HandleLevelUp;
+                    _skills.Save();
+                    _skills.Detach();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 종료 처리 중 오류: " + e.Message);
+            }
+            Debug.Log("[Dskill] 모드 비활성화");
+        }
+
+        private void ParseHotkey(string text)
+        {
+            Key parsed;
+            if (!string.IsNullOrEmpty(text) && Enum.TryParse(text.Trim(), true, out parsed))
+            {
+                _toggleKey = parsed;
+                _toggleKeyName = text.Trim().ToUpperInvariant();
+            }
+        }
+
+        private void HandleLevelInitialized()
+        {
+            _levelInitTime = Time.time;
+            _firstTick = true;
+            _lastDurability.Clear();
+            _medicalUseUntil = 0f;
+            _foodUseUntil = 0f;
+
+            // 레벨(레이드·기지)에 들어갈 때 계승 보너스를 확인한다(60초 스로틀로 파일 읽기 최소화)
+            if (_meta != null)
+            {
+                _meta.Rescan();
+
+                if (!_metaNoticeShown)
+                {
+                    string notice = _meta.StartupNotice();
+                    if (!string.IsNullOrEmpty(notice))
+                    {
+                        _metaNoticeShown = true;
+                        try
+                        {
+                            Duckov.UI.NotificationText.Push(notice);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogWarning("[Dskill] 계승 알림 실패: " + e.Message);
+                        }
+                    }
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // 주기 처리
+        // ------------------------------------------------------------------
+
+        private void Update()
+        {
+            HandleInput();
+            DetectDash();
+
+            _tickTimer += Time.unscaledDeltaTime;
+            if (_tickTimer >= 0.5f)
+            {
+                float elapsed = _tickTimer;
+                _tickTimer = 0f;
+                try
+                {
+                    Tick(elapsed);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[Dskill] 주기 처리 오류: " + e.Message);
+                }
+            }
+        }
+
+        private void HandleInput()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                return;
+            }
+            if (keyboard[_toggleKey].wasPressedThisFrame)
+            {
+                _panelVisible = !_panelVisible;
+
+                // 창을 열 때 계승 정보를 최신으로 맞춘다(내부 스로틀로 과도한 파일 읽기 방지)
+                if (_panelVisible && _meta != null)
+                {
+                    _meta.Rescan();
+                }
+            }
+            if (_panelVisible && keyboard.escapeKey.wasPressedThisFrame)
+            {
+                _panelVisible = false;
+            }
+        }
+
+        private void Tick(float elapsed)
+        {
+            if (_skills == null)
+            {
+                return;
+            }
+
+            RefreshReferences();
+            if (_mainItem == null)
+            {
+                return;
+            }
+
+            // ---- 이동 관련 (근력 / 지구력 / 은신 이동) ----
+            bool moved = false;
+            if (_main != null)
+            {
+                Vector3 position = _main.transform.position;
+                if (!_firstTick)
+                {
+                    moved = (position - _lastPosition).sqrMagnitude > 0.0025f;   // 5cm 이상 이동
+                }
+                _lastPosition = position;
+            }
+
+            if (moved && _main != null)
+            {
+                if (_main.Running)
+                {
+                    _skills.AddXp("endurance", elapsed * Rates.EndurancePerSecond);
+                }
+                else
+                {
+                    _skills.AddXp("covert", elapsed * Rates.CovertPerSecond);
+                }
+
+                float maxWeight = _main.MaxWeight;
+                if (maxWeight > 0.01f)
+                {
+                    float ratio = _mainItem.TotalWeight / maxWeight;
+                    if (ratio >= 0.7f)
+                    {
+                        float perSecond = ratio >= 0.9f ? Rates.StrengthHeavyPerSecond : Rates.StrengthPerSecond;
+                        _skills.AddXp("strength", elapsed * perSecond);
+                    }
+                }
+            }
+
+            // ---- 회복 (회복 아이템을 쓴 뒤 체력이 늘어난 만큼) ----
+            if (_main != null && _main.Health != null)
+            {
+                float health = _main.Health.CurrentHealth;
+                bool windowOpen = Time.time < _medicalUseUntil;
+                if (!_firstTick && health > _lastHealth && windowOpen && Time.time - _levelInitTime > 3f)
+                {
+                    _skills.AddXp("health", (health - _lastHealth) * Rates.HealthPerHeal);
+                }
+                _lastHealth = health;
+            }
+
+            // ---- 신진대사 (음식/물을 쓴 직후 포만감·수분이 늘어난 만큼) ----
+            if (_main != null)
+            {
+                float energy = _main.CurrentEnergy;
+                float water = _main.CurrentWater;
+                bool foodWindow = Time.time < _foodUseUntil;
+                if (!_firstTick && foodWindow)
+                {
+                    if (energy - _lastEnergy > Rates.MetabolismMinDelta)
+                    {
+                        _skills.AddXp("metabolism", (energy - _lastEnergy) * Rates.MetabolismPerPoint);
+                    }
+                    if (water - _lastWater > Rates.MetabolismMinDelta)
+                    {
+                        _skills.AddXp("metabolism", (water - _lastWater) * Rates.MetabolismPerPoint);
+                    }
+                }
+                _lastEnergy = energy;
+                _lastWater = water;
+            }
+
+            CheckRepair();
+            ScanGrenades(elapsed);
+            ScanLoot(elapsed);
+            CheckPickups();
+            ApplyDashSettings();
+            DetectHideoutTime(elapsed);
+            ApplyHideoutEffects(elapsed);
+            DetectNightTime(elapsed);
+            _skills.EnsureApplied(_mainItem);
+
+            _firstTick = false;
+
+            // 안전장치용 주기 저장 (게임 저장과 별개)
+            _saveTimer += elapsed;
+            if (_saveTimer >= 120f)
+            {
+                _saveTimer = 0f;
+                _skills.Save();
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // 참조 갱신 / 수리 감지
+        // ------------------------------------------------------------------
+
+        /// <summary>메인 캐릭터 / 아이템 / 총 / 버프 관리자를 최신 상태로 맞춘다.</summary>
+        private void RefreshReferences()
+        {
+            CharacterMainControl main = CharacterMainControl.Main;
+            if (main != _main)
+            {
+                UnsubscribeBuffs();
+                _main = main;
+                _mainItem = null;
+                _gun = null;
+                _melee = null;
+                _firstTick = true;
+                _lastDurability.Clear();
+            }
+            if (_main == null)
+            {
+                return;
+            }
+
+            Item item = _main.CharacterItem;
+            if (item != _mainItem)
+            {
+                _mainItem = item;
+                _firstTick = true;
+                _lastDurability.Clear();
+                if (_skills != null && item != null)
+                {
+                    _skills.EnsureApplied(item);
+                }
+            }
+
+            ItemAgent_Gun gun = _main.GetGun();
+            if (gun != _gun)
+            {
+                if (_gun != null)
+                {
+                    _gun.OnShootEvent -= HandleShoot;
+                    _gun.OnLoadedEvent -= HandleLoaded;
+                }
+                _gun = gun;
+                if (_gun != null)
+                {
+                    _gun.OnShootEvent += HandleShoot;
+                    _gun.OnLoadedEvent += HandleLoaded;
+                }
+            }
+
+            _melee = _main.GetMeleeWeapon();
+            SubscribeBuffs();
+        }
+
+        private void SubscribeBuffs()
+        {
+            CharacterBuffManager manager = _main != null ? _main.GetBuffManager() : null;
+            if (manager == _buffManager)
+            {
+                return;
+            }
+            UnsubscribeBuffs();
+            _buffManager = manager;
+            if (_buffManager != null)
+            {
+                _buffManager.onAddBuff += HandleAddBuff;
+            }
+        }
+
+        private void UnsubscribeBuffs()
+        {
+            if (_buffManager != null)
+            {
+                _buffManager.onAddBuff -= HandleAddBuff;
+                _buffManager = null;
+            }
+        }
+
+        /// <summary>수리 경험치: 들고 있는 장비의 내구도가 늘어난 만큼 점수를 준다.</summary>
+        private void CheckRepair()
+        {
+            if (_mainItem == null || _skills == null)
+            {
+                return;
+            }
+
+            _itemBuffer.Clear();
+            CollectItems(_mainItem, _itemBuffer);
+
+            float gained = 0f;
+            foreach (Item item in _itemBuffer)
+            {
+                if (item == null || !item.UseDurability)
+                {
+                    continue;
+                }
+                float current = item.Durability;
+                float previous;
+                if (_lastDurability.TryGetValue(item, out previous) && current > previous)
+                {
+                    gained += current - previous;
+                }
+                _lastDurability[item] = current;
+            }
+
+            if (gained > 0.5f)
+            {
+                _skills.AddXp("repair", gained * Rates.RepairPerDurability);
+            }
+
+            // 더 이상 가지고 있지 않은 아이템 정보 정리
+            if (_lastDurability.Count > _itemBuffer.Count + 32)
+            {
+                List<Item> keys = new List<Item>(_lastDurability.Keys);
+                foreach (Item key in keys)
+                {
+                    if (key == null || !_itemBuffer.Contains(key))
+                    {
+                        _lastDurability.Remove(key);
+                    }
+                }
+            }
+        }
+
+        /// <summary>아이템과 그 안에 든 아이템을 모두 모은다.</summary>
+        private static void CollectItems(Item root, List<Item> result)
+        {
+            if (root == null || result.Contains(root))
+            {
+                return;
+            }
+            result.Add(root);
+
+            Inventory inventory = root.Inventory;
+            if (inventory == null)
+            {
+                return;
+            }
+            List<Item> children = inventory.Content;
+            if (children == null)
+            {
+                return;
+            }
+            foreach (Item child in children)
+            {
+                CollectItems(child, result);
+            }
+        }
+    }
+}
