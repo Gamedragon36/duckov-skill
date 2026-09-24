@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Duckov.Utilities;
 using ItemStatsSystem;
+using ItemStatsSystem.Stats;
 using UnityEngine;
 
 namespace Dskill
@@ -283,7 +285,51 @@ namespace Dskill
         private CA_Dash _dashAction;
         private float _originalDashCoolTime = -1f;
         private float _originalDashStamina = -1f;
+        private float _originalDashTime = -1f;    // 구르기 '동작 시간'(0.0.6: 쿨타임과 함께 감소)
+        private readonly object _dashSpeedToken = new object();   // 거리 보정용 스탯 토큰
+        private Item _dashSpeedItem;
+        private int _appliedDashSpeedLevel = -1;
+
+        /// <summary>구르기 거리 보정: 동작 시간을 줄인 만큼 이동 속도를 올려 '이동 거리'를 유지한다.
+        ///  (거리 = 속도 × 시간이므로, 시간이 0.64배가 되면 속도를 1/0.64 = 1.56배로 올린다)</summary>
+        private void ApplyDashSpeedCompensation(Item characterItem, int level, float factor)
+        {
+            if (characterItem == null || factor <= 0.05f)
+            {
+                return;
+            }
+            if (_dashSpeedItem == characterItem && _appliedDashSpeedLevel == level)
+            {
+                return;   // 이미 같은 아이템·같은 레벨로 적용됨
+            }
+
+            try
+            {
+                characterItem.RemoveAllModifiersFrom(_dashSpeedToken);
+                float bonus = (1f / factor) - 1f;
+                if (bonus > 0f)
+                {
+                    if (characterItem.AddModifier("DashSpeed", new Modifier(ModifierType.PercentageMultiply, bonus, _dashSpeedToken)))
+                    {
+                        Debug.Log("[Dskill] 구르기 거리 보정 Lv." + level + " : 동작 시간 -" + ((1f - factor) * 100f).ToString("0.#") +
+                                  "% → 속도 +" + (bonus * 100f).ToString("0.#") + "% (이동 거리 유지)");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[Dskill] DashSpeed 스탯이 없어 구르기 거리 보정을 건너뜁니다.");
+                    }
+                }
+                _dashSpeedItem = characterItem;
+                _appliedDashSpeedLevel = level;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 구르기 거리 보정 실패(무시): " + e.Message);
+            }
+        }
         private bool _wasDashing;
+        private float _loggedDashCool = -1f;      // 쿨타임 로그 중복 방지
+        private float _lastDashLogTime = -10f;    // 구르기 간격 실측용
 
         /// <summary>구르기 스킬: 쿨타임과 스태미나 소모를 줄인다.</summary>
         private void ApplyDashSettings()
@@ -308,6 +354,10 @@ namespace Dskill
                     {
                         _originalDashStamina = _dashAction.staminaCost;
                     }
+                    if (_dashAction.dashTime > 0f && _dashAction.dashTime <= 5f)
+                    {
+                        _originalDashTime = _dashAction.dashTime;
+                    }
                 }
             }
             if (_dashAction == null)
@@ -323,6 +373,10 @@ namespace Dskill
             {
                 _originalDashStamina = _dashAction.staminaCost;
             }
+            if (_originalDashTime <= 0f)
+            {
+                _originalDashTime = _dashAction.dashTime;
+            }
 
             int level = _skills.GetLevel("dash");
             if (level <= 0)
@@ -330,12 +384,32 @@ namespace Dskill
                 // 아직 스킬 레벨이 없으면 원래 값으로 돌려놓는다
                 _dashAction.coolTime = _originalDashCoolTime;
                 _dashAction.staminaCost = _originalDashStamina;
+                _dashAction.dashTime = _originalDashTime;
                 return;
             }
 
             float factor = 1f - _skills.DashReduction(level);
+            float timeFactor = 1f - _skills.DashTimeReduction(level);   // 동작 시간은 최대 20%만 줄임
             _dashAction.coolTime = _originalDashCoolTime * factor;
             _dashAction.staminaCost = _originalDashStamina * factor;
+            // 동작 시간도 함께 줄인다(애니메이션이 잘리지 않는 범위에서)
+            if (_originalDashTime > 0f)
+            {
+                _dashAction.dashTime = _originalDashTime * timeFactor;
+            }
+            // 동작 시간이 짧아진 만큼 속도를 올려 이동 거리를 유지한다
+            ApplyDashSpeedCompensation(_mainItem, level, timeFactor);
+
+            // 값이 바뀔 때만 로그로 남긴다(밸런스 확인용)
+            if (Mathf.Abs(_loggedDashCool - _dashAction.coolTime) > 0.001f)
+            {
+                _loggedDashCool = _dashAction.coolTime;
+                Debug.Log("[Dskill] 구르기 적용 Lv." + level +
+                          " : 쿨타임 " + _originalDashCoolTime.ToString("0.##") + " → " + _dashAction.coolTime.ToString("0.##") + "초" +
+                          " / 동작 " + _originalDashTime.ToString("0.##") + " → " + _dashAction.dashTime.ToString("0.##") + "초" +
+                          " (쿨타임·스태미나 -" + (_skills.DashReduction(level) * 100f).ToString("0.#") +
+                          "% / 동작 -" + (_skills.DashTimeReduction(level) * 100f).ToString("0.#") + "%)");
+            }
         }
 
         /// <summary>구르기 사용 감지(매 프레임). 구르면 경험치를 준다.</summary>
@@ -351,6 +425,11 @@ namespace Dskill
             if (dashing && !_wasDashing)
             {
                 _skills.AddXp("dash", Rates.DashPerUse);
+
+                // 실측: 이전 구르기와의 간격을 로그로 남긴다(쿨타임 확인용)
+                float gap = Time.time - _lastDashLogTime;
+                Debug.Log("[Dskill] 구르기 사용 감지: 이전 사용과 " + gap.ToString("0.##") + "초 간격");
+                _lastDashLogTime = Time.time;
             }
             _wasDashing = dashing;
         }
@@ -358,6 +437,20 @@ namespace Dskill
         /// <summary>모드를 끌 때 구르기 값을 원래대로 돌려놓는다.</summary>
         private void RestoreDash()
         {
+            // 거리 보정 스탯 먼저 제거
+            try
+            {
+                if (_dashSpeedItem != null)
+                {
+                    _dashSpeedItem.RemoveAllModifiersFrom(_dashSpeedToken);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            _dashSpeedItem = null;
+            _appliedDashSpeedLevel = -1;
+
             if (_dashAction == null)
             {
                 return;
@@ -369,6 +462,10 @@ namespace Dskill
             if (_originalDashStamina > 0f)
             {
                 _dashAction.staminaCost = _originalDashStamina;
+            }
+            if (_originalDashTime > 0f)
+            {
+                _dashAction.dashTime = _originalDashTime;
             }
             _dashAction = null;
         }

@@ -93,8 +93,8 @@ namespace Dskill
         public const float ThrowingInstantChance = 0.30f;   // 투척 엘리트: 즉시 폭발 확률
         public const float LootingSpeedPerLevel = 0.025f;   // 파밍: 레벨당 감지 시간 감소 (만렙 -50%)
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
-        public const float DashReductionPerLevel = 0.03f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (0.0.6: 2배 → 만렙 -60%)
-        public const float DashEliteReduction = 0.40f;      // 구르기 엘리트: 각각 -40% 추가 (0.0.6: 2배)
+        public const float DashReductionPerLevel = 0.02f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -40%)
+        public const float DashEliteReduction = 0.10f;      // 구르기 엘리트: 각각 -10% 추가
         public const float MerchantCooldownPerLevel = 0.025f;  // 하이드아웃: 상인 쿨타임 감소 (만렙 -50%)
         public const float MinerEliteTimeReduction = 0.20f;    // 하이드아웃 엘리트: 채굴 시간 -20%
         public const float CraftingBonusPerLevel = 0.015f;     // 제작: 레벨당 추가 생산 확률 (만렙 30%)
