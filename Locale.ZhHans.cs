@@ -175,6 +175,7 @@ cfg.uploadNow|作者专用：设为 true 并启动游戏可上传一次到创意
 cfg.craftUnlockXp|解锁新配方的经验（批量解锁只算一次）
 cfg.craftXpPerValue|制作经验 = 材料价值 × 此值（0.08 = 8%）
 cfg.craftXpCap|单次制作经验上限（0 = 不限制）
+cfg.hideoutSkills|可以在藏身处获得经验的技能（用逗号分隔）— 其他技能不会在藏身处升级
 
 ";
     }

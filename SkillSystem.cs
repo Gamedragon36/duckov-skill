@@ -48,6 +48,10 @@ namespace Dskill
         private readonly Dictionary<string, string> _effectTextCache = new Dictionary<string, string>();
         private readonly Dictionary<string, int> _effectTextLevel = new Dictionary<string, int>();
 
+        // 하이드아웃(기지) 경험치 제한: 허용 목록 캐시 + 차단 로그(스킬당 1회)
+        private HashSet<string> _hideoutAllowed;
+        private readonly HashSet<string> _hideoutBlockedLogged = new HashSet<string>();
+
         /// <summary>스탯 키 -> 화면에 보여줄 한글 이름</summary>
         private static readonly Dictionary<string, string> StatNamesKo = new Dictionary<string, string>
         {
@@ -207,6 +211,50 @@ namespace Dskill
             }
         }
 
+        /// <summary>지금 장소에서 이 스킬 경험치를 받을 수 있는지 판단한다.</summary>
+        private bool IsAllowedHere(string id)
+        {
+            try
+            {
+                LevelManager manager = LevelManager.Instance;
+                if (manager == null || !manager.IsBaseLevel)
+                {
+                    return true;   // 기지가 아니면 제한 없음
+                }
+
+                if (_hideoutAllowed == null)
+                {
+                    _hideoutAllowed = new HashSet<string>();
+                    string list = _config != null ? _config.HideoutSkills : null;
+                    if (!string.IsNullOrEmpty(list))
+                    {
+                        foreach (string token in list.Split(','))
+                        {
+                            string trimmed = token.Trim();
+                            if (trimmed.Length > 0)
+                            {
+                                _hideoutAllowed.Add(trimmed);
+                            }
+                        }
+                    }
+                }
+
+                if (_hideoutAllowed.Contains(id))
+                {
+                    return true;
+                }
+                if (_hideoutBlockedLogged.Add(id))
+                {
+                    Debug.Log("[Dskill] 기지에서는 '" + id + "' 경험치가 오르지 않습니다 (의도된 제한 — config.ini 의 hideout_skills 로 조정)");
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;   // 판단에 실패하면 막지 않는다(경험치 손실 방지)
+            }
+        }
+
         /// <summary>경험치를 더한다. 레벨이 오르면 OnLevelUp 이벤트가 발생한다.</summary>
         public void AddXp(string id, float amount)
         {
@@ -219,6 +267,12 @@ namespace Dskill
                 }
                 SkillDef def = SkillDefs.Find(id);
                 if (def == null)
+                {
+                    return;
+                }
+
+                // 기지(하이드아웃)에서는 의도된 스킬만 오른다
+                if (!IsAllowedHere(id))
                 {
                     return;
                 }

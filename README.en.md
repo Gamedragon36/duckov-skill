@@ -144,5 +144,5 @@ dotnet build -c Release
 
 ## Version policy
 
-- The mod version is **0.0.4** (bump both `version` in `info.ini` and the `Version` constant in code).
+- The mod version is **0.0.5** (bump both `version` in `info.ini` and the `Version` constant in code).
 

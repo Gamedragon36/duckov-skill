@@ -144,5 +144,5 @@ dotnet build -c Release
 
 ## 버전 정책
 
-- 모드 버전은 **0.0.4** 입니다 (올릴 때는 `info.ini` 의 `version` 과 코드의 `Version` 상수를 함께 변경)
+- 모드 버전은 **0.0.5** 입니다 (올릴 때는 `info.ini` 의 `version` 과 코드의 `Version` 상수를 함께 변경)
 

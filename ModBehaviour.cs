@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.4";
+        public const string Version = "0.0.5";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "craft XP fix, metabolism movement bonus -> endurance";
+        private const string ChangeNote = "hotfix: skills no longer gain XP in the hideout";
 
         private Config _config;
         private MetaProgress _meta;

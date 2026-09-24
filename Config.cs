@@ -26,6 +26,10 @@ namespace Dskill
         public float CraftXpPerValue = 0.08f; // 제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)
         public float CraftXpCap = 400f;       // 제작 1회 최대 XP (0 = 제한 없음)
 
+        /// <summary>하이드아웃(기지)에서 경험치를 받을 수 있는 스킬 (쉼표 구분).
+        ///  여기 없는 스킬은 기지에서 오르지 않는다(기지 배회·정리로 오르는 문제 방지).</summary>
+        public string HideoutSkills = "hideout,crafting,repair,barter,metabolism";
+
         /// <summary>제작자용: true 로 두고 실행하면 창작마당 업로드를 1회 실행한다(실행 후 자동 false)</summary>
         public bool UploadNow = false;
 
@@ -119,6 +123,7 @@ namespace Dskill
                     case "craft_unlock_xp": CraftUnlockXp = ParseFloat(value, CraftUnlockXp); break;
                     case "craft_xp_per_value": CraftXpPerValue = ParseFloat(value, CraftXpPerValue); break;
                     case "craft_xp_cap": CraftXpCap = ParseFloat(value, CraftXpCap); break;
+                    case "hideout_skills": HideoutSkills = value; break;
                     case "upload_now": UploadNow = ParseBool(value, UploadNow); break;
                     default:
                         SkillXpMultiplier[key] = ParseFloat(value, 1f);
@@ -192,6 +197,7 @@ namespace Dskill
             lines.Add("craft_unlock_xp = 200    # " + Locale.T("cfg.craftUnlockXp", "새 레시피 해금 XP (한꺼번에 여러 개가 풀리면 1회만 인정)"));
             lines.Add("craft_xp_per_value = 0.08 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)"));
             lines.Add("craft_xp_cap = 400       # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));
+            lines.Add("hideout_skills = hideout,crafting,repair,barter,metabolism # " + Locale.T("cfg.hideoutSkills", "기지에서 경험치를 받을 스킬(쉼표 구분) — 나머지는 기지에서 오르지 않음"));
             lines.Add("upload_now = false    # " + Locale.T("cfg.uploadNow", "true 로 두고 실행하면 창작마당 업로드를 1회 실행 (제작자용)"));
             lines.Add("");
             lines.Add("[meta]");

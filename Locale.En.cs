@@ -175,6 +175,7 @@ cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Wor
 cfg.craftUnlockXp|XP for unlocking a new recipe (a batch unlock counts once)
 cfg.craftXpPerValue|Crafting XP = material value x this value (0.08 = 8%)
 cfg.craftXpCap|Maximum XP per craft (0 = no limit)
+cfg.hideoutSkills|Skills that can gain XP in the hideout (comma separated) - all others do not gain there
 
 
 ";
