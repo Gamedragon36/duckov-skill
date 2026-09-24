@@ -211,10 +211,10 @@ namespace Dskill
             }
         }
 
-        /// <summary>구르기: 동작 시간 감소 비율 — 애니메이션이 잘리지 않도록 최대 20%까지만 줄인다.</summary>
+        /// <summary>구르기: 동작 시간 감소 비율 — 쿨타임과 같은 비율로 줄인다(사용자 요청: 동작 시간 우선).</summary>
         public float DashTimeReduction(int level)
         {
-            return Mathf.Min(DashReduction(level), 0.20f);
+            return DashReduction(level);
         }
 
         /// <summary>회복: 치료 속도 향상 비율 (0.2 = 사용 시간 20% 감소). 만렙 40% + 엘리트 10%</summary>

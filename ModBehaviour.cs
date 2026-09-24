@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.5";
+        public const string Version = "0.0.6";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "hotfix: skills no longer gain XP in the hideout";
+        private const string ChangeNote = "repair XP fix (equipped+stash), throwing/looting unlock, heal speed, dash tuning";
 
         private Config _config;
         private MetaProgress _meta;
