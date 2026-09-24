@@ -38,7 +38,7 @@ eff.repair|Max durability loss -{0}%
 eff.barter|Sell price +{0}%
 eff.throwing|Throw range +{0}%, explosion damage +{1}%
 eff.looting|Item detection time -{0}%
-eff.dash|Cooldown -{0}%, stamina cost -{1}%
+eff.dash|Cooldown -{0}%, action time -{1}%, stamina cost -{2}%
 eff.hideout|Trader restock cooldown -{0}%
 eff.hideoutElite|, mining time -{0}%
 eff.crafting|Extra output chance {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|Vitality
 skill.vitality.trigger|When you take damage (10 pts per damage)
 skill.vitality.elite|Max health +5
 skill.health.name|Healing
-skill.health.trigger|When healing items restore your health (20 pts per HP)
+skill.health.trigger|When healing items restore your health (10 pts per HP)
 skill.health.elite|Healing speed +10% (extra)
 skill.metabolism.name|Metabolism
 skill.metabolism.trigger|When food or water restores hunger/thirst (20 pts per point)
 skill.metabolism.elite|No damage even at zero hunger/thirst
 skill.dash.name|Roll
-skill.dash.trigger|When you roll (8 pts per roll)
-skill.dash.elite|Cooldown and stamina cost each -20% more
+skill.dash.trigger|When you roll (4 pts per roll)
+skill.dash.elite|Cooldown, action time and stamina cost -10% more each
 skill.nightvision.name|Night Vision
 skill.nightvision.trigger|While active at night (2 pts/s)
 skill.nightvision.elite|Night vision ability +0.2 (fully cancels the night penalty)
@@ -107,16 +107,16 @@ skill.assault.name|Rifleman
 skill.assault.trigger|Only when your bullet hits
 skill.assault.elite|Gun crit chance +10%
 skill.recoil.name|Recoil Control
-skill.recoil.trigger|When you fire a gun (3 pts per shot, 6 pts when aiming)
+skill.recoil.trigger|When you fire a gun (2 pts per shot, 4 pts when aiming)
 skill.recoil.elite|Vertical and horizontal recoil -15%
 skill.marksmanship.name|Marksmanship
-skill.marksmanship.trigger|Hit a target from 20 m or more (45 pts, +70 for a headshot)
+skill.marksmanship.trigger|Hit a target from 8 m or more (45 pts, +70 for a headshot)
 skill.marksmanship.elite|Headshot damage +10%
 skill.melee.name|Melee Combat
 skill.melee.trigger|When a melee attack hits (30 pts, +60 for a melee kill)
 skill.melee.elite|Movement speed +10% (extra)
 skill.throwing.name|Throwables
-skill.throwing.trigger|When you throw an explosive (200 pts, 2 pts per explosion damage)
+skill.throwing.trigger|When you throw an explosive (100 pts, 2 pts per explosion damage)
 skill.throwing.elite|Range +20% (extra), 30% chance to detonate instantly
 skill.perception.name|Awareness
 skill.perception.trigger|When you notice a sound nearby (4 pts, at most once per second)
@@ -137,13 +137,13 @@ skill.repair.name|Repair
 skill.repair.trigger|When you repair gear (30 pts per durability restored)
 skill.repair.elite|No max durability loss
 skill.barter.name|Bartering
-skill.barter.trigger|When you buy or sell items (10 pts per 1,000 traded)
+skill.barter.trigger|When you buy or sell items (5 pts per 1,000 traded)
 skill.barter.elite|Black market restock cooldown -50%
 skill.looting.name|Scavenging
-skill.looting.trigger|When you search containers or bodies (40 pts per find, 15 pts per pickup)
+skill.looting.trigger|When you search containers or bodies (20 pts per find, 10 pts per pickup)
 skill.looting.elite|50% chance to detect instantly
 skill.hideout.name|Hideout
-skill.hideout.trigger|Staying at your base (1 pt/s) plus 500 pts per building built or upgraded
+skill.hideout.trigger|Staying at your base (0.5 pt/s) plus 500 pts per building built or upgraded
 skill.hideout.elite|Bitcoin miner production time -20%
 skill.fishing.name|Fishing
 skill.fishing.trigger|When you catch a fish (250 pts per fish)

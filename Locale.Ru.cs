@@ -38,7 +38,7 @@ eff.repair|Снижение макс. прочности -{0}%
 eff.barter|Цена продажи +{0}%
 eff.throwing|Дальность броска +{0}%, урон взрыва +{1}%
 eff.looting|Время поиска предметов -{0}%
-eff.dash|Перезарядка -{0}%, расход выносливости -{1}%
+eff.dash|Перезарядка -{0}%, время действия -{1}%, расход выносливости -{2}%
 eff.hideout|Перезарядка пополнения торговца -{0}%
 eff.hideoutElite|, время добычи -{0}%
 eff.crafting|Шанс доп. продукции {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|Живучесть
 skill.vitality.trigger|При получении урона (10 очков за единицу урона)
 skill.vitality.elite|Макс. здоровье +5
 skill.health.name|Лечение
-skill.health.trigger|При восстановлении здоровья аптечкой (20 очков за единицу)
+skill.health.trigger|При восстановлении здоровья аптечкой (10 очков за единицу)
 skill.health.elite|Скорость лечения +10% (дополнительно)
 skill.metabolism.name|Метаболизм
-skill.metabolism.trigger|При восстановлении сытости/воды (20 очков за единицу)
+skill.metabolism.trigger|При восстановлении сытости/воды (10 очков за единицу)
 skill.metabolism.elite|Нет урона при нулевой сытости и воде
 skill.dash.name|Кувырок
-skill.dash.trigger|При использовании кувырка (8 очков за раз)
-skill.dash.elite|Перезарядка и расход выносливости ещё -20%
+skill.dash.trigger|При использовании кувырка (4 очка за раз)
+skill.dash.elite|Перезарядка, время действия и расход выносливости ещё -10%
 skill.nightvision.name|Ночное зрение
 skill.nightvision.trigger|При активности ночью (2 очка/с)
 skill.nightvision.elite|Ночное зрение +0.2 (полностью снимает ночной штраф)
@@ -107,16 +107,16 @@ skill.assault.name|Стрельба
 skill.assault.trigger|Только при попадании
 skill.assault.elite|Крит. шанс оружия +10%
 skill.recoil.name|Контроль отдачи
-skill.recoil.trigger|При выстреле (3 очка за выстрел, 6 очков при прицеливании)
+skill.recoil.trigger|При выстреле (2 очка за выстрел, 4 очка при прицеливании)
 skill.recoil.elite|Вертикальная и горизонтальная отдача -15%
 skill.marksmanship.name|Точная стрельба
-skill.marksmanship.trigger|Попадание с 20 м и далее (45 очков, +70 за выстрел в голову)
+skill.marksmanship.trigger|Попадание с 8 м и далее (45 очков, +70 за выстрел в голову)
 skill.marksmanship.elite|Урон в голову +10%
 skill.melee.name|Ближний бой
 skill.melee.trigger|При попадании в ближнем бою (30 очков, +60 за убийство)
 skill.melee.elite|Скорость передвижения +10% (дополнительно)
 skill.throwing.name|Метательное
-skill.throwing.trigger|При броске взрывчатки (200 очков, 2 очка за единицу урона взрыва)
+skill.throwing.trigger|При броске взрывчатки (100 очков, 2 очка за единицу урона взрыва)
 skill.throwing.elite|Дальность +20% (дополнительно), 30% шанс мгновенного взрыва
 skill.perception.name|Восприятие
 skill.perception.trigger|При обнаружении звука рядом (4 очка, не чаще 1 раза в секунду)
@@ -137,13 +137,13 @@ skill.repair.name|Ремонт
 skill.repair.trigger|При ремонте снаряжения (30 очков за единицу прочности)
 skill.repair.elite|Макс. прочность больше не снижается
 skill.barter.name|Торговля
-skill.barter.trigger|При покупке или продаже (10 очков за 1 000 оборота)
+skill.barter.trigger|При покупке или продаже (5 очков за 1 000 оборота)
 skill.barter.elite|Перезарядка чёрного рынка -50%
 skill.looting.name|Обыск
-skill.looting.trigger|При поиске в ящиках и телах (40 очков за находку, 15 очков за подбор)
+skill.looting.trigger|При поиске в ящиках и телах (20 очков за находку, 10 очков за подбор)
 skill.looting.elite|50% шанс мгновенного обнаружения
 skill.hideout.name|Убежище
-skill.hideout.trigger|Пребывание на базе (1 очко/с) + 500 очков за постройку или улучшение
+skill.hideout.trigger|Пребывание на базе (0.5 очка/с) + 500 очков за постройку или улучшение
 skill.hideout.elite|Время добычи биткоин-майнера -20%
 skill.fishing.name|Рыбалка
 skill.fishing.trigger|При поимке рыбы (250 очков за рыбу)

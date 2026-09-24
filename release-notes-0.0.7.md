@@ -58,6 +58,14 @@
 ### 0.0.6 수정 사항 포함
 - 수리 경험치 감지(장착 슬롯 + 창고), 투척·파밍 자기잠금 해제, 회복 = 치료 속도, 구르기(쿨타임·동작 시간·거리 보정)
 
+### UI 설명 문구가 이전 수치를 그대로 쓰던 문제 (같은 0.0.7 에서 수정)
+- 스킬 창의 성장 조건·엘리트 설명이 0.0.6 이전 값을 표시하고 있었습니다. **10개 언어 전부** 최신 수치로 교체했습니다.
+  - 회복 20→**10**점 · 구르기 1회 8→**4**점 · 반동 3·6→**2·4** · 정밀사격 **20m→8m** · 투척 200→**100**점
+  - 거래 1,000당 10→**5** · 파밍 40·15→**20·10** · 기지 체류 초당 1→**0.5**
+  - 구르기 엘리트 문구: "-20% 추가" → "쿨타임·동작 시간·스태미나 **-10% 추가**" (실제 값과 일치)
+  - 구르기 효과 문구에 누락되어 있던 **동작 시간** 감소를 추가
+
+
 ---
 
 ## English
@@ -83,6 +91,14 @@
   closer than that (verified: 577 rifle hits → 0 XP). Requirement lowered to **8 m**.
 - Includes the 0.0.6 fixes: repair detection (equipped slots + stash), throwing/scavenging self-lock,
   healing speed instead of amount, roll (cooldown + action time + distance compensation).
+
+### Stale UI text (fixed in the same 0.0.7 update)
+- The skill window's trigger/elite descriptions still showed pre-0.0.6 numbers. **All 10 languages** were updated:
+  - Healing 20→**10** pts · Roll 8→**4** pts per use · Recoil 3 & 6→**2 & 4** · Marksmanship **20 m→8 m** · Throwing 200→**100**
+  - Barter 10→**5** per 1,000 · Scavenging 40 & 15→**20 & 10** · Hideout 1→**0.5** per second
+  - Roll elite text: "-20% more" → "cooldown, action time and stamina **-10% more**" (now matches the real value)
+  - Added the missing **action time** reduction to the roll effect line
+
 
 ### ⚠️ Note on 0.0.6
 In 0.0.6 XP gain was far too high and the balance broke (measured: 610 XP/min, max level in 3-4 raids).

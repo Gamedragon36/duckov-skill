@@ -38,7 +38,7 @@ eff.repair|最大耐久度の減少 -{0}%
 eff.barter|売却額 +{0}%
 eff.throwing|投擲距離 +{0}%、爆発ダメージ +{1}%
 eff.looting|アイテム探知時間 -{0}%
-eff.dash|クールタイム -{0}%、スタミナ消費 -{1}%
+eff.dash|クールタイム -{0}%、動作時間 -{1}%、スタミナ消費 -{2}%
 eff.hideout|商人の補充クールタイム -{0}%
 eff.hideoutElite|、採掘時間 -{0}%
 eff.crafting|追加生産確率 {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|生命力
 skill.vitality.trigger|ダメージを受けたとき（ダメージ 1 につき 10 点）
 skill.vitality.elite|最大体力 +5
 skill.health.name|回復
-skill.health.trigger|回復アイテムで体力を回復したとき（回復量 1 につき 20 点）
+skill.health.trigger|回復アイテムで体力を回復したとき（回復量 1 につき 10 点）
 skill.health.elite|治療速度 +10%（追加）
 skill.metabolism.name|代謝
 skill.metabolism.trigger|食べ物・水で空腹/水分を回復したとき（1 につき 20 点）
 skill.metabolism.elite|空腹・水分が 0 でもダメージを受けない
 skill.dash.name|ローリング
-skill.dash.trigger|ローリングを使ったとき（1 回 8 点）
-skill.dash.elite|クールタイム・スタミナ消費がさらに -20%
+skill.dash.trigger|ローリングを使ったとき（1 回 4 点）
+skill.dash.elite|クールタイム・動作時間・スタミナ消費がさらに -10%
 skill.nightvision.name|暗視
 skill.nightvision.trigger|夜間に活動したとき（毎秒 2 点）
 skill.nightvision.elite|暗視能力 +0.2（夜間ペナルティを完全に無効化）
@@ -107,16 +107,16 @@ skill.assault.name|射撃術
 skill.assault.trigger|弾が命中したときのみ
 skill.assault.elite|銃クリティカル率 +10%
 skill.recoil.name|反動制御
-skill.recoil.trigger|銃を発砲したとき（1 発 3 点、照準射撃は 6 点）
+skill.recoil.trigger|銃を発砲したとき（1 発 2 点、照準射撃は 4 点）
 skill.recoil.elite|縦・横反動 -15%
 skill.marksmanship.name|精密射撃
-skill.marksmanship.trigger|20m 以上の距離で命中（1 回 45 点、ヘッドショットは +70 点）
+skill.marksmanship.trigger|8m 以上の距離で命中（1 回 45 点、ヘッドショットは +70 点）
 skill.marksmanship.elite|ヘッドショットダメージ +10%
 skill.melee.name|近接戦闘
 skill.melee.trigger|近接攻撃が命中したとき（1 回 30 点、近接撃破 +60 点）
 skill.melee.elite|移動速度 +10%（追加）
 skill.throwing.name|投擲術
-skill.throwing.trigger|爆発物を投げたとき（1 回 200 点、爆発ダメージ 1 につき 2 点）
+skill.throwing.trigger|爆発物を投げたとき（1 回 100 点、爆発ダメージ 1 につき 2 点）
 skill.throwing.elite|距離 +20%（追加）、30% の確率で即時爆発
 skill.perception.name|認知・偵察
 skill.perception.trigger|周囲の音を感知したとき（1 回 4 点、1 秒に最大 1 回）
@@ -137,13 +137,13 @@ skill.repair.name|修理
 skill.repair.trigger|装備を修理したとき（修理した耐久度 1 につき 30 点）
 skill.repair.elite|最大耐久度が減らなくなる
 skill.barter.name|値切り
-skill.barter.trigger|アイテムを売買したとき（取引額 1,000 につき 10 点）
+skill.barter.trigger|アイテムを売買したとき（取引額 1,000 につき 5 点）
 skill.barter.elite|闇市場の補充クールタイム -50%
 skill.looting.name|漁り
-skill.looting.trigger|箱や死体からアイテムを見つけたとき（1 個 40 点、拾得 1 個 15 点）
+skill.looting.trigger|箱や死体からアイテムを見つけたとき（1 個 20 点、拾得 1 個 10 点）
 skill.looting.elite|50% の確率で即座に探知
 skill.hideout.name|ハイドアウト
-skill.hideout.trigger|拠点に滞在（毎秒 1 点）＋ 建物の新築・アップグレード 500 点
+skill.hideout.trigger|拠点に滞在（毎秒 0.5 点）＋ 建物の新築・アップグレード 500 点
 skill.hideout.elite|ビットコインマイナーの生産時間 -20%
 skill.fishing.name|釣り
 skill.fishing.trigger|魚を釣り上げたとき（1 匹 250 点）

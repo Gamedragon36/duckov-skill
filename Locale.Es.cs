@@ -38,7 +38,7 @@ eff.repair|Pérdida de durabilidad máx. -{0}%
 eff.barter|Precio de venta +{0}%
 eff.throwing|Distancia de lanzamiento +{0}%, daño de explosión +{1}%
 eff.looting|Tiempo de detección de objetos -{0}%
-eff.dash|Reutilización -{0}%, costo de aguante -{1}%
+eff.dash|Reutilización -{0}%, tiempo de acción -{1}%, costo de aguante -{2}%
 eff.hideout|Reabastecimiento del comerciante -{0}%
 eff.hideoutElite|, tiempo de minado -{0}%
 eff.crafting|Probabilidad de producción extra {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|Vitalidad
 skill.vitality.trigger|Al recibir daño (10 ptos por punto de daño)
 skill.vitality.elite|Salud máxima +5
 skill.health.name|Curación
-skill.health.trigger|Al recuperar salud con objetos curativos (20 ptos por punto)
+skill.health.trigger|Al recuperar salud con objetos curativos (10 ptos por punto)
 skill.health.elite|Velocidad de curación +10% (extra)
 skill.metabolism.name|Metabolismo
-skill.metabolism.trigger|Al llenar hambre/sed con comida o agua (20 ptos por punto)
+skill.metabolism.trigger|Al llenar hambre/sed con comida o agua (10 ptos por punto)
 skill.metabolism.elite|Sin daño aunque hambre y sed estén en 0
 skill.dash.name|Rodar
-skill.dash.trigger|Al rodar (8 ptos por vez)
-skill.dash.elite|Reutilización y costo de aguante -20% más cada uno
+skill.dash.trigger|Al rodar (4 ptos por vez)
+skill.dash.elite|Reutilización, tiempo de acción y costo de aguante -10% más cada uno
 skill.nightvision.name|Visión nocturna
 skill.nightvision.trigger|Al estar activo de noche (2 ptos/s)
 skill.nightvision.elite|Visión nocturna +0.2 (anula la penalización nocturna)
@@ -107,16 +107,16 @@ skill.assault.name|Tiro
 skill.assault.trigger|Solo cuando tu bala acierta
 skill.assault.elite|Prob. crítica de arma +10%
 skill.recoil.name|Control del retroceso
-skill.recoil.trigger|Al disparar (3 ptos por disparo, 6 ptos apuntando)
+skill.recoil.trigger|Al disparar (2 ptos por disparo, 4 ptos apuntando)
 skill.recoil.elite|Retroceso vertical y horizontal -15%
 skill.marksmanship.name|Puntería
-skill.marksmanship.trigger|Acertar desde 20 m o más (45 ptos, +70 por disparo a la cabeza)
+skill.marksmanship.trigger|Acertar desde 8 m o más (45 ptos, +70 por disparo a la cabeza)
 skill.marksmanship.elite|Daño de disparo a la cabeza +10%
 skill.melee.name|Cuerpo a cuerpo
 skill.melee.trigger|Al acertar un golpe cuerpo a cuerpo (30 ptos, +60 por muerte)
 skill.melee.elite|Velocidad de movimiento +10% (extra)
 skill.throwing.name|Lanzables
-skill.throwing.trigger|Al lanzar un explosivo (200 ptos, 2 ptos por punto de daño)
+skill.throwing.trigger|Al lanzar un explosivo (100 ptos, 2 ptos por punto de daño)
 skill.throwing.elite|Alcance +20% (extra), 30% de probabilidad de detonar al instante
 skill.perception.name|Percepción
 skill.perception.trigger|Al notar un sonido cercano (4 ptos, máximo 1 vez por segundo)
@@ -137,13 +137,13 @@ skill.repair.name|Reparación
 skill.repair.trigger|Al reparar equipo (30 ptos por punto de durabilidad)
 skill.repair.elite|Sin pérdida de durabilidad máxima
 skill.barter.name|Regateo
-skill.barter.trigger|Al comprar o vender (10 ptos por cada 1.000)
+skill.barter.trigger|Al comprar o vender (5 ptos por cada 1.000)
 skill.barter.elite|Reabastecimiento del mercado negro -50%
 skill.looting.name|Saqueo
-skill.looting.trigger|Al buscar en cajas o cuerpos (40 ptos por hallazgo, 15 ptos por recogida)
+skill.looting.trigger|Al buscar en cajas o cuerpos (20 ptos por hallazgo, 10 ptos por recogida)
 skill.looting.elite|50% de probabilidad de detección instantánea
 skill.hideout.name|Refugio
-skill.hideout.trigger|Estar en la base (1 pto/s) + 500 ptos por construir o mejorar
+skill.hideout.trigger|Estar en la base (0.5 pto/s) + 500 ptos por construir o mejorar
 skill.hideout.elite|Tiempo de producción del minero de bitcoins -20%
 skill.fishing.name|Pesca
 skill.fishing.trigger|Al pescar un pez (250 ptos por pez)

@@ -20,7 +20,7 @@ namespace Dskill
         public const string Version = "0.0.7";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.7 XP balance rework (curve 2.6x, gain rates halved) + marksmanship 8m fix";
+        private const string ChangeNote = "0.0.7 XP balance rework (curve 2.6x, rates halved) + marksmanship 8m + UI text fixes (10 languages)";
 
         private Config _config;
         private MetaProgress _meta;

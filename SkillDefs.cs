@@ -172,7 +172,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "health", NameKo = "회복", Icon = "＋", Category = "신체",
-                TriggerKo = "회복 아이템으로 체력을 채울 때 (회복량 1당 20점)",
+                TriggerKo = "회복 아이템으로 체력을 채울 때 (회복량 1당 10점)",
                 EliteKo = "치료 속도 +10% (추가)",
                 Effects = new EffectDef[0],        // 특수 처리: 사용 시간 감소(치료 속도)
                 EliteEffects = new EffectDef[0]
@@ -194,8 +194,8 @@ namespace Dskill
             new SkillDef
             {
                 Id = "dash", NameKo = "구르기", Icon = "○", Category = "신체",
-                TriggerKo = "구르기를 사용할 때 (1회 8점)",
-                EliteKo = "쿨타임·스태미나 소모 각각 -20% 추가",
+                TriggerKo = "구르기를 사용할 때 (1회 4점)",
+                EliteKo = "쿨타임·동작 시간·스태미나 소모 각각 -10% 추가",
                 Effects = new EffectDef[0],        // 특수 처리: 쿨타임 -30%, 스태미나 소모 -30%
                 EliteEffects = new EffectDef[0]
             },
@@ -232,7 +232,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "recoil", NameKo = "반동 제어", Icon = "▽", Category = "전투",
-                TriggerKo = "총을 발사할 때 (1발 3점, 조준 사격은 6점)",
+                TriggerKo = "총을 발사할 때 (1발 2점, 조준 사격은 4점)",
                 EliteKo = "수직·수평 반동 -15%",
                 Effects = new[]
                 {
@@ -247,7 +247,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "marksmanship", NameKo = "정밀 사격", Icon = "◎", Category = "전투",
-                TriggerKo = "20m 이상 거리에서 명중 (1회 45점, 헤드샷은 +70점)",
+                TriggerKo = "8m 이상 거리에서 명중 (1회 45점, 헤드샷은 +70점)",
                 EliteKo = "헤드샷 대미지 +10%",
                 Effects = new[]
                 {
@@ -280,7 +280,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "throwing", NameKo = "투척술", Icon = "▶", Category = "전투",
-                TriggerKo = "폭발물을 던질 때 (1회 200점, 폭발 피해 1당 2점)",
+                TriggerKo = "폭발물을 던질 때 (1회 100점, 폭발 피해 1당 2점)",
                 EliteKo = "거리 +20% (추가), 폭발물 즉시 폭발 확률 30%",
                 Effects = new EffectDef[0],        // 특수 처리: 투척 거리 +30%, 폭발 대미지 +50%
                 EliteEffects = new EffectDef[0]
@@ -377,7 +377,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "barter", NameKo = "흥정", Icon = "※", Category = "실용",
-                TriggerKo = "아이템을 사고팔 때 (거래 금액 1,000당 10점)",
+                TriggerKo = "아이템을 사고팔 때 (거래 금액 1,000당 5점)",
                 EliteKo = "암시장 갱신 쿨타임 -50%",
                 Effects = new EffectDef[0],        // 특수 처리: 판매 금액 보너스
                 EliteEffects = new EffectDef[0]
@@ -385,7 +385,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "looting", NameKo = "파밍", Icon = "▣", Category = "실용",
-                TriggerKo = "상자·시체에서 아이템을 찾아낼 때 (1개 40점, 획득 1개 15점)",
+                TriggerKo = "상자·시체에서 아이템을 찾아낼 때 (1개 20점, 획득 1개 10점)",
                 EliteKo = "50% 확률로 즉시 감지",
                 Effects = new EffectDef[0],        // 특수 처리: 아이템 감지 시간 -50%
                 EliteEffects = new EffectDef[0]
@@ -393,7 +393,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "hideout", NameKo = "하이드아웃", Icon = "■", Category = "실용",
-                TriggerKo = "기지 체류(초당 1점) + 건물 신축·업그레이드 500점",
+                TriggerKo = "기지 체류(초당 0.5점) + 건물 신축·업그레이드 500점",
                 EliteKo = "비트코인 채굴기 생산 시간 -20%",
                 Effects = new EffectDef[0],        // 특수 처리: 상인 쿨타임 -50%
                 EliteEffects = new EffectDef[0]

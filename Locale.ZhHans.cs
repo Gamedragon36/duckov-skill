@@ -38,7 +38,7 @@ eff.repair|最大耐久度损耗 -{0}%
 eff.barter|售价 +{0}%
 eff.throwing|投掷距离 +{0}%，爆炸伤害 +{1}%
 eff.looting|物品搜索时间 -{0}%
-eff.dash|冷却 -{0}%，耐力消耗 -{1}%
+eff.dash|冷却 -{0}%，动作时间 -{1}%，耐力消耗 -{2}%
 eff.hideout|商人补货冷却 -{0}%
 eff.hideoutElite|，挖矿时间 -{0}%
 eff.crafting|额外产出概率 {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|生命
 skill.vitality.trigger|受到伤害时（每点伤害 10 点）
 skill.vitality.elite|最大生命值 +5
 skill.health.name|治疗
-skill.health.trigger|用治疗物品恢复生命时（每点恢复量 20 点）
+skill.health.trigger|用治疗物品恢复生命时（每点恢复量 10 点）
 skill.health.elite|治疗速度 +10%（额外）
 skill.metabolism.name|新陈代谢
 skill.metabolism.trigger|用食物或水补充饥饿/水分时（每点 20 点）
 skill.metabolism.elite|饥饿、水分为 0 时也不会受到伤害
 skill.dash.name|翻滚
-skill.dash.trigger|使用翻滚时（每次 8 点）
-skill.dash.elite|冷却与耐力消耗各再 -20%
+skill.dash.trigger|使用翻滚时（每次 4 点）
+skill.dash.elite|冷却、动作时间与耐力消耗各再 -10%
 skill.nightvision.name|夜视
 skill.nightvision.trigger|夜晚活动时（每秒 2 点）
 skill.nightvision.elite|夜视能力 +0.2（完全抵消夜间惩罚）
@@ -107,16 +107,16 @@ skill.assault.name|射击术
 skill.assault.trigger|仅当子弹命中时
 skill.assault.elite|枪械暴击率 +10%
 skill.recoil.name|后坐力控制
-skill.recoil.trigger|开枪时（每发 3 点，瞄准射击 6 点）
+skill.recoil.trigger|开枪时（每发 2 点，瞄准射击 4 点）
 skill.recoil.elite|垂直、水平后坐力 -15%
 skill.marksmanship.name|精准射击
-skill.marksmanship.trigger|在 20 米以上距离命中（每次 45 点，爆头 +70 点）
+skill.marksmanship.trigger|在 8 米以上距离命中（每次 45 点，爆头 +70 点）
 skill.marksmanship.elite|爆头伤害 +10%
 skill.melee.name|近战
 skill.melee.trigger|近战攻击命中时（每次 30 点，近战击杀 +60 点）
 skill.melee.elite|移动速度 +10%（额外）
 skill.throwing.name|投掷
-skill.throwing.trigger|投掷爆炸物时（每次 200 点，每点爆炸伤害 2 点）
+skill.throwing.trigger|投掷爆炸物时（每次 100 点，每点爆炸伤害 2 点）
 skill.throwing.elite|距离 +20%（额外），30% 概率立即爆炸
 skill.perception.name|感知
 skill.perception.trigger|察觉到周围声响时（每次 4 点，每秒最多 1 次）
@@ -137,13 +137,13 @@ skill.repair.name|维修
 skill.repair.trigger|维修装备时（每点修复耐久度 30 点）
 skill.repair.elite|最大耐久度不再下降
 skill.barter.name|讨价还价
-skill.barter.trigger|买卖物品时（每 1,000 交易额 10 点）
+skill.barter.trigger|买卖物品时（每 1,000 交易额 5 点）
 skill.barter.elite|黑市刷新冷却 -50%
 skill.looting.name|搜刮
-skill.looting.trigger|在箱子或尸体中发现物品时（每件 40 点，拾取 1 件 15 点）
+skill.looting.trigger|在箱子或尸体中发现物品时（每件 20 点，拾取 1 件 10 点）
 skill.looting.elite|50% 概率立即发现
 skill.hideout.name|藏身处
-skill.hideout.trigger|待在基地（每秒 1 点）+ 新建或升级建筑 500 点
+skill.hideout.trigger|待在基地（每秒 0.5 点）+ 新建或升级建筑 500 点
 skill.hideout.elite|比特币矿机产出时间 -20%
 skill.fishing.name|钓鱼
 skill.fishing.trigger|钓到鱼时（每条 250 点）

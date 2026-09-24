@@ -401,8 +401,8 @@ namespace Dskill
                 if (id == "dash")
                 {
                     float reduction = DashReduction(level) * 100f;
-                    return Locale.F("eff.dash", "쿨타임 -{0}%, 스태미나 소모 -{1}%",
-                        reduction.ToString("0.#"), reduction.ToString("0.#"));
+                    return Locale.F("eff.dash", "쿨타임 -{0}%, 동작 시간 -{1}%, 스태미나 소모 -{2}%",
+                        reduction.ToString("0.#"), reduction.ToString("0.#"), reduction.ToString("0.#"));
                 }
                 if (id == "hideout")
                 {

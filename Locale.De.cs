@@ -38,7 +38,7 @@ eff.repair|Max. Haltbarkeitsverlust -{0}%
 eff.barter|Verkaufspreis +{0}%
 eff.throwing|Wurfweite +{0}%, Explosionsschaden +{1}%
 eff.looting|Item-Erkennungszeit -{0}%
-eff.dash|Abklingzeit -{0}%, Ausdauerkosten -{1}%
+eff.dash|Abklingzeit -{0}%, Aktionszeit -{1}%, Ausdauerkosten -{2}%
 eff.hideout|Händler-Nachschub-Abklingzeit -{0}%
 eff.hideoutElite|, Abbauzeit -{0}%
 eff.crafting|Zusätzliche Ausgabechance {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|Vitalität
 skill.vitality.trigger|Wenn du Schaden erleidest (10 Pkt. pro Schaden)
 skill.vitality.elite|Max. Gesundheit +5
 skill.health.name|Heilung
-skill.health.trigger|Wenn Heilmittel deine Gesundheit auffüllen (20 Pkt. pro HP)
+skill.health.trigger|Wenn Heilmittel deine Gesundheit auffüllen (10 Pkt. pro HP)
 skill.health.elite|Heilgeschwindigkeit +10% (zusätzlich)
 skill.metabolism.name|Stoffwechsel
 skill.metabolism.trigger|Wenn Essen oder Wasser Hunger/Durst füllt (20 Pkt. pro Punkt)
 skill.metabolism.elite|Kein Schaden bei Hunger/Durst 0
 skill.dash.name|Rollen
-skill.dash.trigger|Wenn du rollst (8 Pkt. pro Rolle)
-skill.dash.elite|Abklingzeit und Ausdauerkosten je -20% mehr
+skill.dash.trigger|Wenn du rollst (4 Pkt. pro Rolle)
+skill.dash.elite|Abklingzeit, Aktionszeit und Ausdauerkosten je -10% mehr
 skill.nightvision.name|Nachtsicht
 skill.nightvision.trigger|Bei Aktivität in der Nacht (2 Pkt./s)
 skill.nightvision.elite|Nachtsichtfähigkeit +0.2 (hebt den Nachtmalus vollständig auf)
@@ -107,16 +107,16 @@ skill.assault.name|Schütze
 skill.assault.trigger|Nur wenn ein Schuss trifft
 skill.assault.elite|Schusswaffen-Kritchance +10%
 skill.recoil.name|Rückstoßkontrolle
-skill.recoil.trigger|Wenn du schießt (3 Pkt. pro Schuss, 6 Pkt. beim Zielen)
+skill.recoil.trigger|Wenn du schießt (2 Pkt. pro Schuss, 4 Pkt. beim Zielen)
 skill.recoil.elite|Vertikaler und horizontaler Rückstoß -15%
 skill.marksmanship.name|Präzisionsschuss
-skill.marksmanship.trigger|Treffer aus 20 m oder mehr (45 Pkt., +70 bei Kopfschuss)
+skill.marksmanship.trigger|Treffer aus 8 m oder mehr (45 Pkt., +70 bei Kopfschuss)
 skill.marksmanship.elite|Kopfschussschaden +10%
 skill.melee.name|Nahkampf
 skill.melee.trigger|Wenn ein Nahkampfangriff trifft (30 Pkt., +60 bei Nahkampf-Kill)
 skill.melee.elite|Bewegungsgeschwindigkeit +10% (zusätzlich)
 skill.throwing.name|Wurfwaffen
-skill.throwing.trigger|Wenn du Sprengstoff wirfst (200 Pkt., 2 Pkt. pro Explosionsschaden)
+skill.throwing.trigger|Wenn du Sprengstoff wirfst (100 Pkt., 2 Pkt. pro Explosionsschaden)
 skill.throwing.elite|Reichweite +20% (zusätzlich), 30% Chance auf Sofortzündung
 skill.perception.name|Wahrnehmung
 skill.perception.trigger|Wenn du ein Geräusch bemerkst (4 Pkt., max. 1x pro Sekunde)
@@ -137,13 +137,13 @@ skill.repair.name|Reparatur
 skill.repair.trigger|Wenn du Ausrüstung reparierst (30 Pkt. pro Haltbarkeit)
 skill.repair.elite|Kein Verlust der max. Haltbarkeit
 skill.barter.name|Feilschen
-skill.barter.trigger|Beim Kaufen oder Verkaufen (10 Pkt. pro 1.000 Handel)
+skill.barter.trigger|Beim Kaufen oder Verkaufen (5 Pkt. pro 1.000 Handel)
 skill.barter.elite|Schwarzmarkt-Abklingzeit -50%
 skill.looting.name|Plündern
-skill.looting.trigger|Beim Durchsuchen von Kisten oder Leichen (40 Pkt. pro Fund, 15 Pkt. pro Aufnahme)
+skill.looting.trigger|Beim Durchsuchen von Kisten oder Leichen (20 Pkt. pro Fund, 10 Pkt. pro Aufnahme)
 skill.looting.elite|50% Chance auf sofortige Erkennung
 skill.hideout.name|Versteck
-skill.hideout.trigger|Aufenthalt im Stützpunkt (1 Pkt./s) + 500 Pkt. pro Bau oder Ausbau
+skill.hideout.trigger|Aufenthalt im Stützpunkt (0.5 Pkt./s) + 500 Pkt. pro Bau oder Ausbau
 skill.hideout.elite|Bitcoin-Miner-Produktionszeit -20%
 skill.fishing.name|Angeln
 skill.fishing.trigger|Wenn du einen Fisch fängst (250 Pkt. pro Fisch)

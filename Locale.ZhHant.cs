@@ -38,7 +38,7 @@ eff.repair|最大耐久度損耗 -{0}%
 eff.barter|售價 +{0}%
 eff.throwing|投擲距離 +{0}%，爆炸傷害 +{1}%
 eff.looting|物品搜索時間 -{0}%
-eff.dash|冷卻 -{0}%，耐力消耗 -{1}%
+eff.dash|冷卻 -{0}%，動作時間 -{1}%，耐力消耗 -{2}%
 eff.hideout|商人補貨冷卻 -{0}%
 eff.hideoutElite|，挖礦時間 -{0}%
 eff.crafting|額外產出機率 {0}%
@@ -92,14 +92,14 @@ skill.vitality.name|生命
 skill.vitality.trigger|受到傷害時（每點傷害 10 點）
 skill.vitality.elite|最大生命值 +5
 skill.health.name|治療
-skill.health.trigger|用治療物品恢復生命時（每點恢復量 20 點）
+skill.health.trigger|用治療物品恢復生命時（每點恢復量 10 點）
 skill.health.elite|治療速度 +10%（額外）
 skill.metabolism.name|新陳代謝
 skill.metabolism.trigger|用食物或水補充飢餓/水分時（每點 20 點）
 skill.metabolism.elite|飢餓、水分為 0 時也不會受到傷害
 skill.dash.name|翻滾
-skill.dash.trigger|使用翻滾時（每次 8 點）
-skill.dash.elite|冷卻與耐力消耗各再 -20%
+skill.dash.trigger|使用翻滾時（每次 4 點）
+skill.dash.elite|冷卻、動作時間與耐力消耗各再 -10%
 skill.nightvision.name|夜視
 skill.nightvision.trigger|夜晚活動時（每秒 2 點）
 skill.nightvision.elite|夜視能力 +0.2（完全抵消夜間懲罰）
@@ -107,16 +107,16 @@ skill.assault.name|射擊術
 skill.assault.trigger|僅當子彈命中時
 skill.assault.elite|槍械爆擊率 +10%
 skill.recoil.name|後座力控制
-skill.recoil.trigger|開槍時（每發 3 點，瞄準射擊 6 點）
+skill.recoil.trigger|開槍時（每發 2 點，瞄準射擊 4 點）
 skill.recoil.elite|垂直、水平後座力 -15%
 skill.marksmanship.name|精準射擊
-skill.marksmanship.trigger|在 20 公尺以上距離命中（每次 45 點，爆頭 +70 點）
+skill.marksmanship.trigger|在 8 公尺以上距離命中（每次 45 點，爆頭 +70 點）
 skill.marksmanship.elite|爆頭傷害 +10%
 skill.melee.name|近戰
 skill.melee.trigger|近戰攻擊命中時（每次 30 點，近戰擊殺 +60 點）
 skill.melee.elite|移動速度 +10%（額外）
 skill.throwing.name|投擲
-skill.throwing.trigger|投擲爆炸物時（每次 200 點，每點爆炸傷害 2 點）
+skill.throwing.trigger|投擲爆炸物時（每次 100 點，每點爆炸傷害 2 點）
 skill.throwing.elite|距離 +20%（額外），30% 機率立即爆炸
 skill.perception.name|感知
 skill.perception.trigger|察覺到周圍聲響時（每次 4 點，每秒最多 1 次）
@@ -137,13 +137,13 @@ skill.repair.name|維修
 skill.repair.trigger|維修裝備時（每點修復耐久度 30 點）
 skill.repair.elite|最大耐久度不再下降
 skill.barter.name|討價還價
-skill.barter.trigger|買賣物品時（每 1,000 交易額 10 點）
+skill.barter.trigger|買賣物品時（每 1,000 交易額 5 點）
 skill.barter.elite|黑市刷新冷卻 -50%
 skill.looting.name|搜刮
-skill.looting.trigger|在箱子或屍體中發現物品時（每件 40 點，拾取 1 件 15 點）
+skill.looting.trigger|在箱子或屍體中發現物品時（每件 20 點，拾取 1 件 10 點）
 skill.looting.elite|50% 機率立即發現
 skill.hideout.name|藏身處
-skill.hideout.trigger|待在基地（每秒 1 點）+ 新建或升級建築 500 點
+skill.hideout.trigger|待在基地（每秒 0.5 點）+ 新建或升級建築 500 點
 skill.hideout.elite|比特幣礦機產出時間 -20%
 skill.fishing.name|釣魚
 skill.fishing.trigger|釣到魚時（每條 250 點）
