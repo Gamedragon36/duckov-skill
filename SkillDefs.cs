@@ -141,7 +141,10 @@ namespace Dskill
                 EliteKo = "스태미나 회복 속도 +30%",
                 Effects = new[]
                 {
-                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -0.02f)  // 만렙 -40%
+                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -0.02f),  // 만렙 -40%
+                    // 신진대사에서 옮겨온 이동 속도 (만렙 +10%)
+                    new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),
+                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
                 },
                 EliteEffects = new[]
                 {
@@ -184,9 +187,8 @@ namespace Dskill
                 Effects = new[]
                 {
                     new EffectDef("EnergyCost", StatModKind.PercentMultiply, -0.015f),   // 만렙 -30%
-                    new EffectDef("WaterCost", StatModKind.PercentMultiply, -0.015f),    // 만렙 -30%
-                    new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),     // 만렙 +10%
-                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
+                    new EffectDef("WaterCost", StatModKind.PercentMultiply, -0.015f)     // 만렙 -30%
+                    // 이동 속도 보너스는 지구력으로 옮겼습니다 (2026-09-24 밸런스 조정)
                 },
                 EliteEffects = new EffectDef[0]
             },
@@ -417,7 +419,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "crafting", NameKo = "제작", Icon = "□", Category = "실용",
-                TriggerKo = "제작 완료 1회 200점 + 새 레시피 해금 1회 400점",
+                TriggerKo = "제작 완료 (재료 가치에 비례) · 새 레시피 해금",
                 EliteKo = "추가 생산 확률 +20% (총 50%)",
                 Effects = new EffectDef[0],        // 특수 처리: 30% 확률로 결과물 1개 추가
                 EliteEffects = new EffectDef[0]

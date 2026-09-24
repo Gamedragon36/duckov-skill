@@ -148,7 +148,7 @@ skill.fishing.name|Fishing
 skill.fishing.trigger|When you catch a fish (250 pts per fish)
 skill.fishing.elite|Fishing skill and luck +20% each (extra)
 skill.crafting.name|Crafting
-skill.crafting.trigger|200 pts per completed craft plus 400 pts per new recipe unlocked
+skill.crafting.trigger|Crafting (scales with the material value) plus each new recipe unlocked
 skill.crafting.elite|Extra output chance +20% (50% total)
 # ==== config.ini 주석 ====
 cfg.header|Tarkov-style skill system - settings
@@ -172,6 +172,9 @@ cfg.skillXpNote|Per-skill XP multiplier (0.5 = half speed, 2.0 = double speed)
 cfg.language|UI language: auto (follows the language you chose in the game), or en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br
 cfg.xpStage|XP gain difficulty stage 1-5 (1 = fastest, 5 = default rate)
 cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Workshop once
+cfg.craftUnlockXp|XP for unlocking a new recipe (a batch unlock counts once)
+cfg.craftXpPerValue|Crafting XP = material value x this value (0.08 = 8%)
+cfg.craftXpCap|Maximum XP per craft (0 = no limit)
 
 
 ";

@@ -148,7 +148,7 @@ skill.fishing.name|Angeln
 skill.fishing.trigger|Wenn du einen Fisch fängst (250 Pkt. pro Fisch)
 skill.fishing.elite|Angelkunst und Glück je +20% (zusätzlich)
 skill.crafting.name|Herstellen
-skill.crafting.trigger|200 Pkt. pro fertigem Craft + 400 Pkt. pro neuem Rezept
+skill.crafting.trigger|Herstellen (nach Materialwert) + jedes neue Rezept
 skill.crafting.elite|Zusätzliche Ausgabechance +20% (insgesamt 50%)
 
 ";

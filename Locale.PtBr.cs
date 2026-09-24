@@ -148,7 +148,7 @@ skill.fishing.name|Pesca
 skill.fishing.trigger|Ao pescar um peixe (250 pts por peixe)
 skill.fishing.elite|Habilidade de pesca e sorte +20% cada (extra)
 skill.crafting.name|Fabricação
-skill.crafting.trigger|200 pts por fabricação + 400 pts por nova receita
+skill.crafting.trigger|Fabricação (conforme o valor dos materiais) + cada nova receita
 skill.crafting.elite|Chance de produção extra +20% (50% no total)
 
 ";

@@ -148,7 +148,7 @@ skill.fishing.name|钓鱼
 skill.fishing.trigger|钓到鱼时（每条 250 点）
 skill.fishing.elite|钓鱼能力与运气各 +20%（额外）
 skill.crafting.name|制作
-skill.crafting.trigger|完成制作 1 次 200 点 + 解锁新配方 1 次 400 点
+skill.crafting.trigger|完成制作（与材料价值成正比）+ 解锁新配方
 skill.crafting.elite|额外产出概率 +20%（合计 50%）
 # ==== config.ini 注释 ====
 cfg.header|塔科夫式技能系统 - 设置
@@ -172,6 +172,9 @@ cfg.skillXpNote|各技能经验倍率（0.5=一半速度，2.0=两倍速度）
 cfg.language|界面语言：auto（跟随游戏内选择的语言），或 en、ko、zh、zh-hant、ja、de、ru、es、fr、pt-br
 cfg.xpStage|经验倍率档位 1~5（1=最快，5=默认）
 cfg.uploadNow|作者专用：设为 true 并启动游戏可上传一次到创意工坊
+cfg.craftUnlockXp|解锁新配方的经验（批量解锁只算一次）
+cfg.craftXpPerValue|制作经验 = 材料价值 × 此值（0.08 = 8%）
+cfg.craftXpCap|单次制作经验上限（0 = 不限制）
 
 ";
     }

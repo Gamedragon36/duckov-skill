@@ -148,7 +148,7 @@ skill.fishing.name|Рыбалка
 skill.fishing.trigger|При поимке рыбы (250 очков за рыбу)
 skill.fishing.elite|Навык рыбалки и удача по +20% (дополнительно)
 skill.crafting.name|Изготовление
-skill.crafting.trigger|200 очков за изготовление + 400 очков за новый рецепт
+skill.crafting.trigger|Изготовление (по стоимости материалов) + каждый новый рецепт
 skill.crafting.elite|Шанс доп. продукции +20% (итого 50%)
 
 ";

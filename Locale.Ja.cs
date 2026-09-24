@@ -148,7 +148,7 @@ skill.fishing.name|釣り
 skill.fishing.trigger|魚を釣り上げたとき（1 匹 250 点）
 skill.fishing.elite|釣り能力・運がそれぞれ +20%（追加）
 skill.crafting.name|製作
-skill.crafting.trigger|製作完了 1 回 200 点 ＋ 新レシピ解放 1 回 400 点
+skill.crafting.trigger|製作完了（材料の価値に比例）＋ 新レシピ解放
 skill.crafting.elite|追加生産確率 +20%（合計 50%）
 
 ";

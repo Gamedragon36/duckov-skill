@@ -36,10 +36,10 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
 | ◆ | Strength | move while above 70% carry weight | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
-| ▲ | Endurance | sprint | stamina drain **-40%** | stamina regen **+30%** |
+| ▲ | Endurance | sprint | stamina drain **-40%**, movement **+10%** | stamina regen **+30%** |
 | ● | Vitality | take damage | max health **+20** | **+5** |
 | ＋ | Healing | heal with items | healing **+40%** | **+10%** (total +50%) |
-| ◉ | Metabolism | eat / drink | hunger & water drain **-30%**, movement **+10%** | **no starvation damage** |
+| ◉ | Metabolism | eat / drink | hunger & water drain **-30%** | **no starvation damage** |
 | ○ | Dash | dodge-roll | cooldown **-30%**, stamina cost **-30%** | each **-20%** (total -50%) |
 | ▼ | Night Vision | spend time at night (raids) | night vision ability **+0.3** | **+0.2** (total 1.0 = no night penalty) |
 
@@ -144,5 +144,5 @@ dotnet build -c Release
 
 ## Version policy
 
-- The mod version is **0.0.3** (bump both `version` in `info.ini` and the `Version` constant in code).
+- The mod version is **0.0.4** (bump both `version` in `info.ini` and the `Version` constant in code).
 

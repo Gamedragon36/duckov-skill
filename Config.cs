@@ -21,6 +21,11 @@ namespace Dskill
         public string Language = "auto";     // 표시 언어 (auto = OS 언어를 따름)
         public int XpStage = 5;              // 경험치 획득 난이도 1~5 (1=가장 빠름, 5=기본)
 
+        // ----- 제작 스킬 밸런스 (값은 여기서 자유롭게 조정) -----
+        public float CraftUnlockXp = 200f;    // 새 레시피 해금 XP (여러 개가 한꺼번에 풀리면 1회만 인정)
+        public float CraftXpPerValue = 0.08f; // 제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)
+        public float CraftXpCap = 400f;       // 제작 1회 최대 XP (0 = 제한 없음)
+
         /// <summary>제작자용: true 로 두고 실행하면 창작마당 업로드를 1회 실행한다(실행 후 자동 false)</summary>
         public bool UploadNow = false;
 
@@ -111,6 +116,9 @@ namespace Dskill
                     case "reset_skills": ResetSkills = ParseBool(value, ResetSkills); break;
                     case "language": Language = value; break;
                     case "xp_stage": XpStage = ParseInt(value, XpStage); break;
+                    case "craft_unlock_xp": CraftUnlockXp = ParseFloat(value, CraftUnlockXp); break;
+                    case "craft_xp_per_value": CraftXpPerValue = ParseFloat(value, CraftXpPerValue); break;
+                    case "craft_xp_cap": CraftXpCap = ParseFloat(value, CraftXpCap); break;
                     case "upload_now": UploadNow = ParseBool(value, UploadNow); break;
                     default:
                         SkillXpMultiplier[key] = ParseFloat(value, 1f);
@@ -127,6 +135,9 @@ namespace Dskill
             if (MetaBonusCapPercent > 1000f) MetaBonusCapPercent = 1000f;
             if (XpStage < 1) XpStage = 1;
             if (XpStage > 5) XpStage = 5;
+            if (CraftUnlockXp < 0f) CraftUnlockXp = 0f;
+            if (CraftXpPerValue < 0f) CraftXpPerValue = 0f;
+            if (CraftXpCap < 0f) CraftXpCap = 0f;
         }
 
         private static int ParseInt(string text, int fallback)
@@ -178,6 +189,9 @@ namespace Dskill
             lines.Add("notify_levelup = true # " + Locale.T("cfg.notifyLevelUp", "레벨업 때 알림 표시 (true/false)"));
             lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto(게임에서 고른 언어) / ko / en / zh / zh-hant / ja / de / ru / es / fr / pt-br"));
             lines.Add("xp_stage = 5          # " + Locale.T("cfg.xpStage", "경험치 난이도 1~5 (1=가장 빠름, 5=기본)"));
+            lines.Add("craft_unlock_xp = 200    # " + Locale.T("cfg.craftUnlockXp", "새 레시피 해금 XP (한꺼번에 여러 개가 풀리면 1회만 인정)"));
+            lines.Add("craft_xp_per_value = 0.08 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)"));
+            lines.Add("craft_xp_cap = 400       # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));
             lines.Add("upload_now = false    # " + Locale.T("cfg.uploadNow", "true 로 두고 실행하면 창작마당 업로드를 1회 실행 (제작자용)"));
             lines.Add("");
             lines.Add("[meta]");

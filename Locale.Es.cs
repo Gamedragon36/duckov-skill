@@ -148,7 +148,7 @@ skill.fishing.name|Pesca
 skill.fishing.trigger|Al pescar un pez (250 ptos por pez)
 skill.fishing.elite|Habilidad de pesca y suerte +20% cada una (extra)
 skill.crafting.name|Fabricación
-skill.crafting.trigger|200 ptos por fabricación + 400 ptos por nueva receta
+skill.crafting.trigger|Fabricación (según el valor de los materiales) + cada nueva receta
 skill.crafting.elite|Probabilidad de producción extra +20% (50% en total)
 
 ";

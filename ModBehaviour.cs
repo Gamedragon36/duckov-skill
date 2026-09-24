@@ -17,7 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.3";
+        public const string Version = "0.0.4";
+
+        /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
+        private const string ChangeNote = "craft XP fix, metabolism movement bonus -> endurance";
 
         private Config _config;
         private MetaProgress _meta;
@@ -192,7 +195,7 @@ namespace Dskill
                     Debug.LogWarning("[Dskill] 설정 파일 제외 실패(그대로 업로드됩니다): " + moveError.Message);
                 }
 
-                method.Invoke(manager, new object[] { path, "Duckov Skill " + Version });
+                method.Invoke(manager, new object[] { path, "Duckov Skill " + Version + " - " + ChangeNote });
 
                 if (moved)
                 {
