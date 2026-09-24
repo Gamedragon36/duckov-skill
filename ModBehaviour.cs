@@ -17,7 +17,7 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.1";
+        public const string Version = "0.0.2";
 
         private Config _config;
         private MetaProgress _meta;
@@ -92,12 +92,83 @@ namespace Dskill
                     Debug.Log("[Dskill] 요청에 따라 스킬 초기화를 실행했고 reset_skills 를 false 로 되돌렸습니다.");
                 }
 
+                // config.ini 의 upload_now = true 요청: 창작마당 업로드를 1회 실행한다(제작자용)
+                if (_config.UploadNow)
+                {
+                    _config.ClearUploadFlag();
+                    StartCoroutine(UploadWorkshopAfterDelay(20f));
+                }
+
                 Debug.Log("[Dskill] 모드 로드 완료 v" + Version + " (스킬 창 키: " + _toggleKeyName +
                           " / 언어: " + Locale.CurrentCode + (Locale.AutoDetected ? " auto" : " 지정") + ")");
             }
             catch (Exception e)
             {
                 Debug.LogError("[Dskill] 초기화 실패: " + e);
+            }
+        }
+
+        /// <summary>게임이 준비될 때까지 잠시 기다렸다가 창작마당 업로드를 요청한다.</summary>
+        private System.Collections.IEnumerator UploadWorkshopAfterDelay(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            TryUploadToWorkshop();
+        }
+
+        /// <summary>
+        /// 창작마당 업로드를 게임 자체 기능으로 1회 실행한다(제작자용).
+        /// 게임의 Duckov.Modding.SteamWorkshopManager.UploadWorkshopItem 을 리플렉션으로 호출한다.
+        /// 실패해도 게임에 영향을 주지 않는다.
+        /// </summary>
+        private void TryUploadToWorkshop()
+        {
+            try
+            {
+                string path = System.IO.Path.GetDirectoryName(typeof(ModBehaviour).Assembly.Location);
+                if (string.IsNullOrEmpty(path))
+                {
+                    Debug.LogWarning("[Dskill] 업로드 중단: 모드 폴더 경로를 찾지 못했습니다.");
+                    return;
+                }
+
+                Type managerType = null;
+                foreach (System.Reflection.Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    managerType = asm.GetType("Duckov.Modding.SteamWorkshopManager", false);
+                    if (managerType != null)
+                    {
+                        break;
+                    }
+                }
+                if (managerType == null)
+                {
+                    Debug.LogWarning("[Dskill] 업로드 중단: SteamWorkshopManager 를 찾지 못했습니다.");
+                    return;
+                }
+
+                System.Reflection.PropertyInfo instanceProperty =
+                    managerType.GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                object manager = instanceProperty != null ? instanceProperty.GetValue(null, null) : null;
+                if (manager == null)
+                {
+                    Debug.LogWarning("[Dskill] 업로드 중단: SteamWorkshopManager 인스턴스가 없습니다(스팀 미연결).");
+                    return;
+                }
+
+                System.Reflection.MethodInfo method = managerType.GetMethod("UploadWorkshopItem",
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (method == null)
+                {
+                    Debug.LogWarning("[Dskill] 업로드 중단: UploadWorkshopItem 메서드를 찾지 못했습니다.");
+                    return;
+                }
+
+                Debug.Log("[Dskill] 창작마당 업로드를 요청합니다: " + path);
+                method.Invoke(manager, new object[] { path, "Duckov Skill " + Version });
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 업로드 요청 실패: " + e.Message);
             }
         }
 

@@ -9,6 +9,8 @@ ui.title|★ Sistema de habilidades estilo Tarkov   —   arrastra la barra de t
 ui.series|Rama: {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Crecimiento: {0}
+ui.xpStage|Velocidad de EXP: nivel {0}/5 (x{1})
+ui.xpStageHint|1 = más rápido, 5 = predeterminado
 ui.tabs|[F7] cambiar rama    [{0} / ESC] cerrar
 ui.footer|La experiencia se guarda en la ranura al guardar la partida.
 cat.body|Cuerpo

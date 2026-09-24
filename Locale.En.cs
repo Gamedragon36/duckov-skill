@@ -9,6 +9,8 @@ ui.title|★ Tarkov Skill System   —   drag the title bar to move this window
 ui.series|Tree: {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Growth: {0}
+ui.xpStage|XP difficulty: stage {0}/5 (x{1})
+ui.xpStageHint|1 = fastest, 5 = default rate
 ui.tabs|[F7] switch tree    [{0} / ESC] close
 ui.footer|XP is stored in the save slot when you save the game.
 cat.body|Physical
@@ -168,6 +170,8 @@ cfg.resetNote2|The value automatically returns to false after the reset.
 cfg.resetSkills|true = reset all skill XP once on the next launch
 cfg.skillXpNote|Per-skill XP multiplier (0.5 = half speed, 2.0 = double speed)
 cfg.language|UI language: auto, en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br
+cfg.xpStage|XP gain difficulty stage 1-5 (1 = fastest, 5 = default rate)
+cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Workshop once
 
 
 ";

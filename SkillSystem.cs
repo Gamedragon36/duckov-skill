@@ -218,7 +218,7 @@ namespace Dskill
                 }
 
                 float metaMultiplier = _meta != null ? _meta.XpMultiplier : 1f;
-                float gain = amount * _config.MultiplierFor(id) * metaMultiplier;
+                float gain = amount * _config.MultiplierFor(id) * metaMultiplier * _config.XpStageMultiplier;
                 if (gain <= 0f)
                 {
                     return;

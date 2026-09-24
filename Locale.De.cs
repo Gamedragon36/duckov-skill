@@ -9,6 +9,8 @@ ui.title|★ Tarkov-Skill-System   —   Titelleiste zum Verschieben ziehen
 ui.series|Baum: {0}
 ui.total|Gesamt Lv.{0} / {1}
 ui.growth|Wachstum: {0}
+ui.xpStage|EP-Tempo: Stufe {0}/5 (x{1})
+ui.xpStageHint|1 = am schnellsten, 5 = Standard
 ui.tabs|[F7] Baum wechseln    [{0} / ESC] schließen
 ui.footer|EP werden beim Speichern im Speicherplatz abgelegt.
 cat.body|Körper

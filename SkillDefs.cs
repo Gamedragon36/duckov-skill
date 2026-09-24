@@ -101,6 +101,13 @@ namespace Dskill
         public const float CraftingBonusPerLevel = 0.015f;     // 제작: 레벨당 추가 생산 확률 (만렙 30%)
         public const float CraftingEliteBonus = 0.20f;         // 제작 엘리트: 확률 +20% (총 50%)
         public const float SurvivalDebuffResistPerLevel = 0.015f;  // 생존술: 디버프 저항 (만렙 30%)
+
+        /// <summary>
+        /// 경험치 획득 난이도(1~5단계) 배율. 게임 안 스킬 창에서 바꿀 수 있다.
+        /// 5단계 = 1.0(지금까지의 기본 밸런스), 1단계 = 5.0(가장 빠름).
+        /// 대략 스킬 1개 만렙까지: 5단계 약 5시간 / 1단계 약 1시간 (달리기 기준)
+        /// </summary>
+        public static readonly float[] XpStageMultipliers = { 5f, 2.5f, 1.5f, 1.2f, 1f };
     }
 
     /// <summary>스킬 17종 정의</summary>

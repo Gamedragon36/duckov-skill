@@ -95,6 +95,23 @@ namespace Dskill
                 GUILayout.Label("<color=#FFD24A>" + _drawMeta.Describe() + "</color>", _subLabel);
             }
 
+            // 경험치 난이도 (1~5단계): 게임 안에서 바로 바꿀 수 있다
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(Locale.F("ui.xpStage", "경험치 난이도: {0}/5 (×{1})",
+                config.XpStage, config.XpStageMultiplier.ToString("0.##")), _subLabel);
+            for (int stage = 1; stage <= 5; stage++)
+            {
+                bool active = config.XpStage == stage;
+                string stageLabel = (active ? "▶" : "  ") + stage;
+                if (GUILayout.Button(stageLabel, GUILayout.Width(38f)))
+                {
+                    config.SetXpStage(stage);
+                }
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(Locale.T("ui.xpStageHint", "1=가장 빠름 … 5=기본 속도"), _footerLabel);
+            GUILayout.EndHorizontal();
+
             GUILayout.BeginHorizontal();
             for (int i = 0; i < SkillDefs.Categories.Length; i++)
             {
@@ -126,7 +143,7 @@ namespace Dskill
 
             // 창 높이 = 헤더/탭/푸터(약 140) + 목록 높이 (+ 계승 줄)
             // 화면보다 커지지 않게 제한한다.
-            _autoHeight = 140f + displayListHeight + (_drawMeta != null ? 18f : 0f);
+            _autoHeight = 168f + displayListHeight + (_drawMeta != null ? 18f : 0f);
             _autoHeight = Mathf.Min(_autoHeight, Mathf.Max(240f, Screen.height - 40f));
 
             if (listHeight > maxListHeight)

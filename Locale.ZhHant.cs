@@ -9,6 +9,8 @@ ui.title|★ 塔科夫技能系統   —   可用滑鼠拖曳標題列移動視�
 ui.series|類別：{0}
 ui.total|總計 Lv.{0} / {1}
 ui.growth|成長：{0}
+ui.xpStage|經驗倍率：{0}/5 檔（x{1}）
+ui.xpStageHint|1 = 最快，5 = 預設
 ui.tabs|[F7] 切換類別    [{0} / ESC] 關閉
 ui.footer|儲存遊戲時經驗值會一併存入存檔欄位。
 cat.body|體質
@@ -168,6 +170,8 @@ cfg.resetNote2|清零完成後該值會自動變回 false。
 cfg.resetSkills|true = 下次啟動時清零所有技能經驗
 cfg.skillXpNote|各技能經驗倍率（0.5=一半速度，2.0=兩倍速度）
 cfg.language|介面語言：auto、en、ko、zh、zh-hant、ja、de、ru、es、fr、pt-br
+cfg.xpStage|經驗倍率檔位 1~5（1=最快，5=預設）
+cfg.uploadNow|作者專用：設為 true 並啟動遊戲可上傳一次到工作坊
 
 ";
     }

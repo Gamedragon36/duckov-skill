@@ -9,6 +9,8 @@ ui.title|★ タルコフ式スキルシステム   —   タイトルバーを�
 ui.series|系統：{0}
 ui.total|合計 Lv.{0} / {1}
 ui.growth|成長条件：{0}
+ui.xpStage|経験値レート：{0}/5（x{1}）
+ui.xpStageHint|1 = 最速、5 = 既定
 ui.tabs|[F7] 系統切替    [{0} / ESC] 閉じる
 ui.footer|経験値はセーブ時にセーブスロットへ保存されます。
 cat.body|身体

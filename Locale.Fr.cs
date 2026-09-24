@@ -9,6 +9,8 @@ ui.title|★ Système de compétences style Tarkov   —   glissez la barre de t
 ui.series|Branche : {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Croissance : {0}
+ui.xpStage|Taux d'EXP : palier {0}/5 (x{1})
+ui.xpStageHint|1 = le plus rapide, 5 = par défaut
 ui.tabs|[F7] changer de branche    [{0} / ESC] fermer
 ui.footer|L'expérience est enregistrée dans l'emplacement lors de la sauvegarde.
 cat.body|Corps
