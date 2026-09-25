@@ -420,8 +420,11 @@ namespace Dskill
             int level = _skills.GetLevel("melee");
             float bonus = _skills.MeleeSpeedBonus(level);           // 0 … 0.5
             float factor = Mathf.Clamp01(1f - bonus);
-            float wantActionTime = _originalMeleeActionTime > 0f ? Mathf.Max(0.05f, _originalMeleeActionTime * factor) : -1f;
-            float wantDealDamage = _originalMeleeDealDamage > 0f ? Mathf.Max(0f, _originalMeleeDealDamage * factor) : -1f;
+            // ⚠ 동작 시간을 크게 줄이면 애니메이션이 잘리고 피해 판정까지 사라진다(0.0.8 실패 사례) →
+            //    동작 시간은 최대 -25%(0.18초 이상)로 제한하고, 실제 공격 속도는 무기의 '사용 시간'(useTime)으로 만든다.
+            float actionFactor = Mathf.Max(factor, 0.75f);
+            float wantActionTime = _originalMeleeActionTime > 0f ? Mathf.Max(0.18f, _originalMeleeActionTime * actionFactor) : -1f;
+            float wantDealDamage = _originalMeleeDealDamage > 0f ? Mathf.Max(0.05f, _originalMeleeDealDamage * actionFactor) : -1f;
             float wantCd = _originalMeleeCd > 0f ? Mathf.Max(0.05f, _originalMeleeCd * factor) : -1f;
 
             // 게임이 값을 되돌리는 경우가 있어 매번 확인하고, 어긋나면 다시 적용한다(자가 복구)
@@ -461,6 +464,7 @@ namespace Dskill
                 {
                     _meleeCdField.SetValue(_meleeAttackAction, wantCd);
                 }
+                ApplyMeleeWeaponUseTime(bonus);      // 실제 공격 속도는 무기 사용 시간으로 (애니메이션까지 빨라짐)
                 if (level != _appliedMeleeSpeedLevel)
                 {
                     _appliedMeleeSpeedLevel = level;
@@ -474,7 +478,52 @@ namespace Dskill
             }
         }
 
+        private bool _meleeUseTimeLogged;
         private bool _wasDashing;
+
+        /// <summary>장착한 근접 무기의 사용 시간(useTime)을 줄인다 — 치료 아이템과 같은 비공개 필드 방식.
+        ///  동작 시간(attackActionTime)만 줄이면 애니메이션이 잘리고 피해 판정이 사라지므로(0.0.8 실패),
+        ///  실제 '공격 속도'는 이 값으로 만든다.</summary>
+        private void ApplyMeleeWeaponUseTime(float bonus)
+        {
+            if (_useTimeField == null || _melee == null)
+            {
+                return;
+            }
+            Item weapon = _melee.Item;
+            if (weapon == null)
+            {
+                return;
+            }
+            UsageUtilities usage = weapon.UsageUtilities;
+            if (usage == null)
+            {
+                if (!_meleeUseTimeLogged)
+                {
+                    _meleeUseTimeLogged = true;
+                    Debug.LogWarning("[Dskill] 근접 무기에 사용 시간(UsageUtilities)이 없어 useTime 방식은 건너뜁니다.");
+                }
+                return;
+            }
+
+            float original;
+            if (!_originalUseTime.TryGetValue(weapon.TypeID, out original))
+            {
+                original = usage.UseTime;
+                _originalUseTime[weapon.TypeID] = original;
+            }
+            float target = Mathf.Max(0.05f, original * (1f - Mathf.Clamp01(bonus)));
+            if (!_meleeUseTimeLogged)
+            {
+                _meleeUseTimeLogged = true;
+                Debug.Log("[Dskill] 근접 무기 사용 시간 확인: " + original.ToString("0.###") + "초 → 목표 " + target.ToString("0.###") + "초");
+            }
+            if (Mathf.Abs(usage.UseTime - target) > 0.001f)
+            {
+                _useTimeField.SetValue(usage, target);
+            }
+        }
+
         private float _loggedDashCool = -1f;      // 쿨타임 로그 중복 방지
         private float _lastDashLogTime = -10f;    // 구르기 간격 실측용
 
