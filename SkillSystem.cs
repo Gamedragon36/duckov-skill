@@ -47,6 +47,8 @@ namespace Dskill
         // 스킬 창이 열려 있는 동안 매 프레임 문자열을 새로 만들지 않도록 한다(GC 부담 제거)
         private readonly Dictionary<string, string> _effectTextCache = new Dictionary<string, string>();
         private readonly Dictionary<string, int> _effectTextLevel = new Dictionary<string, int>();
+        // 레벨당 수치 한 줄(스킬마다 한 번만 만들면 되므로 레벨과 무관하게 캐시한다) — 2026-09-25
+        private readonly Dictionary<string, string> _perLevelCache = new Dictionary<string, string>();
 
         // 하이드아웃(기지) 경험치 제한: 허용 목록 캐시 + 차단 로그(스킬당 1회)
         private HashSet<string> _hideoutAllowed;
@@ -82,6 +84,10 @@ namespace Dskill
             { "BuffChance", "디버프 확률" },
             { "ElementFactor_Fire", "받는 화염 피해" },
             { "ElementFactor_Poison", "받는 독 피해" },
+            { "ElementFactor_Electricity", "받는 전기 피해" },
+            { "ElementFactor_Ice", "받는 냉기 피해" },
+            { "ElementFactor_Ghost", "받는 유령 피해" },
+            { "ElementFactor_Space", "받는 공간 피해" },
             { "BleedChance", "출혈 확률" },
             { "ReloadSpeedGain", "재장전 속도" },
             { "EnergyCost", "배고픔 소모" },
@@ -340,6 +346,28 @@ namespace Dskill
             return text;
         }
 
+        /// <summary>레벨 1당 오르는 수치 — UI에서 **모든 스킬에 숫자가 보이게** 하려고 만든 한 줄.
+        ///  효과 배열이 있는 스킬은 `PerLevel`, 특수 처리 스킬(수리·파밍·흥정…)은 같은 계산을
+        ///  레벨 1로 불러 만든다(모든 수치가 레벨에 정비례하므로 레벨 1 값 = 레벨당 값).</summary>
+        public string DescribePerLevel(SkillDef def)
+        {
+            if (def == null)
+            {
+                return "";
+            }
+
+            string cached;
+            if (_perLevelCache.TryGetValue(def.Id, out cached))
+            {
+                return cached;
+            }
+
+            string text = BuildEffectText(def.Id, 1);
+            string line = string.IsNullOrEmpty(text) ? "" : Locale.F("ui.perLevel", "레벨당: {0}", text);
+            _perLevelCache[def.Id] = line;
+            return line;
+        }
+
         /// <summary>효과 문장을 실제로 만든다.</summary>
         private string BuildEffectText(string id, int level)
         {
@@ -375,6 +403,27 @@ namespace Dskill
                     text += Locale.T("eff.survivalElite", ", 출혈 면역");
                 }
                 return text;
+            }
+
+            if (id == "elemental")
+            {
+                // 속성 6종(화염·독·전기·얼음·유령·우주)이 같은 비율로 줄어든다 → 한 줄로 요약해서 보여 준다
+                float elementPerLevel = 0f;
+                foreach (EffectDef element in def.Effects)
+                {
+                    if (element.Key == "ElementFactor_Fire")
+                    {
+                        elementPerLevel = Mathf.Abs(element.PerLevel);
+                        break;
+                    }
+                }
+                string elementText = Locale.F("eff.elemental", "받는 속성 피해 -{0}%",
+                    (elementPerLevel * level * 100f).ToString("0.##"));
+                if (level >= _config.MaxLevel)
+                {
+                    elementText += Locale.T("eff.elementalElite", ", 엘리트 -5% 추가");
+                }
+                return elementText;
             }
 
             if (def.Effects.Length == 0)

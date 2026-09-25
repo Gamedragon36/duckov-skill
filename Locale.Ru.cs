@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ Система навыков в стиле Tarkov   —   перетащите заголовок, чтобы переместить окно
+        ui.title|★ Duckov Skill   —   перетащите заголовок, чтобы переместить окно
 ui.series|Ветка: {0}
 ui.total|Всего Lv.{0} / {1}
 ui.growth|Рост: {0}
+        ui.perLevel|За уровень: {0}
 ui.xpStage|Скорость опыта: ступень {0}/5 (x{1})
 ui.xpStageHint|1 = быстрее всего, 5 = по умолчанию
 ui.tabs|[F7] смена ветки    [{0} / ESC] закрыть
@@ -34,6 +35,8 @@ notify.elite|  ★Достигнут элитный уровень!
 # ==== Тексты эффектов ====
 eff.survival|Сопротивление дебаффам {0}%, получаемый урон огнём/ядом -{1}%
 eff.survivalElite|, иммунитет к кровотечению
+        eff.elemental|Получаемый урон от стихий -{0}%
+        eff.elementalElite|, элита -5% дополнительно
 eff.repair|Снижение макс. прочности -{0}%
 eff.barter|Цена продажи +{0}%
 eff.throwing|Дальность броска +{0}%, урон взрыва +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|Шанс дебаффа
 stat.ElementFactor_Fire|Получаемый урон огнём
 stat.ElementFactor_Poison|Получаемый урон ядом
 stat.ElementFactor_Physics|Получаемый физический урон
+        stat.ElementFactor_Electricity|Получаемый электрический урон
+        stat.ElementFactor_Ice|Получаемый урон льдом
+        stat.ElementFactor_Ghost|Получаемый урон призрака
+        stat.ElementFactor_Space|Получаемый космический урон
 stat.BleedChance|Шанс кровотечения
 stat.ReloadSpeedGain|Скорость перезарядки
 stat.EnergyCost|Расход сытости
@@ -81,9 +88,9 @@ stat.NightVisionAbility|Ночное зрение
 stat.ViewDistance|Дальность обзора
 stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
-# ==== 23 навыка ====
+# ==== 24 навыка ====
 skill.strength.name|Сила
-skill.strength.trigger|Движение при весе более 70% (тем быстрее, чем тяжелее)
+        skill.strength.trigger|Движение при весе более 60% (свыше 80% — быстрее)
 skill.strength.elite|Инвентарь +5 ячеек, скорость передвижения +10%
 skill.endurance.name|Выносливость
 skill.endurance.trigger|Во время бега
@@ -127,6 +134,9 @@ skill.covert.elite|Звук ходьбы и бега ещё -25% (итого -45
 skill.armor.name|Защита
 skill.armor.trigger|При получении урона в броне (12 очков за единицу урона)
 skill.armor.elite|Получаемый физический урон -10%
+        skill.elemental.name|Адаптация к стихиям
+        skill.elemental.trigger|При получении урона от стихий (огонь/яд/электричество/лёд/призрак/космос) (20 очков за урон)
+        skill.elemental.elite|Урон от стихий -5% дополнительно (итого -15% для каждой стихии)
 skill.survival.name|Выживание
 skill.survival.trigger|При получении статуса (кровотечение/яд/огонь) (300 очков, 12 очков за тик)
 skill.survival.elite|Иммунитет к кровотечению (30% сопротивление — базовый эффект)
@@ -134,14 +144,14 @@ skill.reload.name|Перезарядка
 skill.reload.trigger|При завершении перезарядки (40 очков)
 skill.reload.elite|Скорость перезарядки +10% (дополнительно)
 skill.repair.name|Ремонт
-skill.repair.trigger|При ремонте снаряжения (30 очков за единицу прочности)
+        skill.repair.trigger|При ремонте снаряжения (5 очков за единицу прочности)
 skill.repair.elite|Макс. прочность больше не снижается
 skill.barter.name|Торговля
 skill.barter.trigger|При покупке или продаже (5 очков за 1 000 оборота)
 skill.barter.elite|Перезарядка чёрного рынка -50%
 skill.looting.name|Обыск
 skill.looting.trigger|При поиске в ящиках и телах (20 очков за находку, 10 очков за подбор)
-skill.looting.elite|50% шанс мгновенного обнаружения
+        skill.looting.elite|При открытии: 50% шанс мгновенно обнаружить все предметы
 skill.hideout.name|Убежище
 skill.hideout.trigger|Пребывание на базе (0.5 очка/с) + 500 очков за постройку или улучшение
 skill.hideout.elite|Время добычи биткоин-майнера -20%

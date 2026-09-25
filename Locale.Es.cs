@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ Sistema de habilidades estilo Tarkov   —   arrastra la barra de título para mover
+        ui.title|★ Duckov Skill   —   arrastra la barra de título para mover
 ui.series|Rama: {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Crecimiento: {0}
+        ui.perLevel|Por nivel: {0}
 ui.xpStage|Velocidad de EXP: nivel {0}/5 (x{1})
 ui.xpStageHint|1 = más rápido, 5 = predeterminado
 ui.tabs|[F7] cambiar rama    [{0} / ESC] cerrar
@@ -34,6 +35,8 @@ notify.elite|  ★¡Nivel de élite alcanzado!
 # ==== Textos de efecto ====
 eff.survival|Resistencia a debuffs {0}%, daño recibido de fuego/veneno -{1}%
 eff.survivalElite|, inmunidad al sangrado
+        eff.elemental|Daño elemental recibido -{0}%
+        eff.elementalElite|, élite -5% extra
 eff.repair|Pérdida de durabilidad máx. -{0}%
 eff.barter|Precio de venta +{0}%
 eff.throwing|Distancia de lanzamiento +{0}%, daño de explosión +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|Probabilidad de debuff
 stat.ElementFactor_Fire|Daño de fuego recibido
 stat.ElementFactor_Poison|Daño de veneno recibido
 stat.ElementFactor_Physics|Daño físico recibido
+        stat.ElementFactor_Electricity|Daño eléctrico recibido
+        stat.ElementFactor_Ice|Daño de hielo recibido
+        stat.ElementFactor_Ghost|Daño fantasma recibido
+        stat.ElementFactor_Space|Daño espacial recibido
 stat.BleedChance|Probabilidad de sangrado
 stat.ReloadSpeedGain|Velocidad de recarga
 stat.EnergyCost|Consumo de hambre
@@ -81,9 +88,9 @@ stat.NightVisionAbility|Visión nocturna
 stat.ViewDistance|Distancia de visión
 stat.SenseRange|Radio de detección
 stat.HearingAbility|Oído
-# ==== 23 habilidades ====
+# ==== 24 habilidades ====
 skill.strength.name|Fuerza
-skill.strength.trigger|Moverse con más del 70% de peso (más rápido cuanto más peso)
+        skill.strength.trigger|Moverse con más del 60% de peso (desde 80% más rápido)
 skill.strength.elite|Inventario +5 espacios, velocidad de movimiento +10%
 skill.endurance.name|Aguante
 skill.endurance.trigger|Mientras corres
@@ -127,6 +134,9 @@ skill.covert.elite|Ruido al caminar y correr -25% más (-45% / -35% en total)
 skill.armor.name|Defensa
 skill.armor.trigger|Al recibir daño con armadura (12 ptos por punto de daño)
 skill.armor.elite|Daño físico recibido -10%
+        skill.elemental.name|Adaptación elemental
+        skill.elemental.trigger|Al recibir daño elemental (fuego/veneno/eléctrico/hielo/fantasma/espacial) (20 ptos por daño)
+        skill.elemental.elite|Daño elemental -5% más (-15% en total por elemento)
 skill.survival.name|Supervivencia
 skill.survival.trigger|Al sufrir un estado (sangrado/veneno/quemadura) (300 ptos, 12 ptos por tick)
 skill.survival.elite|Inmunidad al sangrado (30% de resistencia es el efecto base)
@@ -134,14 +144,14 @@ skill.reload.name|Recarga
 skill.reload.trigger|Al terminar de recargar (40 ptos)
 skill.reload.elite|Velocidad de recarga +10% (extra)
 skill.repair.name|Reparación
-skill.repair.trigger|Al reparar equipo (30 ptos por punto de durabilidad)
+        skill.repair.trigger|Al reparar equipo (5 ptos por punto de durabilidad)
 skill.repair.elite|Sin pérdida de durabilidad máxima
 skill.barter.name|Regateo
 skill.barter.trigger|Al comprar o vender (5 ptos por cada 1.000)
 skill.barter.elite|Reabastecimiento del mercado negro -50%
 skill.looting.name|Saqueo
 skill.looting.trigger|Al buscar en cajas o cuerpos (20 ptos por hallazgo, 10 ptos por recogida)
-skill.looting.elite|50% de probabilidad de detección instantánea
+        skill.looting.elite|Al abrir un contenedor: 50% de probabilidad de revelar todos los objetos
 skill.hideout.name|Refugio
 skill.hideout.trigger|Estar en la base (0.5 pto/s) + 500 ptos por construir o mejorar
 skill.hideout.elite|Tiempo de producción del minero de bitcoins -20%

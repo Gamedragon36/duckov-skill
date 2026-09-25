@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ 塔科夫技能系统   —   可用鼠标拖动标题栏移动窗口
+        ui.title|★ Duckov Skill   —   可用鼠标拖动标题栏移动窗口
 ui.series|类别：{0}
 ui.total|总计 Lv.{0} / {1}
 ui.growth|成长：{0}
+        ui.perLevel|每级：{0}
 ui.xpStage|经验倍率：{0}/5 档（x{1}）
 ui.xpStageHint|1 = 最快，5 = 默认
 ui.tabs|[F7] 切换类别    [{0} / ESC] 关闭
@@ -34,6 +35,8 @@ notify.elite|  ★达成精英！
 # ==== 效果文本 ====
 eff.survival|异常状态抗性 {0}%，受到火焰/中毒伤害 -{1}%
 eff.survivalElite|，免疫流血
+        eff.elemental|受到属性伤害 -{0}%
+        eff.elementalElite|，精英额外 -5%
 eff.repair|最大耐久度损耗 -{0}%
 eff.barter|售价 +{0}%
 eff.throwing|投掷距离 +{0}%，爆炸伤害 +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|负面状态概率
 stat.ElementFactor_Fire|受到火焰伤害
 stat.ElementFactor_Poison|受到中毒伤害
 stat.ElementFactor_Physics|受到物理伤害
+        stat.ElementFactor_Electricity|受到电伤害
+        stat.ElementFactor_Ice|受到冰伤害
+        stat.ElementFactor_Ghost|受到幽灵伤害
+        stat.ElementFactor_Space|受到空间伤害
 stat.BleedChance|流血概率
 stat.ReloadSpeedGain|装弹速度
 stat.EnergyCost|饥饿消耗
@@ -81,9 +88,9 @@ stat.NightVisionAbility|夜视能力
 stat.ViewDistance|视野距离
 stat.SenseRange|感知范围
 stat.HearingAbility|听力
-# ==== 技能 23 种 ====
+# ==== 技能 24 种 ====
 skill.strength.name|力量
-skill.strength.trigger|负重 70% 以上时移动（越重越快）
+        skill.strength.trigger|负重 60% 以上时移动（80% 以上更快）
 skill.strength.elite|背包空间 +5 格，移动速度 +10%
 skill.endurance.name|耐力
 skill.endurance.trigger|奔跑时
@@ -127,6 +134,9 @@ skill.covert.elite|走路与奔跑声音再 -25%（合计 -45% / -35%）
 skill.armor.name|防御
 skill.armor.trigger|穿着护甲受到伤害时（每点伤害 12 点）
 skill.armor.elite|受到的物理伤害 -10%
+        skill.elemental.name|属性适应
+        skill.elemental.trigger|受到属性伤害（火焰/毒/电/冰/幽灵/空间）时（每点伤害 20 点）
+        skill.elemental.elite|属性伤害额外 -5%（每种属性合计 -15%）
 skill.survival.name|生存术
 skill.survival.trigger|陷入异常状态（流血、中毒、燃烧）时（每次 300 点，每点持续伤害 12 点）
 skill.survival.elite|不会流血（30% 负面状态抗性为默认效果）
@@ -134,14 +144,14 @@ skill.reload.name|装弹
 skill.reload.trigger|完成装弹时（每次 40 点）
 skill.reload.elite|装弹速度 +10%（额外）
 skill.repair.name|维修
-skill.repair.trigger|维修装备时（每点修复耐久度 30 点）
+        skill.repair.trigger|维修装备时（每点修复耐久度 5 点）
 skill.repair.elite|最大耐久度不再下降
 skill.barter.name|讨价还价
 skill.barter.trigger|买卖物品时（每 1,000 交易额 5 点）
 skill.barter.elite|黑市刷新冷却 -50%
 skill.looting.name|搜刮
 skill.looting.trigger|在箱子或尸体中发现物品时（每件 20 点，拾取 1 件 10 点）
-skill.looting.elite|50% 概率立即发现
+        skill.looting.elite|开启容器时：50% 概率立即发现其中全部物品
 skill.hideout.name|藏身处
 skill.hideout.trigger|待在基地（每秒 0.5 点）+ 新建或升级建筑 500 点
 skill.hideout.elite|比特币矿机产出时间 -20%

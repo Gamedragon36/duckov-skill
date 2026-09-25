@@ -63,7 +63,7 @@ namespace Dskill
             }
 
             _windowRect = GUI.Window(WindowId, _windowRect, DrawWindow,
-                "   " + Locale.T("ui.title", "★ 타르코프 스킬 시스템   —   제목줄을 마우스로 끌어서 이동"));
+                "   " + Locale.T("ui.title", "★ Duckov Skill   —   제목줄을 마우스로 끌어서 이동"));
         }
 
         private static void DrawWindow(int id)
@@ -137,7 +137,7 @@ namespace Dskill
                     rowCount++;
                 }
             }
-            float listHeight = rowCount * 46f;
+            float listHeight = rowCount * 62f;   // 줄이 하나 늘어(레벨당 수치) 46 → 62
             float maxListHeight = Mathf.Max(160f, Screen.height * 0.6f);
             float displayListHeight = Mathf.Min(listHeight, maxListHeight);
 
@@ -196,7 +196,9 @@ namespace Dskill
                 _levelLabel, GUILayout.Width(76f));
             DrawBar(ratio);
             GUILayout.Space(8f);
-            GUILayout.Label((ratio * 100f).ToString("0") + "%", _percentLabel, GUILayout.Width(42f));
+            // 경험치통: 퍼센트와 **정수(현재/필요)** 를 함께 보여 준다(2026-09-25 사용자 요청)
+            GUILayout.Label((ratio * 100f).ToString("0") + "%  " + current.ToString("0") + "/" + needed.ToString("0"),
+                _percentLabel, GUILayout.Width(132f));
             GUILayout.Label(system.DescribeEffects(def.Id, level), _effectLabel);
             GUILayout.EndHorizontal();
 
@@ -207,6 +209,13 @@ namespace Dskill
                 growthText += "   ★" + Locale.SkillElite(def);
             }
             GUILayout.Label(growthText + "</color>", _subLabel);
+
+            // 레벨당 수치 — 수치가 안 보이던 스킬까지 모두 숫자가 보이게 한다(2026-09-25 사용자 요청)
+            string perLevel = system.DescribePerLevel(def);
+            if (perLevel.Length > 0)
+            {
+                GUILayout.Label("<color=#7FB8E8>       " + perLevel + "</color>", _subLabel);
+            }
             GUILayout.Space(4f);
         }
 

@@ -20,6 +20,9 @@ namespace Dskill
 
         // ---- 파밍 ----
         private float _lootScanTimer;
+        // 엘리트 파밍: 상자(시체)마다 **열 때 한 번만** 굴린 결과를 담아 둔다
+        //   (2026-09-25: 아이템마다 굴리던 것을 상자 단위로 바꿈 — 한 번 성공하면 그 안의 모든 아이템을 감지)
+        private readonly Dictionary<int, bool> _eliteRevealRolls = new Dictionary<int, bool>();
         private readonly Dictionary<Item, float> _pendingInspect = new Dictionary<Item, float>();
         private readonly HashSet<Item> _inspectingSeen = new HashSet<Item>();
         private readonly HashSet<Item> _knownItems = new HashSet<Item>();
@@ -150,6 +153,11 @@ namespace Dskill
             // 최적화: 상자(루팅) UI가 열려 있을 때만 확인한다. 평소에는 비용 0.
             if (!(Duckov.UI.View.ActiveView is Duckov.UI.LootView))
             {
+                // 창을 닫으면 '이번에 열었을 때의 굴림'을 지운다 → 다음에 열면 새로 굴린다
+                if (_eliteRevealRolls.Count > 0)
+                {
+                    _eliteRevealRolls.Clear();
+                }
                 return;
             }
 
@@ -179,6 +187,10 @@ namespace Dskill
                     continue;
                 }
 
+                // 엘리트: **상자 단위로 한 번** 굴려서 성공하면 그 안의 아이템을 모두 즉시 감지
+                //   (2026-09-25 사용자 요청: "50% 확률로 열어본 상자·시체의 모든 아이템이 감지")
+                bool revealAll = elite && EliteRevealAll(box);
+
                 foreach (Item item in inventory.Content)
                 {
                     if (item == null || item.Inspected || !item.Inspecting)
@@ -190,15 +202,16 @@ namespace Dskill
                         continue;   // 이미 처리한 아이템
                     }
 
-                    // 엘리트: 확률로 즉시 감지
-                    if (elite && UnityEngine.Random.value < Specials.LootingInstantChance)
+                    if (revealAll)
                     {
                         RevealItem(item);
                         continue;
                     }
 
                     float normal = GameplayDataSettings.LootingData.GetInspectingTime(item);
-                    _pendingInspect[item] = Time.time + normal * factor;
+                    // 만렙(-100%)이어도 0초가 되지 않게 최소 시간을 둔다 (2026-09-25 사용자 요청)
+                    float wait = Mathf.Max(normal * factor, Specials.LootingMinInspectTime);
+                    _pendingInspect[item] = Time.time + wait;
                 }
             }
 
@@ -224,6 +237,27 @@ namespace Dskill
                 }
                 _finishBuffer.Clear();
             }
+        }
+
+        /// <summary>엘리트 파밍: 이 상자(시체)를 열 때 성공했는지 — **열 때 한 번만** 굴린다.
+        ///  한 번 성공하면 그 상자의 아이템을 모두 감지하므로, 0.4초마다 다시 굴리면 안 된다.</summary>
+        private bool EliteRevealAll(InteractableLootbox box)
+        {
+            int id = box.GetInstanceID();
+            bool success;
+            if (_eliteRevealRolls.TryGetValue(id, out success))
+            {
+                return success;
+            }
+
+            success = UnityEngine.Random.value < Specials.LootingInstantChance;
+            if (_eliteRevealRolls.Count > 64)
+            {
+                _eliteRevealRolls.Clear();   // raid 한 판에서 캐시가 커지지 않게
+            }
+            _eliteRevealRolls[id] = success;
+            Debug.Log("[Dskill] 파밍 엘리트: 상자 굴림 " + (success ? "성공 — 안의 아이템을 모두 즉시 감지" : "실패"));
+            return success;
         }
 
         /// <summary>아이템을 감지 완료 상태로 만든다(게임이 하는 것과 같은 처리).</summary>

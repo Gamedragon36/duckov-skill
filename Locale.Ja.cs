@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ タルコフ式スキルシステム   —   タイトルバーをドラッグして移動
+        ui.title|★ Duckov Skill   —   タイトルバーをドラッグして移動
 ui.series|系統：{0}
 ui.total|合計 Lv.{0} / {1}
 ui.growth|成長条件：{0}
+        ui.perLevel|1レベル毎：{0}
 ui.xpStage|経験値レート：{0}/5（x{1}）
 ui.xpStageHint|1 = 最速、5 = 既定
 ui.tabs|[F7] 系統切替    [{0} / ESC] 閉じる
@@ -34,6 +35,8 @@ notify.elite|  ★エリート達成！
 # ==== 効果テキスト ====
 eff.survival|状態異常耐性 {0}%、受ける火炎/毒ダメージ -{1}%
 eff.survivalElite|、出血免疫
+        eff.elemental|受ける属性ダメージ -{0}%
+        eff.elementalElite|、エリート -5% 追加
 eff.repair|最大耐久度の減少 -{0}%
 eff.barter|売却額 +{0}%
 eff.throwing|投擲距離 +{0}%、爆発ダメージ +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|デバフ確率
 stat.ElementFactor_Fire|受ける火炎ダメージ
 stat.ElementFactor_Poison|受ける毒ダメージ
 stat.ElementFactor_Physics|受ける物理ダメージ
+        stat.ElementFactor_Electricity|受ける電気ダメージ
+        stat.ElementFactor_Ice|受ける氷ダメージ
+        stat.ElementFactor_Ghost|受けるゴーストダメージ
+        stat.ElementFactor_Space|受ける空間ダメージ
 stat.BleedChance|出血確率
 stat.ReloadSpeedGain|リロード速度
 stat.EnergyCost|空腹消費
@@ -81,9 +88,9 @@ stat.NightVisionAbility|暗視能力
 stat.ViewDistance|視界距離
 stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
-# ==== スキル 23 種 ====
+# ==== スキル 24 種 ====
 skill.strength.name|筋力
-skill.strength.trigger|重量 70% 以上で移動（重いほど速く）
+        skill.strength.trigger|重量 60% 以上で移動（80% 以上でより速く）
 skill.strength.elite|バッグ容量 +5 枠、移動速度 +10%
 skill.endurance.name|持久力
 skill.endurance.trigger|走っている間
@@ -127,6 +134,9 @@ skill.covert.elite|歩き・走りの音がさらに -25%（合計 -45% / -35%�
 skill.armor.name|防御
 skill.armor.trigger|アーマーを着けてダメージを受けたとき（ダメージ 1 につき 12 点）
 skill.armor.elite|受ける物理ダメージ -10%
+        skill.elemental.name|属性適応
+        skill.elemental.trigger|属性ダメージ（火炎・毒・電気・氷・ゴースト・空間）を受けたとき（ダメージ 1 につき 20 点）
+        skill.elemental.elite|属性ダメージ -5% 追加（各属性 合計 -15%）
 skill.survival.name|サバイバル
 skill.survival.trigger|状態異常（出血・中毒・燃焼）になったとき（1 回 300 点、継続ダメージ 1 につき 12 点）
 skill.survival.elite|出血しない（30% のデバフ耐性は基本効果）
@@ -134,14 +144,14 @@ skill.reload.name|リロード
 skill.reload.trigger|リロードを完了したとき（1 回 40 点）
 skill.reload.elite|リロード速度 +10%（追加）
 skill.repair.name|修理
-skill.repair.trigger|装備を修理したとき（修理した耐久度 1 につき 30 点）
+        skill.repair.trigger|装備を修理したとき（修理した耐久度 1 につき 5 点）
 skill.repair.elite|最大耐久度が減らなくなる
 skill.barter.name|値切り
 skill.barter.trigger|アイテムを売買したとき（取引額 1,000 につき 5 点）
 skill.barter.elite|闇市場の補充クールタイム -50%
 skill.looting.name|漁り
 skill.looting.trigger|箱や死体からアイテムを見つけたとき（1 個 20 点、拾得 1 個 10 点）
-skill.looting.elite|50% の確率で即座に探知
+        skill.looting.elite|開封時に 50% の確率で中のアイテムをすべて即座に探知
 skill.hideout.name|ハイドアウト
 skill.hideout.trigger|拠点に滞在（毎秒 0.5 点）＋ 建物の新築・アップグレード 500 点
 skill.hideout.elite|ビットコインマイナーの生産時間 -20%

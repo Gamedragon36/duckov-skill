@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ Tarkov-Skill-System   —   Titelleiste zum Verschieben ziehen
+        ui.title|★ Duckov Skill   —   Titelleiste zum Verschieben ziehen
 ui.series|Baum: {0}
 ui.total|Gesamt Lv.{0} / {1}
 ui.growth|Wachstum: {0}
+        ui.perLevel|Pro Stufe: {0}
 ui.xpStage|EP-Tempo: Stufe {0}/5 (x{1})
 ui.xpStageHint|1 = am schnellsten, 5 = Standard
 ui.tabs|[F7] Baum wechseln    [{0} / ESC] schließen
@@ -34,6 +35,8 @@ notify.elite|  ★Elite erreicht!
 # ==== Effekttexte ====
 eff.survival|Debuff-Widerstand {0}%, erlittener Feuer-/Giftschaden -{1}%
 eff.survivalElite|, Blutungsimmunität
+        eff.elemental|Erlittener Elementarschaden -{0}%
+        eff.elementalElite|, Elite -5% extra
 eff.repair|Max. Haltbarkeitsverlust -{0}%
 eff.barter|Verkaufspreis +{0}%
 eff.throwing|Wurfweite +{0}%, Explosionsschaden +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|Debuff-Chance
 stat.ElementFactor_Fire|Erlittener Feuerschaden
 stat.ElementFactor_Poison|Erlittener Giftschaden
 stat.ElementFactor_Physics|Erlittener physischer Schaden
+        stat.ElementFactor_Electricity|Erlittener Elektroschaden
+        stat.ElementFactor_Ice|Erlittener Eisschaden
+        stat.ElementFactor_Ghost|Erlittener Geistschaden
+        stat.ElementFactor_Space|Erlittener Raumschaden
 stat.BleedChance|Blutungschance
 stat.ReloadSpeedGain|Nachladegeschwindigkeit
 stat.EnergyCost|Hungerverbrauch
@@ -81,9 +88,9 @@ stat.NightVisionAbility|Nachtsicht
 stat.ViewDistance|Sichtweite
 stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
-# ==== 23 Fertigkeiten ====
+# ==== 24 Fertigkeiten ====
 skill.strength.name|Stärke
-skill.strength.trigger|Bewegen mit über 70% Gewicht (schneller, je schwerer)
+        skill.strength.trigger|Bewegen mit über 60% Gewicht (ab 80% schneller)
 skill.strength.elite|Inventar +5 Plätze, Bewegungsgeschwindigkeit +10%
 skill.endurance.name|Ausdauer
 skill.endurance.trigger|Beim Rennen
@@ -127,6 +134,9 @@ skill.covert.elite|Geh- und Laufgeräusch -25% mehr (insgesamt -45% / -35%)
 skill.armor.name|Panzerung
 skill.armor.trigger|Wenn du mit Panzerung Schaden erleidest (12 Pkt. pro Schaden)
 skill.armor.elite|Erlittener physischer Schaden -10%
+        skill.elemental.name|Elementanpassung
+        skill.elemental.trigger|Wenn du Elementarschaden erleidest (Feuer/Gift/Elektro/Eis/Geist/Raum) (20 Pkt. pro Schaden)
+        skill.elemental.elite|Elementarschaden -5% mehr (insgesamt -15% je Element)
 skill.survival.name|Überleben
 skill.survival.trigger|Bei einem Statuseffekt (Blutung/Gift/Brand) (300 Pkt., 12 Pkt. pro Tick)
 skill.survival.elite|Blutungsimmunität (30% Debuff-Widerstand ist der Basiseffekt)
@@ -134,14 +144,14 @@ skill.reload.name|Nachladen
 skill.reload.trigger|Wenn du das Nachladen beendest (40 Pkt.)
 skill.reload.elite|Nachladegeschwindigkeit +10% (zusätzlich)
 skill.repair.name|Reparatur
-skill.repair.trigger|Wenn du Ausrüstung reparierst (30 Pkt. pro Haltbarkeit)
+        skill.repair.trigger|Wenn du Ausrüstung reparierst (5 Pkt. pro Haltbarkeit)
 skill.repair.elite|Kein Verlust der max. Haltbarkeit
 skill.barter.name|Feilschen
 skill.barter.trigger|Beim Kaufen oder Verkaufen (5 Pkt. pro 1.000 Handel)
 skill.barter.elite|Schwarzmarkt-Abklingzeit -50%
 skill.looting.name|Plündern
 skill.looting.trigger|Beim Durchsuchen von Kisten oder Leichen (20 Pkt. pro Fund, 10 Pkt. pro Aufnahme)
-skill.looting.elite|50% Chance auf sofortige Erkennung
+        skill.looting.elite|Beim Öffnen: 50% Chance, alle Items sofort zu erkennen
 skill.hideout.name|Versteck
 skill.hideout.trigger|Aufenthalt im Stützpunkt (0.5 Pkt./s) + 500 Pkt. pro Bau oder Ausbau
 skill.hideout.elite|Bitcoin-Miner-Produktionszeit -20%

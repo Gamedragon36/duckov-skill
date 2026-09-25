@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ 塔科夫技能系統   —   可用滑鼠拖曳標題列移動視窗
+        ui.title|★ Duckov Skill   —   可用滑鼠拖曳標題列移動視窗
 ui.series|類別：{0}
 ui.total|總計 Lv.{0} / {1}
 ui.growth|成長：{0}
+        ui.perLevel|每級：{0}
 ui.xpStage|經驗倍率：{0}/5 檔（x{1}）
 ui.xpStageHint|1 = 最快，5 = 預設
 ui.tabs|[F7] 切換類別    [{0} / ESC] 關閉
@@ -34,6 +35,8 @@ notify.elite|  ★達成菁英！
 # ==== 效果文字 ====
 eff.survival|異常狀態抗性 {0}%，受到火焰/中毒傷害 -{1}%
 eff.survivalElite|，免疫流血
+        eff.elemental|受到屬性傷害 -{0}%
+        eff.elementalElite|，精英額外 -5%
 eff.repair|最大耐久度損耗 -{0}%
 eff.barter|售價 +{0}%
 eff.throwing|投擲距離 +{0}%，爆炸傷害 +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|負面狀態機率
 stat.ElementFactor_Fire|受到火焰傷害
 stat.ElementFactor_Poison|受到中毒傷害
 stat.ElementFactor_Physics|受到物理傷害
+        stat.ElementFactor_Electricity|受到電傷害
+        stat.ElementFactor_Ice|受到冰傷害
+        stat.ElementFactor_Ghost|受到幽靈傷害
+        stat.ElementFactor_Space|受到空間傷害
 stat.BleedChance|流血機率
 stat.ReloadSpeedGain|裝彈速度
 stat.EnergyCost|飢餓消耗
@@ -81,9 +88,9 @@ stat.NightVisionAbility|夜視能力
 stat.ViewDistance|視野距離
 stat.SenseRange|感知範圍
 stat.HearingAbility|聽力
-# ==== 技能 23 種 ====
+# ==== 技能 24 種 ====
 skill.strength.name|力量
-skill.strength.trigger|負重 70% 以上時移動（越重越快）
+        skill.strength.trigger|負重 60% 以上時移動（80% 以上更快）
 skill.strength.elite|背包空間 +5 格，移動速度 +10%
 skill.endurance.name|耐力
 skill.endurance.trigger|奔跑時
@@ -127,6 +134,9 @@ skill.covert.elite|走路與奔跑聲音再 -25%（合計 -45% / -35%）
 skill.armor.name|防禦
 skill.armor.trigger|穿著護甲受到傷害時（每點傷害 12 點）
 skill.armor.elite|受到的物理傷害 -10%
+        skill.elemental.name|屬性適應
+        skill.elemental.trigger|受到屬性傷害（火焰／毒／電／冰／幽靈／空間）時（每點傷害 20 點）
+        skill.elemental.elite|屬性傷害額外 -5%（每種屬性合計 -15%）
 skill.survival.name|生存術
 skill.survival.trigger|陷入異常狀態（流血、中毒、燃燒）時（每次 300 點，每點持續傷害 12 點）
 skill.survival.elite|不會流血（30% 負面狀態抗性為預設效果）
@@ -134,14 +144,14 @@ skill.reload.name|裝彈
 skill.reload.trigger|完成裝彈時（每次 40 點）
 skill.reload.elite|裝彈速度 +10%（額外）
 skill.repair.name|維修
-skill.repair.trigger|維修裝備時（每點修復耐久度 30 點）
+        skill.repair.trigger|維修裝備時（每點修復耐久度 5 點）
 skill.repair.elite|最大耐久度不再下降
 skill.barter.name|討價還價
 skill.barter.trigger|買賣物品時（每 1,000 交易額 5 點）
 skill.barter.elite|黑市刷新冷卻 -50%
 skill.looting.name|搜刮
 skill.looting.trigger|在箱子或屍體中發現物品時（每件 20 點，拾取 1 件 10 點）
-skill.looting.elite|50% 機率立即發現
+        skill.looting.elite|開啟容器時：50% 機率立即發現其中全部物品
 skill.hideout.name|藏身處
 skill.hideout.trigger|待在基地（每秒 0.5 點）+ 新建或升級建築 500 點
 skill.hideout.elite|比特幣礦機產出時間 -20%

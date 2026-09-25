@@ -17,12 +17,12 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 
 | Item | Detail |
 |---|---|
-| Skills | **23** (Physical 7 · Combat 6 · Practical 10) |
+| Skills | **24** (Physical 7 · Combat 6 · Practical 11) |
 | Levels | **Lv.0 – Lv.20** per skill |
 | Elite | Reaching Lv.20 unlocks a **★Elite** bonus |
 | Growth | Perform actions while playing → gain XP → auto level-up |
 | Application | Uses the game's own **stat-modifier system** (no game-code patching, no Harmony) |
-| UI | **F6** opens the skill window (drag the title bar to move), **F7** switches category |
+| UI | **F6** opens the skill window (drag the title bar to move), **F7** switches category · each skill shows **XP (current/needed)** and its **per-level value** |
 | Notifications | Level-ups appear in the game's own notification UI |
 | Saving | XP is stored **per save slot** |
 | Inheritance | Skills earned in **other saves** boost the XP rate of the current run (roguelike) |
@@ -35,21 +35,21 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
-| ◆ | Strength | move while above 70% carry weight | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
+| ◆ | Strength | move while above 60% carry weight (80%+ gains faster) | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
 | ▲ | Endurance | sprint | stamina drain **-40%**, movement **+10%** | stamina regen **+30%** |
 | ● | Vitality | take damage | max health **+20** | **+5** |
-| ＋ | Healing | heal with items | healing **+40%** | **+10%** (total +50%) |
+| ＋ | Healing | heal with items (10 pts per HP) | healing **speed -40%** (use time) | **-10%** more (total -50%) |
 | ◉ | Metabolism | eat / drink | hunger & water drain **-30%** | **no starvation damage** |
-| ○ | Dash | dodge-roll | cooldown **-30%**, stamina cost **-30%** | each **-20%** (total -50%) |
+| ○ | Dash | dodge-roll (4 pts per roll) | cooldown, **action time** & stamina **-40%** (distance kept via speed compensation) | each **-10%** more |
 | ▼ | Night Vision | spend time at night (raids) | night vision ability **+0.3** | **+0.2** (total 1.0 = no night penalty) |
 
 ### Combat
 
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
-| ★ | Assault | fire your gun | gun damage **+15%** | gun crit rate **+10%** |
+| ★ | Assault | **when your bullet hits** (8 pts; firing alone gives none) | gun damage **+15%** | gun crit rate **+10%** |
 | ▽ | Recoil Control | fire your gun (ADS counts more) | recoil control **+0.2** | vertical/horizontal recoil **-15%** |
-| ◎ | Marksmanship | hit targets beyond 20 m | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
+| ◎ | Marksmanship | hit targets **beyond 20 m** (**150** pts, headshot **+200**) | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
 | ◀ | Melee | hit with melee weapons | melee damage **+50%**, melee crit **+50%**, movement **+10%** | movement **+10%** more |
 | ▶ | Throwing | throw explosives | throw distance **+30%**, explosion damage **+50%** | distance **+20%**, **30% chance of instant detonation** |
 | ◁ | Perception | hear sounds around you | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
@@ -60,11 +60,12 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 |---|---|---|---|---|
 | ◐ | Covert Movement | walk (not sprint) | walk sound **-20%**, run sound **-10%** | walk/run sound **-25%** more |
 | ◇ | Armor | take damage while wearing armor | body & head armor **+2.0** | physical damage taken **-10%** |
+| ⊙ | Elemental Adaptation | take elemental damage (fire/poison/electric/ice/ghost/space) (20 pts per damage) | each element damage **-10%** | each element **-5%** more (-15% total) |
 | ☆ | Survival | get debuffs | **30% debuff resistance**, fire & poison damage **-10%** | **bleed immunity** |
 | ◑ | Reloading | finish a reload | reload speed **+30%** | **+10%** more |
 | ◈ | Repair | repair gear | max durability loss **-50%** | **no max durability loss** |
 | ※ | Bartering | buy & sell items | sale price **+10%** | black-market refresh **-50%** |
-| ▣ | Looting | reveal items in containers | item detection time **-50%** | **50% chance of instant detection** |
+| ▣ | Looting | reveal items in containers | item detection time **-70%** (min 0.2 s) | **opening a container: 50% chance to reveal every item inside instantly** |
 | ■ | Hideout | stay at the hideout / construct buildings | merchant restock cooldown **-50%** | bitcoin miner time **-20%** |
 | ▪ | Fishing | catch fish | fishing ability **+30%**, fishing luck **+20%** | **+20%** each |
 | □ | Crafting | craft items / unlock recipes | **30% chance of a bonus item** | **+20%** (total 50%) |
@@ -73,9 +74,9 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 
 | Item | Value |
 |---|---|
-| XP needed per level | 300 for level 1, +65 per level (300, 365, 430, … 1,535) |
-| Total XP to Lv.20 | **18,350** points |
-| Approximate pace | about **5 hours** of the related activity (slower in normal play) |
+| XP needed per level | 500 for level 1, +200 per level (500, 700, 900, … 4,300) |
+| Total XP to Lv.20 | **48,000** points |
+| Approximate pace | about **3.5 hours** of sprinting (slower in normal play) |
 
 ## Roguelike inheritance
 
@@ -98,8 +99,8 @@ Skill levels earned in **other save slots** increase the XP gain rate of the run
 ```ini
 [general]
 max_level = 20          # max skill level
-xp_base = 300           # XP for level 1
-xp_step = 65            # XP added per level
+xp_base = 500           # XP for level 1
+xp_step = 200           # XP added per level
 xp_multiplier = 1.0     # global XP gain multiplier (0.5 = half, 2.0 = double)
 hotkey = F6             # key that opens the skill window
 notify_levelup = true   # show level-up notifications
@@ -144,5 +145,5 @@ dotnet build -c Release
 
 ## Version policy
 
-- The mod version is **0.0.7** (bump both `version` in `info.ini` and the `Version` constant in code).
+- The mod version is **0.0.8** (bump both `version` in `info.ini` and the `Version` constant in code).
 

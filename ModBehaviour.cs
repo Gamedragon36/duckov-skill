@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.7";
+        public const string Version = "0.0.8";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.7 XP balance rework (curve 2.6x, rates halved) + marksmanship 150/200 (20m kept) + UI text fixes";
+        private const string ChangeNote = "0.0.8: new Elemental Adaptation skill (24 skills), looting detection -70%, elemental effect/elite values fixed, UI shows XP and per-level values";
 
         private Config _config;
         private MetaProgress _meta;
@@ -406,9 +406,10 @@ namespace Dskill
                 if (maxWeight > 0.01f)
                 {
                     float ratio = _mainItem.TotalWeight / maxWeight;
-                    if (ratio >= 0.7f)
+                    // 2026-09-25 사용자 요청: 임계값을 60% / 80% 로 (예전 70% / 90%)
+                    if (ratio >= 0.6f)
                     {
-                        float perSecond = ratio >= 0.9f ? Rates.StrengthHeavyPerSecond : Rates.StrengthPerSecond;
+                        float perSecond = ratio >= 0.8f ? Rates.StrengthHeavyPerSecond : Rates.StrengthPerSecond;
                         _skills.AddXp("strength", elapsed * perSecond);
                     }
                 }

@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== 창(UI) ====
-ui.title|★ Tarkov Skill System   —   drag the title bar to move this window
+        ui.title|★ Duckov Skill   —   drag the title bar to move this window
 ui.series|Tree: {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Growth: {0}
+        ui.perLevel|Per level: {0}
 ui.xpStage|XP difficulty: stage {0}/5 (x{1})
 ui.xpStageHint|1 = fastest, 5 = default rate
 ui.tabs|[F7] switch tree    [{0} / ESC] close
@@ -34,6 +35,8 @@ notify.elite|  ★Elite reached!
 # ==== 효과 문장 ====
 eff.survival|Debuff resistance {0}%, fire/poison damage taken -{1}%
 eff.survivalElite|, bleed immunity
+        eff.elemental|Elemental damage taken -{0}%
+        eff.elementalElite|, elite -5% extra
 eff.repair|Max durability loss -{0}%
 eff.barter|Sell price +{0}%
 eff.throwing|Throw range +{0}%, explosion damage +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|Debuff chance
 stat.ElementFactor_Fire|Fire damage taken
 stat.ElementFactor_Poison|Poison damage taken
 stat.ElementFactor_Physics|Physical damage taken
+        stat.ElementFactor_Electricity|Electric damage taken
+        stat.ElementFactor_Ice|Ice damage taken
+        stat.ElementFactor_Ghost|Ghost damage taken
+        stat.ElementFactor_Space|Space damage taken
 stat.BleedChance|Bleed chance
 stat.ReloadSpeedGain|Reload speed
 stat.EnergyCost|Hunger drain
@@ -81,9 +88,9 @@ stat.NightVisionAbility|Night vision
 stat.ViewDistance|View distance
 stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
-# ==== 스킬 23종 ====
+# ==== 스킬 24종 ====
 skill.strength.name|Strength
-skill.strength.trigger|Move while over 70% weight (faster the heavier you are)
+        skill.strength.trigger|Move while over 60% weight (80%+ gains faster)
 skill.strength.elite|Inventory space +5 slots, movement speed +10%
 skill.endurance.name|Endurance
 skill.endurance.trigger|While sprinting
@@ -127,6 +134,9 @@ skill.covert.elite|Walking and sprint noise -25% more (-45% / -35% total)
 skill.armor.name|Armor
 skill.armor.trigger|When you take damage while wearing armor (12 pts per damage)
 skill.armor.elite|Physical damage taken -10%
+        skill.elemental.name|Elemental Adaptation
+        skill.elemental.trigger|When you take elemental damage (fire/poison/electric/ice/ghost/space) (20 pts per damage)
+        skill.elemental.elite|Elemental damage -5% more (-15% total per element)
 skill.survival.name|Survival
 skill.survival.trigger|When you get a status effect (bleed/poison/burn) (300 pts, 12 pts per damage-over-time tick)
 skill.survival.elite|Bleed immunity (30% debuff resistance is the base effect)
@@ -134,14 +144,14 @@ skill.reload.name|Reloading
 skill.reload.trigger|When you finish a reload (40 pts)
 skill.reload.elite|Reload speed +10% (extra)
 skill.repair.name|Repair
-skill.repair.trigger|When you repair gear (30 pts per durability restored)
+        skill.repair.trigger|When you repair gear (5 pts per durability restored)
 skill.repair.elite|No max durability loss
 skill.barter.name|Bartering
 skill.barter.trigger|When you buy or sell items (5 pts per 1,000 traded)
 skill.barter.elite|Black market restock cooldown -50%
 skill.looting.name|Scavenging
 skill.looting.trigger|When you search containers or bodies (20 pts per find, 10 pts per pickup)
-skill.looting.elite|50% chance to detect instantly
+        skill.looting.elite|Opening a container: 50% chance to instantly reveal every item inside
 skill.hideout.name|Hideout
 skill.hideout.trigger|Staying at your base (0.5 pt/s) plus 500 pts per building built or upgraded
 skill.hideout.elite|Bitcoin miner production time -20%

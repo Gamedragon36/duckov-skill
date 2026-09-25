@@ -44,9 +44,9 @@ namespace Dskill
     /// <summary>경험치 획득량 (게임에서 1단위 일어날 때 얻는 점수)</summary>
     public static class Rates
     {
-        public const float StrengthPerSecond = 2f;          // 과적 상태 이동(초) — 0.0.6: 2배
-        public const float StrengthHeavyPerSecond = 4f;     // 90% 이상 과적 — 0.0.6: 2배
-        public const float EndurancePerSecond = 2f;         // 달리기(초) — 0.0.6: 2배
+        public const float StrengthPerSecond = 4f;          // 과적 상태 이동(초) — 2026-09-25: 사용자 요청으로 2배(2 → 4)
+        public const float StrengthHeavyPerSecond = 8f;     // 무게 80% 이상 — 2026-09-25: 2배(4 → 8) · 기준 90% → 80%
+        public const float EndurancePerSecond = 4f;         // 달리기(초) — 2026-09-25: 사용자 요청으로 2배(2 → 4)
         public const float CovertPerSecond = 1f;            // 걷기(초)
         public const float VitalityPerDamage = 10f;         // 받은 피해
         public const float ArmorPerDamage = 12f;            // 방어구 착용 중 받은 피해
@@ -61,8 +61,12 @@ namespace Dskill
         public const float MeleePerKill = 60f;              // 근접 처치 보너스
         public const float SurvivalPerDebuff = 300f;        // 상태이상 1회
         public const float SurvivalPerTickDamage = 12f;     // 지속 피해
+        public const float ElementPerDamage = 20f;          // 받은 '속성' 피해 1당 (속성적응 — 화염·독·전기·얼음·유령·우주)
         public const float ReloadPerComplete = 40f;         // 재장전 1회
-        public const float RepairPerDurability = 30f;       // 수리한 내구도
+        public const float RepairPerDurability = 5f;        // 수리한 내구도 1당 점수
+        // 2026-09-25 확인·수정: 30 → 5.  30 이면 **수리 1회(내구도 30 회복)에 900점**이라
+        //   Lv.1 필요치(500)를 한 번에 넘고 만렙(누적 48,000)까지 53회면 끝났습니다(비정상적으로 빠름).
+        //   5 로 낮추면 같은 수리가 150점 → 만렙까지 320회(내구도 9,600)로 다른 스킬과 비슷해집니다.
         public const float BarterPer1000 = 5f;              // 거래 금액 1,000당 (0.0.7: 10 → 5)
         public const float MetabolismPerPoint = 20f;        // 포만감/수분 회복량
         public const float ThrowingPerThrow = 100f;         // 폭발물 투척 1회 (0.0.7: 200 → 100)
@@ -91,7 +95,8 @@ namespace Dskill
         public const float ThrowingEliteRange = 0.20f;      // 투척 엘리트: 거리 +20%
         public const float ThrowingDamagePerLevel = 0.025f; // 투척: 레벨당 폭발 대미지 (만렙 +50%)
         public const float ThrowingInstantChance = 0.30f;   // 투척 엘리트: 즉시 폭발 확률
-        public const float LootingSpeedPerLevel = 0.025f;   // 파밍: 레벨당 감지 시간 감소 (만렙 -50%)
+        public const float LootingSpeedPerLevel = 0.035f;   // 파밍: 레벨당 감지 시간 감소 (만렙 -70%) — 2026-09-25: 0.05 → 0.035 (사용자 요청: -70%)
+        public const float LootingMinInspectTime = 0.2f;    // 파밍: 만렙(-70%)에서도 0초가 되지 않게 유지하는 최소 감지 시간(초)
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
         public const float DashReductionPerLevel = 0.02f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -40%)
         public const float DashEliteReduction = 0.10f;      // 구르기 엘리트: 각각 -10% 추가
@@ -114,7 +119,7 @@ namespace Dskill
         public static readonly float[] XpStageMultipliers = { 5f, 2.5f, 1.5f, 1.2f, 1f };
     }
 
-    /// <summary>스킬 17종 정의</summary>
+    /// <summary>스킬 정의 (2026-09-25 기준 24종: 신체 7 · 전투 6 · 실용 11)</summary>
     public static class SkillDefs
     {
         public static readonly SkillDef[] All =
@@ -123,7 +128,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "strength", NameKo = "근력", Icon = "◆", Category = "신체",
-                TriggerKo = "무게 70% 이상으로 이동 (무거울수록 더 빠르게)",
+                TriggerKo = "무게 60% 이상으로 이동 (80% 이상이면 2배 빠르게)",
                 EliteKo = "가방 공간 +5칸, 이동 속도 +10%",
                 Effects = new[]
                 {
@@ -342,6 +347,33 @@ namespace Dskill
             },
             new SkillDef
             {
+                Id = "elemental", NameKo = "속성적응", Icon = "⊙", Category = "실용",
+                TriggerKo = "속성 피해(화염·독·전기·얼음·유령·우주)를 받을 때 (피해 1당 20점)",
+                EliteKo = "속성 피해 -5% 추가 (각 속성 합계 -15%)",
+                Effects = new[]
+                {
+                    // 만렙(20)까지 각 속성 피해 -10% = 레벨당 0.5%. (0.0.7 수정: 레벨/엘리트 수치가 뒤바뀌어 있었음)
+                    // 물리(physics)는 '방어' 스킬이 담당하므로 여기서는 제외합니다(중복 방지).
+                    new EffectDef("ElementFactor_Fire", StatModKind.PercentMultiply, -0.005f),
+                    new EffectDef("ElementFactor_Poison", StatModKind.PercentMultiply, -0.005f),
+                    new EffectDef("ElementFactor_Electricity", StatModKind.PercentMultiply, -0.005f),
+                    new EffectDef("ElementFactor_Ice", StatModKind.PercentMultiply, -0.005f),
+                    new EffectDef("ElementFactor_Ghost", StatModKind.PercentMultiply, -0.005f),
+                    new EffectDef("ElementFactor_Space", StatModKind.PercentMultiply, -0.005f)
+                },
+                EliteEffects = new[]
+                {
+                    // 엘리트(만렙): 각 속성 -5% 추가 → 합계 -15%
+                    new EffectDef("ElementFactor_Fire", StatModKind.PercentMultiply, -0.05f),
+                    new EffectDef("ElementFactor_Poison", StatModKind.PercentMultiply, -0.05f),
+                    new EffectDef("ElementFactor_Electricity", StatModKind.PercentMultiply, -0.05f),
+                    new EffectDef("ElementFactor_Ice", StatModKind.PercentMultiply, -0.05f),
+                    new EffectDef("ElementFactor_Ghost", StatModKind.PercentMultiply, -0.05f),
+                    new EffectDef("ElementFactor_Space", StatModKind.PercentMultiply, -0.05f)
+                }
+            },
+            new SkillDef
+            {
                 Id = "survival", NameKo = "생존술", Icon = "☆", Category = "실용",
                 TriggerKo = "상태이상(출혈·중독·화상)에 걸릴 때 (1회 300점, 지속피해 1당 12점)",
                 EliteKo = "출혈에 걸리지 않음 (디버프 30% 저항은 기본 효과)",
@@ -369,7 +401,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "repair", NameKo = "수리", Icon = "◈", Category = "실용",
-                TriggerKo = "장비를 수리할 때 (수리한 내구도 1당 30점)",
+                TriggerKo = "장비를 수리할 때 (수리한 내구도 1당 5점)",
                 EliteKo = "최대 내구도 감소 없음",
                 Effects = new EffectDef[0],        // 특수 처리: 최대 내구도 감소 -50%
                 EliteEffects = new EffectDef[0]
@@ -386,8 +418,8 @@ namespace Dskill
             {
                 Id = "looting", NameKo = "파밍", Icon = "▣", Category = "실용",
                 TriggerKo = "상자·시체에서 아이템을 찾아낼 때 (1개 20점, 획득 1개 10점)",
-                EliteKo = "50% 확률로 즉시 감지",
-                Effects = new EffectDef[0],        // 특수 처리: 아이템 감지 시간 -50%
+                EliteKo = "상자·시체를 열면 50% 확률로 그 안의 아이템을 모두 즉시 감지",
+                Effects = new EffectDef[0],        // 특수 처리: 아이템 감지 시간 -70% (레벨당 3.5%)
                 EliteEffects = new EffectDef[0]
             },
             new SkillDef

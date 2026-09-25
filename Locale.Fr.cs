@@ -5,10 +5,11 @@ namespace Dskill
     {
         public const string Table = @"
 # ==== UI ====
-ui.title|★ Système de compétences style Tarkov   —   glissez la barre de titre pour déplacer
+        ui.title|★ Duckov Skill   —   glissez la barre de titre pour déplacer
 ui.series|Branche : {0}
 ui.total|Total Lv.{0} / {1}
 ui.growth|Croissance : {0}
+        ui.perLevel|Par niveau : {0}
 ui.xpStage|Taux d'EXP : palier {0}/5 (x{1})
 ui.xpStageHint|1 = le plus rapide, 5 = par défaut
 ui.tabs|[F7] changer de branche    [{0} / ESC] fermer
@@ -34,6 +35,8 @@ notify.elite|  ★Niveau élite atteint !
 # ==== Textes d'effet ====
 eff.survival|Résistance aux malus {0}%, dégâts de feu/poison subis -{1}%
 eff.survivalElite|, immunité aux saignements
+        eff.elemental|Dégâts élémentaires subis -{0}%
+        eff.elementalElite|, élite -5% en plus
 eff.repair|Perte de durabilité max. -{0}%
 eff.barter|Prix de vente +{0}%
 eff.throwing|Distance de lancer +{0}%, dégâts d'explosion +{1}%
@@ -73,6 +76,10 @@ stat.BuffChance|Chance de malus
 stat.ElementFactor_Fire|Dégâts de feu subis
 stat.ElementFactor_Poison|Dégâts de poison subis
 stat.ElementFactor_Physics|Dégâts physiques subis
+        stat.ElementFactor_Electricity|Dégâts électriques subis
+        stat.ElementFactor_Ice|Dégâts de glace subis
+        stat.ElementFactor_Ghost|Dégâts de fantôme subis
+        stat.ElementFactor_Space|Dégâts spatiaux subis
 stat.BleedChance|Chance de saignement
 stat.ReloadSpeedGain|Vitesse de rechargement
 stat.EnergyCost|Consommation de faim
@@ -81,9 +88,9 @@ stat.NightVisionAbility|Vision nocturne
 stat.ViewDistance|Distance de vision
 stat.SenseRange|Rayon de détection
 stat.HearingAbility|Ouïe
-# ==== 23 compétences ====
+# ==== 24 compétences ====
 skill.strength.name|Force
-skill.strength.trigger|Se déplacer avec plus de 70% de poids (plus rapide si plus lourd)
+        skill.strength.trigger|Se déplacer avec plus de 60% de poids (plus rapide dès 80%)
 skill.strength.elite|Inventaire +5 emplacements, vitesse de déplacement +10%
 skill.endurance.name|Endurance
 skill.endurance.trigger|En courant
@@ -127,6 +134,9 @@ skill.covert.elite|Bruit de marche et de course -25% de plus (-45% / -35% au tot
 skill.armor.name|Défense
 skill.armor.trigger|En subissant des dégâts avec armure (12 pts par dégât)
 skill.armor.elite|Dégâts physiques subis -10%
+        skill.elemental.name|Adaptation élémentaire
+        skill.elemental.trigger|Quand vous subissez des dégâts élémentaires (feu/poison/électrique/glace/fantôme/espace) (20 pts par dégât)
+        skill.elemental.elite|Dégâts élémentaires -5% de plus (-15% au total par élément)
 skill.survival.name|Survie
 skill.survival.trigger|En subissant un état (saignement/poison/brûlure) (300 pts, 12 pts par tick)
 skill.survival.elite|Immunité aux saignements (30% de résistance est l'effet de base)
@@ -134,14 +144,14 @@ skill.reload.name|Rechargement
 skill.reload.trigger|En terminant un rechargement (40 pts)
 skill.reload.elite|Vitesse de rechargement +10% (supplémentaire)
 skill.repair.name|Réparation
-skill.repair.trigger|En réparant de l'équipement (30 pts par point de durabilité)
+        skill.repair.trigger|En réparant de l'équipement (5 pts par point de durabilité)
 skill.repair.elite|Aucune perte de durabilité max.
 skill.barter.name|Marchandage
 skill.barter.trigger|En achetant ou vendant (5 pts par 1 000 échangés)
 skill.barter.elite|Réapprovisionnement du marché noir -50%
 skill.looting.name|Fouille
 skill.looting.trigger|En fouillant caisses et corps (20 pts par trouvaille, 10 pts par prise)
-skill.looting.elite|50% de chance de détection immédiate
+        skill.looting.elite|À l'ouverture : 50% de chance de révéler tous les objets
 skill.hideout.name|Planque
 skill.hideout.trigger|Rester à la base (0.5 pt/s) + 500 pts par construction ou amélioration
 skill.hideout.elite|Temps de production du mineur de bitcoins -20%

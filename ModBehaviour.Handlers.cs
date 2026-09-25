@@ -19,6 +19,27 @@ namespace Dskill
         // 피해 / 사망
         // ------------------------------------------------------------------
 
+        /// <summary>이 피해에 '속성'이 실려 있는지 확인한다.
+        ///  게임은 속성이 없으면 물리(physics) 1.0 을 넣으므로(Health.cs),
+        ///  물리가 아닌 속성이 하나라도 있으면 속성 피해로 봅니다.</summary>
+        private static bool HasElementDamage(DamageInfo info)
+        {
+            List<ElementFactor> factors = info.elementFactors;
+            if (factors == null)
+            {
+                return false;
+            }
+            for (int i = 0; i < factors.Count; i++)
+            {
+                ElementFactor factor = factors[i];
+                if (factor.elementType != ElementTypes.physics && factor.factor > 0f)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void HandleHurt(Health health, DamageInfo info)
         {
             if (health == null || _skills == null || _main == null)
@@ -50,6 +71,12 @@ namespace Dskill
             if (info.isFromBuffOrEffect)
             {
                 _skills.AddXp("survival", damage * Rates.SurvivalPerTickDamage);
+            }
+
+            // 속성적응: 속성(화염·독·전기·얼음·유령·우주) 피해를 받았을 때 (물리는 '방어' 담당)
+            if (HasElementDamage(info))
+            {
+                _skills.AddXp("elemental", damage * Rates.ElementPerDamage);
             }
 
             // 폭발 피해 (투척술): 내가 던진 폭발물로 준 피해
