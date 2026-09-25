@@ -30,7 +30,8 @@
 - **0.0.6 에서 경험치 증가가 과도해 밸런스가 무너졌습니다.** 제작자가 이를 인지하고, 세이브 실측
   (분당 610 XP · 기지 3,370 XP/시간)을 근거로 0.0.7 에서 **곡선 2.6배 + 요율 약 0.5배**로 수정했습니다.
 - 정밀 사격의 **20m 기준은 의도된 설계**입니다 (저격용 — 멀리서 잡는 플레이를 보상).
-- 곡선이 가팔라진 이후 **표시 레벨이 몇 단계 내려갈 수 있습니다** (정상 · 경험치 자체는 그대로 유지됩니다).
+- 곡선이 가팔라진 이후 **표시 레벨이 몇 단계 내려갈 수 있습니다** (정상).
+
 - 물리 피해는 기존 **'방어' 스킬이 담당**하므로 속성적응에서는 제외했습니다 (중복 방지).
 
 ## 설치
@@ -38,7 +39,8 @@
 2. 게임 실행 → **모드(Mods)** 에서 **Duckov Skill** 켜기
 3. **F6** 스킬 창 (제목줄 드래그로 이동) · **F7** 계열 전환
 
-> 0.0.7 사용자는 `Dskill.dll` 만 교체하면 됩니다 — 설정·세이브·스킬 레벨은 그대로 유지됩니다.
+> 0.0.7 사용자는 `Dskill.dll` 만 교체하면 됩니다.
+
 
 ## AI 제작 표시
 이 모드의 코드·문서·번역은 **AI 코딩 에이전트(Cline)** 와 협업해 제작했습니다.
@@ -78,7 +80,8 @@
 - **In 0.0.6 XP gain was far too high and the balance broke.** I confirmed this, measured it from save data
   (610 XP/min, 3,370 XP/h in the hideout) and fixed it in 0.0.7 (**curve 2.6x steeper, rates about half**).
 - The **20 m requirement for Marksmanship is intentional** (sniping — it rewards long-range play).
-- Because the curve is steeper now, **shown levels may drop a few steps** (expected; the XP itself is kept).
+- Because the curve is steeper now, **shown levels may drop a few steps** (expected).
+
 - Physical damage is handled by the existing **Armor** skill, so it is excluded from Elemental Adaptation.
 
 ## Installation
@@ -86,7 +89,8 @@
 2. Launch the game → enable **Duckov Skill** in the **Mods** menu
 3. **F6** opens the skill window (drag the title bar) · **F7** switches category
 
-> On 0.0.7? Replacing `Dskill.dll` is enough — config, saves and skill levels are kept.
+> On 0.0.7? Replacing `Dskill.dll` is enough.
+
 
 ## AI disclosure
 The code, documentation and translations were created in collaboration with an **AI coding agent (Cline)**.
