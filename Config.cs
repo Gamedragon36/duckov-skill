@@ -21,6 +21,10 @@ namespace Dskill
         public string Language = "auto";     // 표시 언어 (auto = OS 언어를 따름)
         public int XpStage = 5;              // 경험치 획득 난이도 1~5 (1=가장 빠름, 5=기본)
 
+        /// <summary>작성자 테스트용: 근접 공격속도를 강제로 감소시킨다 (0=끔, 0.9=-90%).
+        ///  테스트가 끝나면 0 으로 되돌리면 원래 레벨 기반 계산으로 복귀한다(재빌드 불필요).</summary>
+        public float MeleeSpeedTest = 0f;
+
         // ----- 제작 스킬 밸런스 (값은 여기서 자유롭게 조정) -----
         public float CraftUnlockXp = 200f;    // 새 레시피 해금 XP (여러 개가 한꺼번에 풀리면 1회만 인정)
         public float CraftXpPerValue = 0.08f; // 제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)
@@ -111,6 +115,7 @@ namespace Dskill
                     case "max_level": MaxLevel = ParseInt(value, MaxLevel); break;
                     case "xp_base": XpBase = ParseFloat(value, XpBase); break;
                     case "xp_step": XpStep = ParseFloat(value, XpStep); break;
+            case "melee_speed_test": MeleeSpeedTest = ParseFloat(value, MeleeSpeedTest); break;
                     case "xp_multiplier": XpMultiplier = ParseFloat(value, XpMultiplier); break;
                     case "hotkey": Hotkey = value; break;
                     case "notify_levelup": NotifyLevelUp = ParseBool(value, NotifyLevelUp); break;
@@ -133,6 +138,8 @@ namespace Dskill
 
             if (MaxLevel < 1) MaxLevel = 1;
             if (MaxLevel > 200) MaxLevel = 200;
+            if (MeleeSpeedTest < 0f) MeleeSpeedTest = 0f;
+            if (MeleeSpeedTest > 0.95f) MeleeSpeedTest = 0.95f;
             if (XpMultiplier <= 0f) XpMultiplier = 0.01f;
             if (MetaBonusPercent < 0f) MetaBonusPercent = 0f;
             if (MetaBonusPercent > 20f) MetaBonusPercent = 20f;
@@ -194,6 +201,7 @@ namespace Dskill
             lines.Add("notify_levelup = true # " + Locale.T("cfg.notifyLevelUp", "레벨업 때 알림 표시 (true/false)"));
             lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto(게임에서 고른 언어) / ko / en / zh / zh-hant / ja / de / ru / es / fr / pt-br"));
             lines.Add("xp_stage = 5          # " + Locale.T("cfg.xpStage", "경험치 난이도 1~5 (1=가장 빠름, 5=기본)"));
+            lines.Add("melee_speed_test = 0    # " + Locale.T("cfg.meleeSpeedTest", "작성자 테스트용: 근접 공격속도 강제 감소 (0=끔, 0.9=-90%)"));
             lines.Add("craft_unlock_xp = 200    # " + Locale.T("cfg.craftUnlockXp", "새 레시피 해금 XP (한꺼번에 여러 개가 풀리면 1회만 인정)"));
             lines.Add("craft_xp_per_value = 0.08 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)"));
             lines.Add("craft_xp_cap = 400       # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));

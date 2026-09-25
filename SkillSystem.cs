@@ -220,6 +220,11 @@ namespace Dskill
         /// <summary>근접 전투: 근접 공격속도 증가 비율 — 쿨타임·동작 시간(CA_Attack)을 같은 비율로 줄인다. (0.0.8)</summary>
         public float MeleeSpeedBonus(int level)
         {
+            // 작성자 테스트용: config.ini 의 melee_speed_test 가 0 보다 크면 그 값을 그대로 사용한다
+            if (_config.MeleeSpeedTest > 0f)
+            {
+                return Mathf.Clamp(_config.MeleeSpeedTest, 0f, 0.95f);
+            }
             if (level <= 0)
             {
                 return 0f;
