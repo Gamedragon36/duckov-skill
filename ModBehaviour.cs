@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.8";
+        public const string Version = "0.0.9";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.8: +Elemental Adaptation skill (24) / +Melee attack speed +30% & elite +20% / looting -70% (nerf) / strength 60-80% (buff) / repair 5 / XP curve 48000->25000 (buff) / UI shows XP numbers";
+        private const string ChangeNote = "0.0.9: distance-based movement XP (strength 1.6/m, endurance 1.04/m, covert 1/s+0.7/m) / melee 45&90 / fixed melee+gun+marksmanship HIT xp (was dead code) / marksmanship 20m distance fix / dash counts as sprint / dash stamina stacks with endurance / hold dash key to chain rolls / looting elite reveals whole container";
 
         private Config _config;
         private MetaProgress _meta;
@@ -326,6 +326,7 @@ namespace Dskill
         {
             HandleInput();
             DetectDash();
+            HandleDashHold();   // 구르기 키를 꾹 누르면 자동으로 다시 구르게 한다 (0.0.9)
 
             _tickTimer += Time.unscaledDeltaTime;
             if (_tickTimer >= 0.5f)
@@ -380,37 +381,54 @@ namespace Dskill
             }
 
             // ---- 이동 관련 (근력 / 지구력 / 은신 이동) ----
+            //  0.0.9: 이동 **거리 비례(1m당)** 성장. 근력·지구력은 '초당' 몫을 지우고 거리만 쓴다
+            //        (2026-09-26 사용자 요청 — 은신 이동만 초당 1점을 유지).
+            //    · Y축은 제외 → 낙하·점프는 거리로 세지 않는다
+            //    · 속도 버프를 그대로 반영 → 같은 시간에 더 멀리 가면 더 많이 얻는다(보정 없음)
             bool moved = false;
+            float distance = 0f;      // 이번 틱에 실제로 이동한 수평 거리(m)
             if (_main != null)
             {
                 Vector3 position = _main.transform.position;
                 if (!_firstTick)
                 {
-                    moved = (position - _lastPosition).sqrMagnitude > 0.0025f;   // 5cm 이상 이동
+                    Vector3 delta = position - _lastPosition;
+                    moved = delta.sqrMagnitude > 0.0025f;   // 5cm 이상 이동
+                    if (moved)
+                    {
+                        delta.y = 0f;                        // 수직 이동(낙하·점프) 제외
+                        // 한 틱에 상한을 넘게 움직이면 순간이동(존 이동)으로 보고 상한까지만 인정한다.
+                        //  (버리지 않고 자르는 이유: 구르기와 달리기가 겹친 틱의 실제 이동까지 잃지 않게)
+                        distance = Mathf.Min(delta.magnitude, Rates.MovementMaxStep);
+                    }
                 }
                 _lastPosition = position;
             }
 
             if (moved && _main != null)
             {
-                if (_main.Running)
+                // 구르기(대시)도 '달리기'로 인정한다
+                //  (2026-09-26 사용자 요청 — 구르기로 지구력이 오르지 않던 문제: 게임은 구르기 중 Running 을 켜지 않는다)
+                if (_main.Running || _main.Dashing)
                 {
-                    _skills.AddXp("endurance", elapsed * Rates.EndurancePerSecond);
+                    // 지구력: 거리 비례만 (2026-09-26 사용자 요청 — '초당' 몫 삭제)
+                    _skills.AddXp("endurance", distance * Rates.EndurancePerMeter);
                 }
                 else
                 {
-                    _skills.AddXp("covert", elapsed * Rates.CovertPerSecond);
+                    // 은신 이동: 초당 1점 + 거리 비례
+                    _skills.AddXp("covert", elapsed * Rates.CovertPerSecond
+                        + distance * Rates.CovertPerMeter);
                 }
 
                 float maxWeight = _main.MaxWeight;
                 if (maxWeight > 0.01f)
                 {
                     float ratio = _mainItem.TotalWeight / maxWeight;
-                    // 2026-09-25 사용자 요청: 임계값을 60% / 80% 로 (예전 70% / 90%)
+                    // 근력: 무게 60% 이상이면 거리 비례로만 오른다 (2026-09-26: '초당' 몫 삭제 · 80% 차등 없음)
                     if (ratio >= 0.6f)
                     {
-                        float perSecond = ratio >= 0.8f ? Rates.StrengthHeavyPerSecond : Rates.StrengthPerSecond;
-                        _skills.AddXp("strength", elapsed * perSecond);
+                        _skills.AddXp("strength", distance * Rates.StrengthPerMeter);
                     }
                 }
             }

@@ -91,10 +91,10 @@ stat.SenseRange|Raio de detecção
 stat.HearingAbility|Audição
 # ==== 24 habilidades ====
 skill.strength.name|Força
-        skill.strength.trigger|Mover-se com mais de 60% de peso (4 pts/s, 8 pts/s a partir de 80%)
+        skill.strength.trigger|Mover-se com mais de 60% de peso (1.6 pts/m)
 skill.strength.elite|Inventário +5 espaços, velocidade de movimento +10%
 skill.endurance.name|Resistência
-skill.endurance.trigger|Enquanto corre (4 pts/s)
+skill.endurance.trigger|Enquanto corre ou rola (1.04 pts/m)
 skill.endurance.elite|Recuperação de stamina +30%
 skill.vitality.name|Vitalidade
 skill.vitality.trigger|Ao receber dano (10 pts por dano)
@@ -121,7 +121,7 @@ skill.marksmanship.name|Precisão
 skill.marksmanship.trigger|Acertar a 20 m ou mais (150 pts, +200 na cabeça)
 skill.marksmanship.elite|Dano na cabeça +10%
 skill.melee.name|Corpo a corpo
-skill.melee.trigger|Quando um ataque corpo a corpo acerta (30 pts, +60 por abate)
+skill.melee.trigger|Quando um ataque corpo a corpo acerta (45 pts, +90 por abate)
 skill.melee.elite|Velocidade de movimento +10% (extra)
 skill.throwing.name|Arremessos
 skill.throwing.trigger|Ao arremessar um explosivo (100 pts, 2 pts por dano de explosão)
@@ -130,7 +130,7 @@ skill.perception.name|Percepção
 skill.perception.trigger|Ao notar um som por perto (4 pts, no máximo 1 vez por segundo)
 skill.perception.elite|Visão e detecção +10%, audição +20% (extra)
 skill.covert.name|Movimento furtivo
-skill.covert.trigger|Ao andar (corrida excluída, 1 pt/s)
+skill.covert.trigger|Ao andar (corrida excluída, 1 pt/s + 0.7 pts/m)
 skill.covert.elite|Barulho ao andar e correr -25% a mais (-45% / -35% no total)
 skill.armor.name|Defesa
 skill.armor.trigger|Ao receber dano usando armadura (12 pts por dano)

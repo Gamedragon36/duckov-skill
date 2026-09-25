@@ -44,10 +44,16 @@ namespace Dskill
     /// <summary>경험치 획득량 (게임에서 1단위 일어날 때 얻는 점수)</summary>
     public static class Rates
     {
-        public const float StrengthPerSecond = 4f;          // 과적 상태 이동(초) — 2026-09-25: 사용자 요청으로 2배(2 → 4)
-        public const float StrengthHeavyPerSecond = 8f;     // 무게 80% 이상 — 2026-09-25: 2배(4 → 8) · 기준 90% → 80%
-        public const float EndurancePerSecond = 4f;         // 달리기(초) — 2026-09-25: 사용자 요청으로 2배(2 → 4)
-        public const float CovertPerSecond = 1f;            // 걷기(초)
+        // 근력·지구력의 '초당' 성장은 2026-09-26 사용자 요청으로 **삭제**했다(거리 비례만 사용).
+        public const float CovertPerSecond = 1f;            // 은신 이동: 걷기(초) — 초당 성장을 남겨둔 유일한 이동 스킬
+        // ---- 이동 거리 비례 (0.0.9 · 2026-09-26 사용자 요청) ----
+        //   Y축(낙하·점프) 제외 · 속도 버프를 그대로 반영(빠를수록 더 많이 얻음).
+        //   근력·지구력은 '초당' 몫을 지우고 이 거리 비례만 쓴다.
+        public const float EndurancePerMeter = 1.04f;       // 달리기 1m당 — 2026-09-26: 1.3배(0.8 → 1.04)
+        public const float CovertPerMeter = 0.7f;           // 걷기 1m당 (은신 이동은 초당 1점 + 거리 몫)
+        public const float StrengthPerMeter = 1.6f;         // 과적(무게 60% 이상) 1m당 — 80% 차등 없음
+        /// <summary>한 틱에 이보다 많이 움직이면 순간이동으로 보고 거리에서 제외 (m). 틱이 0.5초라 20m/s 상당</summary>
+        public const float MovementMaxStep = 10f;
         public const float VitalityPerDamage = 10f;         // 받은 피해
         public const float ArmorPerDamage = 12f;            // 방어구 착용 중 받은 피해
         public const float HealthPerHeal = 10f;             // 회복량 (0.0.7: 20 → 10)
@@ -57,8 +63,8 @@ namespace Dskill
         public const float MarksmanshipPerHit = 150f;       // 원거리 명중 (0.0.7: 20m 유지 대신 45 → 150)
         public const float MarksmanshipPerCrit = 200f;       // 원거리 헤드샷 보너스 (0.0.7: 70 → 200)
         public const float MarksmanshipMinDistance = 20f;   // 원거리 기준 거리(m) — 저격용으로 20m 유지(의도)
-        public const float MeleePerHit = 30f;               // 근접 명중
-        public const float MeleePerKill = 60f;              // 근접 처치 보너스
+        public const float MeleePerHit = 45f;               // 근접 명중 — 2026-09-26: 사용자 요청으로 1.5배(30 → 45)
+        public const float MeleePerKill = 90f;              // 근접 처치 보너스 — 2026-09-26: 1.5배(60 → 90)
         public const float SurvivalPerDebuff = 300f;        // 상태이상 1회
         public const float SurvivalPerTickDamage = 12f;     // 지속 피해
         public const float ElementPerDamage = 20f;          // 받은 '속성' 피해 1당 (속성적응 — 화염·독·전기·얼음·유령·우주)
@@ -100,6 +106,8 @@ namespace Dskill
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
         public const float DashReductionPerLevel = 0.02f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -40%)
         public const float DashEliteReduction = 0.10f;      // 구르기 엘리트: 각각 -10% 추가
+        public const float EnduranceStaminaPerLevel = 0.02f;  // 지구력: 레벨당 스태미나 소모 감소 (만렙 -40%)
+        public const float EnduranceStaminaMax = 0.40f;       // 지구력: 스태미나 소모 감소 상한 (-40%)
         public const float MerchantCooldownPerLevel = 0.025f;  // 하이드아웃: 상인 쿨타임 감소 (만렙 -50%)
         public const float MinerEliteTimeReduction = 0.20f;    // 하이드아웃 엘리트: 채굴 시간 -20%
         public const float CraftingBonusPerLevel = 0.015f;     // 제작: 레벨당 추가 생산 확률 (만렙 30%)
@@ -134,7 +142,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "strength", NameKo = "근력", Icon = "◆", Category = "신체",
-                TriggerKo = "무게 60% 이상으로 이동 (초당 4점, 80% 이상은 초당 8점)",
+                TriggerKo = "무게 60% 이상으로 이동 (1m당 1.6점)",
                 EliteKo = "가방 공간 +5칸, 이동 속도 +10%",
                 Effects = new[]
                 {
@@ -152,11 +160,11 @@ namespace Dskill
             new SkillDef
             {
                 Id = "endurance", NameKo = "지구력", Icon = "▲", Category = "신체",
-                TriggerKo = "달리는 동안 (초당 4점)",
+                TriggerKo = "달리기·구르기로 이동한 거리 (1m당 1.04점)",
                 EliteKo = "스태미나 회복 속도 +30%",
                 Effects = new[]
                 {
-                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -0.02f),  // 만렙 -40%
+                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -Specials.EnduranceStaminaPerLevel),  // 만렙 -40% (구르기 중첩 계산과 같은 상수 공유)
                     // 신진대사에서 옮겨온 이동 속도 (만렙 +10%)
                     new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),
                     new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
@@ -273,7 +281,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "melee", NameKo = "근접 전투", Icon = "◀", Category = "전투",
-                TriggerKo = "근접 공격이 명중할 때 (1회 30점, 근접 처치 +60점)",
+                TriggerKo = "근접 공격이 명중할 때 (1회 45점, 근접 처치 +90점)",
                 EliteKo = "이동 속도 +10%, 근접 공격속도 +20% (추가)",
                 Effects = new[]
                 {
@@ -319,7 +327,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "covert", NameKo = "은신 이동", Icon = "◐", Category = "실용",
-                TriggerKo = "걸어서 이동할 때 (달리기 제외, 초당 1점)",
+                TriggerKo = "걸어서 이동할 때 (달리기 제외, 초당 1점 + 1m당 0.7점)",
                 EliteKo = "보행·달리기 소리 -25% 추가 (총 -45% / -35%)",
                 Effects = new[]
                 {

@@ -91,10 +91,10 @@ stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
 # ==== 스킬 24종 ====
 skill.strength.name|Strength
-        skill.strength.trigger|Move while over 60% weight (4 pts/s, 8 pts/s above 80%)
+        skill.strength.trigger|Move while over 60% weight (1.6 pts/m)
 skill.strength.elite|Inventory space +5 slots, movement speed +10%
 skill.endurance.name|Endurance
-skill.endurance.trigger|While sprinting (4 pts/s)
+skill.endurance.trigger|While sprinting or dashing (1.04 pts/m)
 skill.endurance.elite|Stamina recovery rate +30%
 skill.vitality.name|Vitality
 skill.vitality.trigger|When you take damage (10 pts per damage)
@@ -121,7 +121,7 @@ skill.marksmanship.name|Marksmanship
 skill.marksmanship.trigger|Hit a target from 20 m or more (150 pts, +200 for a headshot)
 skill.marksmanship.elite|Headshot damage +10%
 skill.melee.name|Melee Combat
-skill.melee.trigger|When a melee attack hits (30 pts, +60 for a melee kill)
+skill.melee.trigger|When a melee attack hits (45 pts, +90 for a melee kill)
 skill.melee.elite|Movement speed +10% (extra)
 skill.throwing.name|Throwables
 skill.throwing.trigger|When you throw an explosive (100 pts, 2 pts per explosion damage)
@@ -130,7 +130,7 @@ skill.perception.name|Awareness
 skill.perception.trigger|When you notice a sound nearby (4 pts, at most once per second)
 skill.perception.elite|View and detection +10%, hearing +20% (extra)
 skill.covert.name|Stealth Movement
-skill.covert.trigger|While walking (sprinting excluded, 1 pt/s)
+skill.covert.trigger|While walking (sprinting excluded, 1 pt/s + 0.7 pts/m)
 skill.covert.elite|Walking and sprint noise -25% more (-45% / -35% total)
 skill.armor.name|Armor
 skill.armor.trigger|When you take damage while wearing armor (12 pts per damage)
@@ -184,6 +184,7 @@ cfg.skillXpNote|Per-skill XP multiplier (0.5 = half speed, 2.0 = double speed)
 cfg.language|UI language: auto (follows the language you chose in the game), or en, ko, zh, zh-hant, ja, de, ru, es, fr, pt-br
 cfg.xpStage|XP gain difficulty stage 1-5 (1 = fastest, 5 = default rate)
 cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Workshop once
+cfg.dashHoldRepeat|Hold the dash key to keep rolling automatically (each cooldown)
 cfg.craftUnlockXp|XP for unlocking a new recipe (a batch unlock counts once)
 cfg.craftXpPerValue|Crafting XP = material value x this value (0.08 = 8%)
 cfg.craftXpCap|Maximum XP per craft (0 = no limit)

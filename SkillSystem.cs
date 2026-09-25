@@ -615,6 +615,18 @@ namespace Dskill
             return Mathf.Clamp(value, 0f, 0.95f);
         }
 
+        /// <summary>지구력: 스태미나 소모 감소 비율 (0.4 = -40%). 만렙 -40%.
+        ///  달리기 스태미나(게임 스탯 StaminaDrainRate)에 적용되고,
+        ///  **구르기 스태미나에도 같은 비율로 중첩 적용**한다(게임은 두 값을 따로 계산하므로 모드가 직접 곱한다).</summary>
+        public float EnduranceStaminaReduction(int level)
+        {
+            if (level <= 0)
+            {
+                return 0f;
+            }
+            return Mathf.Clamp(Specials.EnduranceStaminaPerLevel * level, 0f, Specials.EnduranceStaminaMax);
+        }
+
         /// <summary>하이드아웃: 상인(상점) 재고 갱신 쿨타임 감소 비율 (0.5 = 절반)</summary>
         public float MerchantCooldownReduction(int level)
         {

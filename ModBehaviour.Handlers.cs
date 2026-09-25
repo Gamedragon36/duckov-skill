@@ -49,77 +49,145 @@ namespace Dskill
             {
                 return;
             }
-            // 내가 맞은 것이 아니면 무시
-            if (health.TryGetCharacter() != _main)
-            {
-                return;
-            }
-
             float damage = info.finalDamage;
             if (damage <= 0f)
             {
                 return;
             }
 
-            // 생명력: 맞은 만큼
-            _skills.AddXp("vitality", damage * Rates.VitalityPerDamage);
+            bool hurtMe = health.TryGetCharacter() == _main;
+            bool fromMe = info.fromCharacter != null && info.fromCharacter == _main;
 
-            // 방어: 방어구를 착용 중일 때
-            if (health.BodyArmor > 0f || health.HeadArmor > 0f)
+            // ---- 내가 맞은 것 ----
+            if (hurtMe)
             {
-                _skills.AddXp("armor", damage * Rates.ArmorPerDamage);
-            }
+                // 생명력: 맞은 만큼
+                _skills.AddXp("vitality", damage * Rates.VitalityPerDamage);
 
-            // 상태이상(출혈·중독 등)으로 인한 지속 피해
-            if (info.isFromBuffOrEffect)
-            {
-                _skills.AddXp("survival", damage * Rates.SurvivalPerTickDamage);
-            }
-
-            // 속성적응: 속성(화염·독·전기·얼음·유령·우주) 피해를 받았을 때 (물리는 '방어' 담당)
-            if (HasElementDamage(info))
-            {
-                _skills.AddXp("elemental", damage * Rates.ElementPerDamage);
-            }
-
-            // 폭발 피해 (투척술): 내가 던진 폭발물로 준 피해
-            if (info.isExplosion && info.fromCharacter != null && info.fromCharacter == _main)
-            {
-                _skills.AddXp("throwing", damage * Rates.ThrowingPerExplosionDamage);
-            }
-
-            // 내가 준 피해 (사격 / 정밀 사격 / 근접)
-            CharacterMainControl from = info.fromCharacter;
-            if (from != null && from == _main && IsMeleeDamage(info))
-            {
-                // 근접 전투: 명중할 때마다 (이전 버전에서 누락되어 있던 경험치)
-                float meleeNow = Time.time;
-                if (_lastMeleeHitTime > 0f)
+                // 방어: 방어구를 착용 중일 때
+                if (health.BodyArmor > 0f || health.HeadArmor > 0f)
                 {
-                    // 실측 로그: 이전 근접 명중과의 간격 — 공격속도(CA_Attack 시간 감소)가 반영되는지 확인용
-                    Debug.Log("[Dskill] 근접 공격 감지: 이전 명중과 " + (meleeNow - _lastMeleeHitTime).ToString("0.##") + "초 간격");
+                    _skills.AddXp("armor", damage * Rates.ArmorPerDamage);
                 }
-                _lastMeleeHitTime = meleeNow;
-                _skills.AddXp("melee", Rates.MeleePerHit);
+
+                // 상태이상(출혈·중독 등)으로 인한 지속 피해
+                if (info.isFromBuffOrEffect)
+                {
+                    _skills.AddXp("survival", damage * Rates.SurvivalPerTickDamage);
+                }
+
+                // 속성적응: 속성(화염·독·전기·얼음·유령·우주) 피해를 받았을 때 (물리는 '방어' 담당)
+                if (HasElementDamage(info))
+                {
+                    _skills.AddXp("elemental", damage * Rates.ElementPerDamage);
+                }
             }
-            else if (from != null && from == _main)
+
+            // ---- 내가 준 피해 (투척·근접·사격·정밀 사격) ----
+            //  0.0.9 수정: 예전에는 이 함수가 '내가 맞은 경우'만 통과시키고 바로 return 해서
+            //   아래(내가 준 피해) 코드가 **한 번도 실행되지 않았다**(로그 '근접 공격 감지' 0회).
+            //   → 근접 명중·사격 명중·정밀 사격 경험치가 오르지 않던 원인.
+            if (fromMe && !hurtMe)
             {
-                if (_gun != null && _gun.Item != null && info.fromWeaponItemID == _gun.Item.TypeID)
+                // 지속 피해(출혈 등)는 '명중'으로 세지 않는다(경험치 중복 방지)
+                if (info.isFromBuffOrEffect)
+                {
+                    return;
+                }
+
+                if (info.isExplosion)
+                {
+                    // 투척술: 내가 던진 폭발물로 준 피해
+                    _skills.AddXp("throwing", damage * Rates.ThrowingPerExplosionDamage);
+                }
+                else if (IsMeleeDamage(info))
+                {
+                    // 근접 전투: 명중할 때마다
+                    float meleeNow = Time.time;
+                    if (_lastMeleeHitTime > 0f)
+                    {
+                        // 실측 로그: 이전 근접 명중과의 간격 — 공격속도(CA_Attack 시간 감소)가 반영되는지 확인용
+                        Debug.Log("[Dskill] 근접 공격 감지: 이전 명중과 " + (meleeNow - _lastMeleeHitTime).ToString("0.##") + "초 간격");
+                    }
+                    _lastMeleeHitTime = meleeNow;
+                    _skills.AddXp("melee", Rates.MeleePerHit);
+                }
+                else if (IsGunDamage(info))
                 {
                     _skills.AddXp("assault", Rates.AssaultPerHit);
 
-                    float distance = Vector3.Distance(_main.transform.position, info.damagePoint);
+                    // 거리는 '내 캐릭터'와 '맞은 대상' 사이로 잰다.
+                    //  0.0.9 수정: 예전에는 info.damagePoint 를 썼는데 총알 피해에서는 값이 비어 있어(0)
+                    //   사실상 '원점~플레이어' 거리가 나왔고, 그 값이 20m 를 넘어 **가까운 거리에서도 정밀 사격이 올랐다**.
+                    float distance = MeasureHitDistance(health, info);
                     if (distance >= Rates.MarksmanshipMinDistance)
                     {
                         float gain = Rates.MarksmanshipPerHit;
-                        if (info.crit != 0)
+                        bool crit = info.crit != 0;
+                        if (crit)
                         {
                             gain += Rates.MarksmanshipPerCrit;
                         }
                         _skills.AddXp("marksmanship", gain);
+                        Debug.Log("[Dskill] 정밀 사격 +" + gain.ToString("0.#") + " (" + distance.ToString("0.#") +
+                                  "m" + (crit ? ", 치명타" : "") + " / 무기ID " + info.fromWeaponItemID + ")");
+                    }
+                    else
+                    {
+                        // 검증용: 기준 미만일 때 실제로 잰 거리를 남긴다(가까운 거리 오지급 확인)
+                        Debug.Log("[Dskill] 사격 명중 " + distance.ToString("0.#") + "m — 정밀 사격 기준 " +
+                                  Rates.MarksmanshipMinDistance.ToString("0") + "m 미만이라 오르지 않음");
                     }
                 }
             }
+        }
+
+        /// <summary>이 피해가 총기(사격)로 준 것인지 확인한다.
+        ///  게임이 fromWeaponItemID 를 채우지 않는 경우가 있어,
+        ///  근접·폭발·상태이상이 아니면서 총을 들고 있으면 사격으로 인정한다
+        ///  (정밀 사격이 동작하지 않던 원인 보완 · 2026-09-26).</summary>
+        private bool IsGunDamage(DamageInfo info)
+        {
+            if (_gun == null || _gun.Item == null)
+            {
+                return false;
+            }
+            if (info.fromWeaponItemID == _gun.Item.TypeID)
+            {
+                return true;
+            }
+            return !IsMeleeDamage(info) && !info.isExplosion;
+        }
+
+        /// <summary>내 캐릭터와 '맞은 대상' 사이의 거리(m).
+        ///  총알 피해의 damagePoint 는 비어 있는 경우가 있고, 체력 컴포넌트 위치도 0 인 대상이 있어
+        ///  **대상 캐릭터 위치 → 체력 컴포넌트 위치 → 피해 지점** 순으로 믿을 수 있는 값을 고른다.
+        ///  (위치를 알 수 없으면 0 을 돌려 정밀 사격을 주지 않는다 — 가까운 거리 오지급 방지)</summary>
+        private float MeasureHitDistance(Health health, DamageInfo info)
+        {
+            if (_main == null || health == null)
+            {
+                return 0f;
+            }
+            Vector3 myPosition = _main.transform.position;
+
+            CharacterMainControl victim = health.TryGetCharacter();
+            if (victim != null && victim != _main)
+            {
+                return Vector3.Distance(myPosition, victim.transform.position);
+            }
+
+            Vector3 target = health.transform.position;
+            if (target != Vector3.zero)
+            {
+                return Vector3.Distance(myPosition, target);
+            }
+
+            if (info.damagePoint != Vector3.zero)
+            {
+                return Vector3.Distance(myPosition, info.damagePoint);
+            }
+            return 0f;
         }
 
         /// <summary>이 피해가 근접 무기로 준 것인지 확인</summary>
@@ -141,6 +209,12 @@ namespace Dskill
             if (IsMeleeDamage(info))
             {
                 _skills.AddXp("melee", Rates.MeleePerKill);
+            }
+            else if (IsGunDamage(info))
+            {
+                // 검증용: 사격 처치 거리를 남긴다(정밀 사격 기준 20m 와 비교해 확인)
+                Debug.Log("[Dskill] 사격 처치: " + MeasureHitDistance(health, info).ToString("0.#") +
+                          "m (정밀 사격 기준 " + Rates.MarksmanshipMinDistance.ToString("0") + "m)");
             }
         }
 

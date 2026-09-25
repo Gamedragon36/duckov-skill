@@ -91,10 +91,10 @@ stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
 # ==== スキル 24 種 ====
 skill.strength.name|筋力
-        skill.strength.trigger|重量 60% 以上で移動（毎秒 4 点、80% 以上は毎秒 8 点）
+        skill.strength.trigger|重量 60% 以上で移動（1m あたり 1.6 点）
 skill.strength.elite|バッグ容量 +5 枠、移動速度 +10%
 skill.endurance.name|持久力
-skill.endurance.trigger|走っている間（毎秒 4 点）
+skill.endurance.trigger|走り・ローリング中の移動距離（1m あたり 1.04 点）
 skill.endurance.elite|スタミナ回復速度 +30%
 skill.vitality.name|生命力
 skill.vitality.trigger|ダメージを受けたとき（ダメージ 1 につき 10 点）
@@ -121,7 +121,7 @@ skill.marksmanship.name|精密射撃
 skill.marksmanship.trigger|20m 以上の距離で命中（1 回 150 点、ヘッドショットは +200 点）
 skill.marksmanship.elite|ヘッドショットダメージ +10%
 skill.melee.name|近接戦闘
-skill.melee.trigger|近接攻撃が命中したとき（1 回 30 点、近接撃破 +60 点）
+skill.melee.trigger|近接攻撃が命中したとき（1 回 45 点、近接撃破 +90 点）
 skill.melee.elite|移動速度 +10%（追加）
 skill.throwing.name|投擲術
 skill.throwing.trigger|爆発物を投げたとき（1 回 100 点、爆発ダメージ 1 につき 2 点）
@@ -130,7 +130,7 @@ skill.perception.name|認知・偵察
 skill.perception.trigger|周囲の音を感知したとき（1 回 4 点、1 秒に最大 1 回）
 skill.perception.elite|視界・感知 +10%、聴力 +20%（追加）
 skill.covert.name|隠密移動
-skill.covert.trigger|歩いて移動したとき（走りは除く、毎秒 1 点）
+skill.covert.trigger|歩いて移動したとき（走りは除く、毎秒 1 点 + 1m あたり 0.7 点）
 skill.covert.elite|歩き・走りの音がさらに -25%（合計 -45% / -35%）
 skill.armor.name|防御
 skill.armor.trigger|アーマーを着けてダメージを受けたとき（ダメージ 1 につき 12 点）

@@ -91,10 +91,10 @@ stat.SenseRange|Rayon de détection
 stat.HearingAbility|Ouïe
 # ==== 24 compétences ====
 skill.strength.name|Force
-        skill.strength.trigger|Se déplacer avec plus de 60% de poids (4 pts/s, 8 pts/s dès 80%)
+        skill.strength.trigger|Se déplacer avec plus de 60% de poids (1.6 pts/m)
 skill.strength.elite|Inventaire +5 emplacements, vitesse de déplacement +10%
 skill.endurance.name|Endurance
-skill.endurance.trigger|En courant (4 pts/s)
+skill.endurance.trigger|En courant ou en roulade (1.04 pts/m)
 skill.endurance.elite|Récupération d'endurance +30%
 skill.vitality.name|Vitalité
 skill.vitality.trigger|En subissant des dégâts (10 pts par dégât)
@@ -121,7 +121,7 @@ skill.marksmanship.name|Tir de précision
 skill.marksmanship.trigger|Toucher à 20 m ou plus (150 pts, +200 pour un tir à la tête)
 skill.marksmanship.elite|Dégâts à la tête +10%
 skill.melee.name|Corps à corps
-skill.melee.trigger|Quand une attaque au corps à corps touche (30 pts, +60 pour une élimination)
+skill.melee.trigger|Quand une attaque au corps à corps touche (45 pts, +90 pour une élimination)
 skill.melee.elite|Vitesse de déplacement +10% (supplémentaire)
 skill.throwing.name|Lancers
 skill.throwing.trigger|En lançant un explosif (100 pts, 2 pts par dégât d'explosion)
@@ -130,7 +130,7 @@ skill.perception.name|Perception
 skill.perception.trigger|En remarquant un son proche (4 pts, au plus 1 fois par seconde)
 skill.perception.elite|Vision et détection +10%, ouïe +20% (supplémentaire)
 skill.covert.name|Déplacement furtif
-skill.covert.trigger|En marchant (course exclue, 1 pt/s)
+skill.covert.trigger|En marchant (course exclue, 1 pt/s + 0.7 pts/m)
 skill.covert.elite|Bruit de marche et de course -25% de plus (-45% / -35% au total)
 skill.armor.name|Défense
 skill.armor.trigger|En subissant des dégâts avec armure (12 pts par dégât)

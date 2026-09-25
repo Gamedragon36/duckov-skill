@@ -91,10 +91,10 @@ stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
 # ==== 24 Fertigkeiten ====
 skill.strength.name|Stärke
-        skill.strength.trigger|Bewegen mit über 60% Gewicht (4 Pkt./s, ab 80% 8 Pkt./s)
+        skill.strength.trigger|Bewegen mit über 60% Gewicht (1.6 Pkt./m)
 skill.strength.elite|Inventar +5 Plätze, Bewegungsgeschwindigkeit +10%
 skill.endurance.name|Ausdauer
-skill.endurance.trigger|Beim Rennen (4 Pkt./s)
+skill.endurance.trigger|Beim Rennen oder Rollen (1.04 Pkt./m)
 skill.endurance.elite|Ausdauererholung +30%
 skill.vitality.name|Vitalität
 skill.vitality.trigger|Wenn du Schaden erleidest (10 Pkt. pro Schaden)
@@ -121,7 +121,7 @@ skill.marksmanship.name|Präzisionsschuss
 skill.marksmanship.trigger|Treffer aus 20 m oder mehr (150 Pkt., +200 bei Kopfschuss)
 skill.marksmanship.elite|Kopfschussschaden +10%
 skill.melee.name|Nahkampf
-skill.melee.trigger|Wenn ein Nahkampfangriff trifft (30 Pkt., +60 bei Nahkampf-Kill)
+skill.melee.trigger|Wenn ein Nahkampfangriff trifft (45 Pkt., +90 bei Nahkampf-Kill)
 skill.melee.elite|Bewegungsgeschwindigkeit +10% (zusätzlich)
 skill.throwing.name|Wurfwaffen
 skill.throwing.trigger|Wenn du Sprengstoff wirfst (100 Pkt., 2 Pkt. pro Explosionsschaden)
@@ -130,7 +130,7 @@ skill.perception.name|Wahrnehmung
 skill.perception.trigger|Wenn du ein Geräusch bemerkst (4 Pkt., max. 1x pro Sekunde)
 skill.perception.elite|Sicht und Erkennung +10%, Gehör +20% (zusätzlich)
 skill.covert.name|Tarnbewegung
-skill.covert.trigger|Beim Gehen (Rennen ausgenommen, 1 Pkt./s)
+skill.covert.trigger|Beim Gehen (Rennen ausgenommen, 1 Pkt./s + 0.7 Pkt./m)
 skill.covert.elite|Geh- und Laufgeräusch -25% mehr (insgesamt -45% / -35%)
 skill.armor.name|Panzerung
 skill.armor.trigger|Wenn du mit Panzerung Schaden erleidest (12 Pkt. pro Schaden)

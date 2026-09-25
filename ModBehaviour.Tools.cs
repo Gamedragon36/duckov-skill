@@ -4,6 +4,9 @@ using Duckov.Utilities;
 using ItemStatsSystem;
 using ItemStatsSystem.Stats;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace Dskill
 {
@@ -187,31 +190,56 @@ namespace Dskill
                     continue;
                 }
 
+                // 지금 '내가 열고 있는' 상자인지 확인한다.
+                //   게임은 내가 연 상자의 아이템만 감지(Inspecting)를 시작하므로 이 조건이 곧 판별이 된다.
+                //   0.0.8 문제: 6m 안의 모든 상자에 굴림을 써버려 확률이 낭비되고, 캐시가 차서 굴림이 초기화되며
+                //   (성공 → 실패로 다시 굴려짐) 게임이 감지를 시작하지 않은 아이템은 건너뛰었다
+                //   → "50% 확률로 열었는데 절반만 즉시 감지"처럼 보였다.
+                if (!HasInspectingItem(inventory))
+                {
+                    continue;
+                }
+
                 // 엘리트: **상자 단위로 한 번** 굴려서 성공하면 그 안의 아이템을 모두 즉시 감지
                 //   (2026-09-25 사용자 요청: "50% 확률로 열어본 상자·시체의 모든 아이템이 감지")
                 bool revealAll = elite && EliteRevealAll(box);
+                int revealedNow = 0;
 
                 foreach (Item item in inventory.Content)
                 {
-                    if (item == null || item.Inspected || !item.Inspecting)
+                    if (item == null || item.Inspected)
                     {
                         continue;
+                    }
+
+                    if (revealAll)
+                    {
+                        // 성공한 상자는 **아직 감지를 시작하지 않은 아이템까지 전부** 감지한다.
+                        //   (게임이 아이템을 하나씩 감지하기 시작해도 나머지가 밀리지 않게)
+                        _inspectingSeen.Add(item);
+                        RevealItem(item);
+                        revealedNow++;
+                        continue;
+                    }
+
+                    if (!item.Inspecting)
+                    {
+                        continue;   // 게임이 아직 감지를 시작하지 않은 아이템은 다음 스캔에서 처리
                     }
                     if (!_inspectingSeen.Add(item))
                     {
                         continue;   // 이미 처리한 아이템
                     }
 
-                    if (revealAll)
-                    {
-                        RevealItem(item);
-                        continue;
-                    }
-
                     float normal = GameplayDataSettings.LootingData.GetInspectingTime(item);
                     // 만렙(-100%)이어도 0초가 되지 않게 최소 시간을 둔다 (2026-09-25 사용자 요청)
                     float wait = Mathf.Max(normal * factor, Specials.LootingMinInspectTime);
                     _pendingInspect[item] = Time.time + wait;
+                }
+
+                if (revealedNow > 0)
+                {
+                    Debug.Log("[Dskill] 파밍 엘리트: 상자 1개에서 " + revealedNow + "개를 즉시 감지했습니다.");
                 }
             }
 
@@ -239,6 +267,21 @@ namespace Dskill
             }
         }
 
+        /// <summary>이 상자에 '감지가 시작된' 아이템이 있는지 확인한다.
+        ///  게임은 **내가 열고 있는 상자**의 아이템만 감지를 시작하므로,
+        ///  이 조건이 곧 '지금 열고 있는 상자' 판별이 된다(0.0.8: 6m 안 모든 상자에 굴림을 낭비하던 문제 수정).</summary>
+        private static bool HasInspectingItem(Inventory inventory)
+        {
+            foreach (Item item in inventory.Content)
+            {
+                if (item != null && !item.Inspected && item.Inspecting)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>엘리트 파밍: 이 상자(시체)를 열 때 성공했는지 — **열 때 한 번만** 굴린다.
         ///  한 번 성공하면 그 상자의 아이템을 모두 감지하므로, 0.4초마다 다시 굴리면 안 된다.</summary>
         private bool EliteRevealAll(InteractableLootbox box)
@@ -251,9 +294,13 @@ namespace Dskill
             }
 
             success = UnityEngine.Random.value < Specials.LootingInstantChance;
-            if (_eliteRevealRolls.Count > 64)
+            // 캐시는 '상자 UI가 열려 있는 동안'만 유지된다(닫으면 위에서 비운다).
+            // 굴림 대상도 실제로 연 상자로 한정했으므로 이 상한은 안전장치일 뿐이다.
+            //   (0.0.8: 64 였고 정상 플레이에서도 자주 차서 **전체 초기화** → 열던 상자가 다시 굴려져
+            //    성공이 실패로 바뀌었다 → '절반만 즉시 감지' 원인 중 하나)
+            if (_eliteRevealRolls.Count > 256)
             {
-                _eliteRevealRolls.Clear();   // raid 한 판에서 캐시가 커지지 않게
+                _eliteRevealRolls.Clear();
             }
             _eliteRevealRolls[id] = success;
             Debug.Log("[Dskill] 파밍 엘리트: 상자 굴림 " + (success ? "성공 — 안의 아이템을 모두 즉시 감지" : "실패"));
@@ -512,6 +559,7 @@ namespace Dskill
         }
 
         private float _loggedDashCool = -1f;      // 쿨타임 로그 중복 방지
+        private float _loggedDashStamina = -1f;   // 스태미나 로그 중복 방지(지구력 중첩 확인용)
         private float _lastDashLogTime = -10f;    // 구르기 간격 실측용
 
         /// <summary>구르기 스킬: 쿨타임과 스태미나 소모를 줄인다.</summary>
@@ -562,36 +610,42 @@ namespace Dskill
             }
 
             int level = _skills.GetLevel("dash");
-            if (level <= 0)
-            {
-                // 아직 스킬 레벨이 없으면 원래 값으로 돌려놓는다
-                _dashAction.coolTime = _originalDashCoolTime;
-                _dashAction.staminaCost = _originalDashStamina;
-                _dashAction.dashTime = _originalDashTime;
-                return;
-            }
+            int enduranceLevel = _skills.GetLevel("endurance");
 
-            float factor = 1f - _skills.DashReduction(level);
-            float timeFactor = 1f - _skills.DashTimeReduction(level);   // 동작 시간은 최대 20%만 줄임
+            // 0.0.9: 지구력 스킬의 '스태미나 소모 -%' 를 구르기 스태미나에도 **중첩** 적용한다.
+            //   게임은 달리기 스태미나(스탯 StaminaDrainRate)와 구르기 스태미나(CA_Dash.staminaCost)를
+            //   따로 계산해서, 예전에는 지구력 감소가 구르기에 전혀 들어가지 않았다
+            //   (2026-09-26 사용자 요청으로 중첩 적용). 스킬 레벨이 0이어도 원래 값으로 되돌아온다.
+            float enduranceFactor = 1f - _skills.EnduranceStaminaReduction(enduranceLevel);
+            float factor = level > 0 ? 1f - _skills.DashReduction(level) : 1f;
+            float timeFactor = level > 0 ? 1f - _skills.DashTimeReduction(level) : 1f;   // 동작 시간은 최대 20%만 줄임
+
             _dashAction.coolTime = _originalDashCoolTime * factor;
-            _dashAction.staminaCost = _originalDashStamina * factor;
+            // 스태미나 = 원래값 × 구르기 감소 × 지구력 감소 (두 스킬 중첩)
+            _dashAction.staminaCost = _originalDashStamina * factor * enduranceFactor;
             // 동작 시간도 함께 줄인다(애니메이션이 잘리지 않는 범위에서)
             if (_originalDashTime > 0f)
             {
                 _dashAction.dashTime = _originalDashTime * timeFactor;
             }
             // 동작 시간이 짧아진 만큼 속도를 올려 이동 거리를 유지한다
+            //  (레벨 0 일 때도 호출해 예전에 붙어 있던 거리 보정을 확실히 제거한다 — factor 가 1 이라 아무 값도 더하지 않는다)
             ApplyDashSpeedCompensation(_mainItem, level, timeFactor);
 
             // 값이 바뀔 때만 로그로 남긴다(밸런스 확인용)
-            if (Mathf.Abs(_loggedDashCool - _dashAction.coolTime) > 0.001f)
+            if (Mathf.Abs(_loggedDashCool - _dashAction.coolTime) > 0.001f ||
+                Mathf.Abs(_loggedDashStamina - _dashAction.staminaCost) > 0.001f)
             {
                 _loggedDashCool = _dashAction.coolTime;
-                Debug.Log("[Dskill] 구르기 적용 Lv." + level +
+                _loggedDashStamina = _dashAction.staminaCost;
+                float staminaCut = _originalDashStamina > 0f
+                    ? (1f - (_dashAction.staminaCost / _originalDashStamina)) * 100f
+                    : 0f;
+                Debug.Log("[Dskill] 구르기 적용 (구르기 Lv." + level + " / 지구력 Lv." + enduranceLevel + ")" +
                           " : 쿨타임 " + _originalDashCoolTime.ToString("0.##") + " → " + _dashAction.coolTime.ToString("0.##") + "초" +
-                          " / 동작 " + _originalDashTime.ToString("0.##") + " → " + _dashAction.dashTime.ToString("0.##") + "초" +
-                          " (쿨타임·스태미나 -" + (_skills.DashReduction(level) * 100f).ToString("0.#") +
-                          "% / 동작 -" + (_skills.DashTimeReduction(level) * 100f).ToString("0.#") + "%)");
+                          " / 스태미나 " + _originalDashStamina.ToString("0.##") + " → " + _dashAction.staminaCost.ToString("0.##") +
+                          " (총 -" + staminaCut.ToString("0.#") + "% = 구르기 -" + (_skills.DashReduction(level) * 100f).ToString("0.#") +
+                          "% × 지구력 -" + (_skills.EnduranceStaminaReduction(enduranceLevel) * 100f).ToString("0.#") + "%)");
             }
         }
 
@@ -608,6 +662,7 @@ namespace Dskill
             if (dashing && !_wasDashing)
             {
                 _skills.AddXp("dash", Rates.DashPerUse);
+                _lastDashStartTime = Time.time;
 
                 // 실측: 이전 구르기와의 간격을 로그로 남긴다(쿨타임 확인용)
                 float gap = Time.time - _lastDashLogTime;
@@ -615,6 +670,108 @@ namespace Dskill
                 _lastDashLogTime = Time.time;
             }
             _wasDashing = dashing;
+        }
+
+        // ------------------------------------------------------------------
+        // 구르기 꾹 누르기 → 자동 반복 (0.0.9 · 2026-09-26 사용자 요청)
+        // ------------------------------------------------------------------
+        //  방식(A안): 게임의 입력 파이프라인을 그대로 이용한다.
+        //   스페이스바를 누르고 있고 ① 구르기 중이 아니며 ② 쿨타임이 지났을 때만
+        //   "떼기 → (다음 프레임) 누르기" 입력을 주입해, 게임이 평소처럼 구르기를 실행하게 한다.
+        //   → 쿨타임·스태미나 검사는 **게임이 그대로** 수행하므로 규칙을 우회하지 않는다.
+        private float _lastDashStartTime = -10f;    // 마지막 구르기 시작 시각(쿨타임 게이트용)
+        private int _dashInjectPhase;               // 0 = 대기, 1 = '떼기' 주입됨(다음 프레임에 '누르기')
+        private float _lastDashInjectTime = -10f;   // 주입 최소 간격
+        private readonly List<Key> _dashKeyBuffer = new List<Key>();
+
+        /// <summary>구르기 키를 꾹 누르고 있으면 쿨타임마다 자동으로 다시 구른다 (매 프레임).</summary>
+        private void HandleDashHold()
+        {
+            if (_config == null || !_config.DashHoldRepeat)
+            {
+                _dashInjectPhase = 0;
+                return;
+            }
+            if (_main == null || _main.dashAction == null)
+            {
+                return;
+            }
+
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                return;
+            }
+
+            // '떼기'를 이미 넣었으면 다음 프레임에 '누르기'를 넣어 한 번의 누름을 완성한다.
+            //  (누르기 완료는 무조건 실행해야 한다 — 중간에 취소하면 스페이스가 떼진 상태로 남는다)
+            if (_dashInjectPhase == 1)
+            {
+                PushKeyboardState(keyboard, true);
+                _dashInjectPhase = 0;
+                _lastDashInjectTime = Time.time;
+                return;
+            }
+
+            // 아직 안 눌렀거나 구르기 동작 중이면 아무것도 하지 않는다
+            if (!keyboard.spaceKey.isPressed || _main.Dashing)
+            {
+                return;
+            }
+
+            // 이번 세션에서 구르기를 한 번도 못 봤다면 아무것도 하지 않는다.
+            //  (구르기 키를 스페이스바가 아닌 다른 키로 바꾼 경우 오작동을 막는 안전장치)
+            if (_lastDashStartTime <= 0f)
+            {
+                return;
+            }
+
+            float cool = _main.dashAction.coolTime;
+            if (cool < 0.1f)
+            {
+                cool = 0.1f;
+            }
+            if (Time.time - _lastDashStartTime < cool)
+            {
+                return;   // 쿨타임 남음 (게임이 어차피 무시하므로 입력 주입을 아낀다)
+            }
+            if (Time.time - _lastDashInjectTime < 0.1f)
+            {
+                return;   // 연속 주입 방지
+            }
+
+            PushKeyboardState(keyboard, false);   // 스페이스만 뗀 상태를 주입
+            _dashInjectPhase = 1;
+        }
+
+        /// <summary>지금 눌려 있는 다른 키는 유지한 채, 스페이스만 뗀 상태/누른 상태를 입력 시스템에 넣는다.
+        ///  (입력을 '주입'하므로 게임의 구르기 입력 처리·쿨타임·스태미나 검사가 평소와 동일하게 동작한다)</summary>
+        private void PushKeyboardState(Keyboard keyboard, bool spacePressed)
+        {
+            try
+            {
+                _dashKeyBuffer.Clear();
+                var keys = keyboard.allKeys;
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    KeyControl control = keys[i];
+                    if (control == null || !control.isPressed || control.keyCode == Key.Space)
+                    {
+                        continue;
+                    }
+                    _dashKeyBuffer.Add(control.keyCode);   // 이동키 등은 그대로 유지
+                }
+                if (spacePressed)
+                {
+                    _dashKeyBuffer.Add(Key.Space);
+                }
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(_dashKeyBuffer.ToArray()));
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 구르기 홀드 입력 주입 실패(무시): " + e.Message);
+                _dashInjectPhase = 0;
+            }
         }
 
         /// <summary>모드를 끌 때 구르기 값을 원래대로 돌려놓는다.</summary>

@@ -91,10 +91,10 @@ stat.SenseRange|感知範圍
 stat.HearingAbility|聽力
 # ==== 技能 24 種 ====
 skill.strength.name|力量
-        skill.strength.trigger|負重 60% 以上時移動（每秒 4 點，80% 以上每秒 8 點）
+        skill.strength.trigger|負重 60% 以上時移動（每公尺 1.6 點）
 skill.strength.elite|背包空間 +5 格，移動速度 +10%
 skill.endurance.name|耐力
-skill.endurance.trigger|奔跑時（每秒 4 點）
+skill.endurance.trigger|奔跑或翻滾移動時（每公尺 1.04 點）
 skill.endurance.elite|耐力恢復速度 +30%
 skill.vitality.name|生命
 skill.vitality.trigger|受到傷害時（每點傷害 10 點）
@@ -121,7 +121,7 @@ skill.marksmanship.name|精準射擊
 skill.marksmanship.trigger|在 20 公尺以上距離命中（每次 150 點，爆頭 +200 點）
 skill.marksmanship.elite|爆頭傷害 +10%
 skill.melee.name|近戰
-skill.melee.trigger|近戰攻擊命中時（每次 30 點，近戰擊殺 +60 點）
+skill.melee.trigger|近戰攻擊命中時（每次 45 點，近戰擊殺 +90 點）
 skill.melee.elite|移動速度 +10%（額外）
 skill.throwing.name|投擲
 skill.throwing.trigger|投擲爆炸物時（每次 100 點，每點爆炸傷害 2 點）
@@ -130,7 +130,7 @@ skill.perception.name|感知
 skill.perception.trigger|察覺到周圍聲響時（每次 4 點，每秒最多 1 次）
 skill.perception.elite|視野與感知 +10%，聽力 +20%（額外）
 skill.covert.name|潛行移動
-skill.covert.trigger|走路移動時（不含奔跑，每秒 1 點）
+skill.covert.trigger|走路移動時（不含奔跑，每秒 1 點 + 每公尺 0.7 點）
 skill.covert.elite|走路與奔跑聲音再 -25%（合計 -45% / -35%）
 skill.armor.name|防禦
 skill.armor.trigger|穿著護甲受到傷害時（每點傷害 12 點）
@@ -184,6 +184,7 @@ cfg.skillXpNote|各技能經驗倍率（0.5=一半速度，2.0=兩倍速度）
 cfg.language|介面語言：auto（跟隨遊戲內選擇的語言），或 en、ko、zh、zh-hant、ja、de、ru、es、fr、pt-br
 cfg.xpStage|經驗倍率檔位 1~5（1=最快，5=預設）
 cfg.uploadNow|作者專用：設為 true 並啟動遊戲可上傳一次到工作坊
+cfg.dashHoldRepeat|按住翻滾鍵即可自動連續翻滾（每次冷卻結束）
 cfg.craftUnlockXp|解鎖新配方的經驗（批次解鎖只算一次）
 cfg.craftXpPerValue|製作經驗 = 材料價值 × 此值（0.08 = 8%）
 cfg.craftXpCap|單次製作經驗上限（0 = 不限制）

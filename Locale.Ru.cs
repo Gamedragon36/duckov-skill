@@ -91,10 +91,10 @@ stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
 # ==== 24 навыка ====
 skill.strength.name|Сила
-        skill.strength.trigger|Движение при весе более 60% (4 очка/с, свыше 80% — 8 очков/с)
+        skill.strength.trigger|Движение при весе более 60% (1.6 очка/м)
 skill.strength.elite|Инвентарь +5 ячеек, скорость передвижения +10%
 skill.endurance.name|Выносливость
-skill.endurance.trigger|Во время бега (4 очка/с)
+skill.endurance.trigger|При беге или кувырке (1.04 очка/м)
 skill.endurance.elite|Восстановление выносливости +30%
 skill.vitality.name|Живучесть
 skill.vitality.trigger|При получении урона (10 очков за единицу урона)
@@ -121,7 +121,7 @@ skill.marksmanship.name|Точная стрельба
 skill.marksmanship.trigger|Попадание с 20 м и далее (150 очков, +200 за выстрел в голову)
 skill.marksmanship.elite|Урон в голову +10%
 skill.melee.name|Ближний бой
-skill.melee.trigger|При попадании в ближнем бою (30 очков, +60 за убийство)
+skill.melee.trigger|При попадании в ближнем бою (45 очков, +90 за убийство)
 skill.melee.elite|Скорость передвижения +10% (дополнительно)
 skill.throwing.name|Метательное
 skill.throwing.trigger|При броске взрывчатки (100 очков, 2 очка за единицу урона взрыва)
@@ -130,7 +130,7 @@ skill.perception.name|Восприятие
 skill.perception.trigger|При обнаружении звука рядом (4 очка, не чаще 1 раза в секунду)
 skill.perception.elite|Обзор и обнаружение +10%, слух +20% (дополнительно)
 skill.covert.name|Скрытное движение
-skill.covert.trigger|При ходьбе (кроме бега, 1 очко/с)
+skill.covert.trigger|При ходьбе (кроме бега, 1 очко/с + 0.7 очка/м)
 skill.covert.elite|Звук ходьбы и бега ещё -25% (итого -45% / -35%)
 skill.armor.name|Защита
 skill.armor.trigger|При получении урона в броне (12 очков за единицу урона)

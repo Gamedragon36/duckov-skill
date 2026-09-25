@@ -25,6 +25,11 @@ namespace Dskill
         ///  테스트가 끝나면 0 으로 되돌리면 원래 레벨 기반 계산으로 복귀한다(재빌드 불필요).</summary>
         public float MeleeSpeedTest = 0f;
 
+        // ----- 조작 편의 (0.0.9) -----
+        /// <summary>구르기 키(스페이스바)를 꾹 누르고 있으면 쿨타임마다 자동으로 다시 구른다.
+        ///  (2026-09-26 사용자 요청 · 게임 입력 파이프라인을 그대로 이용 — 쿨타임·스태미나 검사는 게임이 수행)</summary>
+        public bool DashHoldRepeat = true;
+
         // ----- 제작 스킬 밸런스 (값은 여기서 자유롭게 조정) -----
         public float CraftUnlockXp = 200f;    // 새 레시피 해금 XP (여러 개가 한꺼번에 풀리면 1회만 인정)
         public float CraftXpPerValue = 0.08f; // 제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)
@@ -63,6 +68,8 @@ namespace Dskill
                 if (File.Exists(config.ConfigPath))
                 {
                     config.Parse(File.ReadAllLines(config.ConfigPath));
+                    // 구버전 config.ini 에는 없는 새 옵션을 한 줄 추가해 준다(값은 코드 기본값 그대로 동작)
+                    config.EnsureDashHoldOption();
                 }
                 else
                 {
@@ -116,6 +123,7 @@ namespace Dskill
                     case "xp_base": XpBase = ParseFloat(value, XpBase); break;
                     case "xp_step": XpStep = ParseFloat(value, XpStep); break;
             case "melee_speed_test": MeleeSpeedTest = ParseFloat(value, MeleeSpeedTest); break;
+                    case "dash_hold_repeat": DashHoldRepeat = ParseBool(value, DashHoldRepeat); break;
                     case "xp_multiplier": XpMultiplier = ParseFloat(value, XpMultiplier); break;
                     case "hotkey": Hotkey = value; break;
                     case "notify_levelup": NotifyLevelUp = ParseBool(value, NotifyLevelUp); break;
@@ -195,13 +203,14 @@ namespace Dskill
             lines.Add("[general]");
             lines.Add("max_level = 20        # " + Locale.T("cfg.maxLevel", "스킬 최대 레벨 (만렙)"));
             lines.Add("xp_base = 300         # " + Locale.T("cfg.xpBase", "1레벨에 필요한 경험치"));
-            lines.Add("xp_step = 65          # " + Locale.T("cfg.xpStep", "레벨마다 늘어나는 경험치"));
+            lines.Add("xp_step = 100         # " + Locale.T("cfg.xpStep", "레벨마다 늘어나는 경험치"));
             lines.Add("xp_multiplier = 1.0   # " + Locale.T("cfg.xpMultiplier", "전체 경험치 배율 (0.5=절반, 2.0=두배)"));
             lines.Add("hotkey = F6           # " + Locale.T("cfg.hotkey", "스킬 창 여는 키 (예: F6, F7, F8)"));
             lines.Add("notify_levelup = true # " + Locale.T("cfg.notifyLevelUp", "레벨업 때 알림 표시 (true/false)"));
             lines.Add("language = auto       # " + Locale.T("cfg.language", "표시 언어: auto(게임에서 고른 언어) / ko / en / zh / zh-hant / ja / de / ru / es / fr / pt-br"));
             lines.Add("xp_stage = 5          # " + Locale.T("cfg.xpStage", "경험치 난이도 1~5 (1=가장 빠름, 5=기본)"));
             lines.Add("melee_speed_test = 0    # " + Locale.T("cfg.meleeSpeedTest", "작성자 테스트용: 근접 공격속도 강제 감소 (0=끔, 0.9=-90%)"));
+            lines.Add(DashHoldRepeatLine());
             lines.Add("craft_unlock_xp = 200    # " + Locale.T("cfg.craftUnlockXp", "새 레시피 해금 XP (한꺼번에 여러 개가 풀리면 1회만 인정)"));
             lines.Add("craft_xp_per_value = 0.08 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)"));
             lines.Add("craft_xp_cap = 400       # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));
@@ -258,6 +267,44 @@ namespace Dskill
                     return 1f;
                 }
                 return Specials.XpStageMultipliers[index];
+            }
+        }
+
+        /// <summary>설정 파일에 쓸 dash_hold_repeat 한 줄 (기본값·설명 포함)</summary>
+        private string DashHoldRepeatLine()
+        {
+            return "dash_hold_repeat = " + (DashHoldRepeat ? "true" : "false") + "    # " +
+                   Locale.T("cfg.dashHoldRepeat", "구르기 키를 꾹 누르면 쿨타임마다 자동으로 다시 구르기 (true/false)");
+        }
+
+        /// <summary>구버전 config.ini 에 새 옵션(dash_hold_repeat)이 없으면 맨 끝에 한 줄 추가한다.</summary>
+        private void EnsureDashHoldOption()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ConfigPath) || !File.Exists(ConfigPath))
+                {
+                    return;
+                }
+                string[] lines = File.ReadAllLines(ConfigPath);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].TrimStart().StartsWith("dash_hold_repeat"))
+                    {
+                        return;   // 이미 있음
+                    }
+                }
+
+                string[] bigger = new string[lines.Length + 2];
+                Array.Copy(lines, bigger, lines.Length);
+                bigger[lines.Length] = "";
+                bigger[lines.Length + 1] = DashHoldRepeatLine();
+                File.WriteAllLines(ConfigPath, bigger, new System.Text.UTF8Encoding(false));
+                UnityEngine.Debug.Log("[Dskill] 설정 파일에 새 옵션을 추가했습니다: dash_hold_repeat");
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogWarning("[Dskill] 설정 파일 옵션 추가 실패: " + e.Message);
             }
         }
 
