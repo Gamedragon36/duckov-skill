@@ -20,7 +20,7 @@ namespace Dskill
         public const string Version = "0.0.8";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.8: +Elemental Adaptation skill (24) / +Melee attack speed 30% & elite +20% (buff) / looting -70% (nerf) / marksmanship 150-200 (buff) / fixes & UI";
+        private const string ChangeNote = "0.0.8: +Elemental Adaptation skill (24) / +Melee attack speed +30% (elite +20%) / looting detection -70% (nerf) / strength 60-80% (buff) / repair 5 / UI shows XP numbers";
 
         private Config _config;
         private MetaProgress _meta;
