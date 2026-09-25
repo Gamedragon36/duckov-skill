@@ -419,58 +419,19 @@ namespace Dskill
 
             int level = _skills.GetLevel("melee");
             float bonus = _skills.MeleeSpeedBonus(level);           // 0 … 0.5
-            float factor = Mathf.Clamp01(1f - bonus);
-            // ⚠ 동작 시간을 크게 줄이면 애니메이션이 잘리고 피해 판정까지 사라진다(0.0.8 실패 사례) →
-            //    동작 시간은 최대 -25%(0.18초 이상)로 제한하고, 실제 공격 속도는 무기의 '사용 시간'(useTime)으로 만든다.
-            float actionFactor = Mathf.Max(factor, 0.75f);
-            float wantActionTime = _originalMeleeActionTime > 0f ? Mathf.Max(0.18f, _originalMeleeActionTime * actionFactor) : -1f;
-            float wantDealDamage = _originalMeleeDealDamage > 0f ? Mathf.Max(0.05f, _originalMeleeDealDamage * actionFactor) : -1f;
-            float wantCd = _originalMeleeCd > 0f ? Mathf.Max(0.05f, _originalMeleeCd * factor) : -1f;
-
-            // 게임이 값을 되돌리는 경우가 있어 매번 확인하고, 어긋나면 다시 적용한다(자가 복구)
-            bool drifted = false;
-            if (_originalMeleeActionTime > 0f)
-            {
-                float current = (float)_meleeActionTimeField.GetValue(_meleeAttackAction);
-                if (Mathf.Abs(current - wantActionTime) > 0.004f)
-                {
-                    drifted = true;
-                }
-            }
-            if (!drifted && _originalMeleeCd > 0f)
-            {
-                float current = (float)_meleeCdField.GetValue(_meleeAttackAction);
-                if (Mathf.Abs(current - wantCd) > 0.004f)
-                {
-                    drifted = true;
-                }
-            }
-            if (!drifted && level == _appliedMeleeSpeedLevel)
+            if (level == _appliedMeleeSpeedLevel)
             {
                 return;
             }
 
             try
             {
-                if (_originalMeleeActionTime > 0f)
-                {
-                    _meleeActionTimeField.SetValue(_meleeAttackAction, wantActionTime);
-                }
-                if (_originalMeleeDealDamage > 0f)
-                {
-                    _meleeDealDamageField.SetValue(_meleeAttackAction, wantDealDamage);
-                }
-                if (_originalMeleeCd > 0f)
-                {
-                    _meleeCdField.SetValue(_meleeAttackAction, wantCd);
-                }
-                ApplyMeleeWeaponUseTime(bonus);      // 실제 공격 속도는 무기 사용 시간으로 (애니메이션까지 빨라짐)
-                if (level != _appliedMeleeSpeedLevel)
-                {
-                    _appliedMeleeSpeedLevel = level;
-                    Debug.Log("[Dskill] 근접 공격속도 적용 Lv." + level + " : 동작 " + _originalMeleeActionTime.ToString("0.##") + " → " + wantActionTime.ToString("0.##") +
-                              "초 / 피해판정 " + _originalMeleeDealDamage.ToString("0.##") + " → " + wantDealDamage.ToString("0.##") + "초 (+" + (bonus * 100f).ToString("0.#") + "%)");
-                }
+                // ⚠ 동작 시간(attackActionTime)·피해 판정(dealDamageTime)은 건드리지 않는다.
+                //    실측 결과 공격 주기를 바꾸지 못하고 애니메이션만 잘랐다(0.0.8 실패).
+                //    실제 공격 속도는 '무기'가 읽는 AttackSpeed 스탯으로 만든다.
+                ApplyMeleeWeaponSpeed(level, bonus);
+                _appliedMeleeSpeedLevel = level;
+                Debug.Log("[Dskill] 근접 공격속도 적용 Lv." + level + " : 무기 AttackSpeed +" + (bonus * 100f).ToString("0.#") + "% (동작·피해판정은 원본 유지)");
             }
             catch (Exception e)
             {
@@ -478,13 +439,50 @@ namespace Dskill
             }
         }
 
-        private bool _meleeUseTimeLogged;
+        /// <summary>장착한 근접 무기에 AttackSpeed 수정자를 건다.
+        ///  이 스탯은 캐릭터가 아니라 무기(ItemAgent_MeleeWeapon)가 읽는 값이라 캐릭터에 걸면 거부된다(0.0.8 발견).</summary>
+        private void ApplyMeleeWeaponSpeed(int level, float bonus)
+        {
+            Item weapon = _melee != null ? _melee.Item : null;
+            if (weapon == null)
+            {
+                return;
+            }
+            try
+            {
+                weapon.RemoveAllModifiersFrom(_meleeSpeedToken);
+                if (bonus <= 0f)
+                {
+                    return;
+                }
+                if (weapon.AddModifier("AttackSpeed", new Modifier(ModifierType.PercentageMultiply, bonus, _meleeSpeedToken)))
+                {
+                    if (!_meleeWeaponStatLogged)
+                    {
+                        _meleeWeaponStatLogged = true;
+                        Debug.Log("[Dskill] 근접 무기 AttackSpeed 수정자 적용 성공: +" + (bonus * 100f).ToString("0.#") + "% (무기 스탯, Lv." + level + ")");
+                    }
+                }
+                else if (!_meleeWeaponStatLogged)
+                {
+                    _meleeWeaponStatLogged = true;
+                    Debug.LogWarning("[Dskill] 근접 무기에서도 AttackSpeed 스탯이 거부되었습니다 — 이 키는 수정할 수 없는 값입니다.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 근접 무기 공속 적용 실패(무시): " + e.Message);
+            }
+        }
+
+        private bool _meleeWeaponStatLogged;
+        private readonly object _meleeSpeedToken = new object();   // 무기 AttackSpeed 수정자 토큰
+        private bool _meleeUseTimeLogged;   // (미사용 메서드용 — 정리 대상)
         private bool _wasDashing;
 
-        /// <summary>장착한 근접 무기의 사용 시간(useTime)을 줄인다 — 치료 아이템과 같은 비공개 필드 방식.
-        ///  동작 시간(attackActionTime)만 줄이면 애니메이션이 잘리고 피해 판정이 사라지므로(0.0.8 실패),
-        ///  실제 '공격 속도'는 이 값으로 만든다.</summary>
-        private void ApplyMeleeWeaponUseTime(float bonus)
+        /// <summary>[미사용 — 0.0.8 실패] 근접 무기에는 UsageUtilities(사용 시간)가 없어 이 방식은 쓰지 않는다.
+        ///  (치료 아이템에는 존재해서 그쪽은 그대로 사용)</summary>
+        private void ApplyMeleeWeaponUseTimeUnused(float bonus)
         {
             if (_useTimeField == null || _melee == null)
             {
