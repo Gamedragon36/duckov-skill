@@ -74,8 +74,8 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 
 | Item | Value |
 |---|---|
-| XP needed per level | 500 for level 1, +200 per level (500, 700, 900, … 4,300) |
-| Total XP to Lv.20 | **48,000** points |
+| XP needed per level | 300 for level 1, +100 per level (300, 400, 500, … 2,200) |
+| Total XP to Lv.20 | **25,000** points |
 | Approximate pace | about **3.5 hours** of sprinting (slower in normal play) |
 
 ## Roguelike inheritance
@@ -99,8 +99,8 @@ Skill levels earned in **other save slots** increase the XP gain rate of the run
 ```ini
 [general]
 max_level = 20          # max skill level
-xp_base = 500           # XP for level 1
-xp_step = 200           # XP added per level
+xp_base = 300           # XP for level 1
+xp_step = 100           # XP added per level
 xp_multiplier = 1.0     # global XP gain multiplier (0.5 = half, 2.0 = double)
 hotkey = F6             # key that opens the skill window
 notify_levelup = true   # show level-up notifications

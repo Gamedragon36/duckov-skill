@@ -367,11 +367,14 @@ namespace Dskill
         private CA_Attack _meleeAttackAction;
         private float _originalMeleeCd = -1f;
         private float _originalMeleeActionTime = -1f;
+        private float _originalMeleeDealDamage = -1f;
         private int _appliedMeleeSpeedLevel = -1;
         private static readonly System.Reflection.FieldInfo _meleeCdField =
             typeof(CA_Attack).GetField("cd", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         private static readonly System.Reflection.FieldInfo _meleeActionTimeField =
             typeof(CA_Attack).GetField("attackActionTime", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        private static readonly System.Reflection.FieldInfo _meleeDealDamageField =
+            typeof(CA_Attack).GetField("dealDamageTime", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
         /// <summary>근접 전투: 근접 공격 쿨타임(cd)과 동작 시간(attackActionTime)을 같은 비율로 줄인다.</summary>
         private void ApplyMeleeSpeedSettings()
@@ -384,50 +387,86 @@ namespace Dskill
             if (_meleeAttackAction == null)
             {
                 _meleeAttackAction = _main.attackAction;
-                if (_meleeAttackAction != null && _meleeCdField != null && _meleeActionTimeField != null)
+                if (_meleeAttackAction == null)
                 {
-                    // 다른 모드가 비정상 값을 넣었을 가능성을 대비해 정상 범위만 원본으로 인정한다
-                    float cd = (float)_meleeCdField.GetValue(_meleeAttackAction);
-                    float actionTime = (float)_meleeActionTimeField.GetValue(_meleeAttackAction);
-                    if (cd > 0f && cd <= 10f)
-                    {
-                        _originalMeleeCd = cd;
-                    }
-                    if (actionTime > 0f && actionTime <= 5f)
-                    {
-                        _originalMeleeActionTime = actionTime;
-                    }
-                    Debug.Log("[Dskill] 근접 액션 확인: 쿨타임 " + cd.ToString("0.###") + "초 / 동작 " + actionTime.ToString("0.###") + "초");
+                    return;
                 }
+                float cd = _meleeCdField != null ? (float)_meleeCdField.GetValue(_meleeAttackAction) : -1f;
+                float actionTime = _meleeActionTimeField != null ? (float)_meleeActionTimeField.GetValue(_meleeAttackAction) : -1f;
+                float dealDamage = _meleeDealDamageField != null ? (float)_meleeDealDamageField.GetValue(_meleeAttackAction) : -1f;
+                // 다른 모드가 비정상 값을 넣었을 가능성을 대비해 정상 범위만 원본으로 인정한다
+                if (actionTime >= 0.05f && actionTime <= 5f)
+                {
+                    _originalMeleeActionTime = actionTime;
+                }
+                if (dealDamage > 0f && dealDamage <= 5f)
+                {
+                    _originalMeleeDealDamage = dealDamage;
+                }
+                if (cd > 0f && cd <= 10f)
+                {
+                    _originalMeleeCd = cd;
+                }
+                Debug.Log("[Dskill] 근접 액션 확인: 쿨타임 " + cd.ToString("0.###") + " / 동작 " + actionTime.ToString("0.###") +
+                          "초 / 피해판정 " + dealDamage.ToString("0.###") + "초");
             }
-            if (_meleeAttackAction == null || _originalMeleeCd <= 0f)
+            // 근접은 게임에서 cd 가 -1(쿨타임 없음)로 오는 경우가 많다 → 동작 시간(attackActionTime)이 핵심.
+            // 두 값 모두 쓸 수 없을 때만 건너뛴다.
+            if (_originalMeleeActionTime <= 0f && _originalMeleeCd <= 0f)
             {
                 return;
             }
 
             int level = _skills.GetLevel("melee");
-            if (level == _appliedMeleeSpeedLevel)
+            float bonus = _skills.MeleeSpeedBonus(level);           // 0 … 0.5
+            float factor = Mathf.Clamp01(1f - bonus);
+            float wantActionTime = _originalMeleeActionTime > 0f ? Mathf.Max(0.05f, _originalMeleeActionTime * factor) : -1f;
+            float wantDealDamage = _originalMeleeDealDamage > 0f ? Mathf.Max(0f, _originalMeleeDealDamage * factor) : -1f;
+            float wantCd = _originalMeleeCd > 0f ? Mathf.Max(0.05f, _originalMeleeCd * factor) : -1f;
+
+            // 게임이 값을 되돌리는 경우가 있어 매번 확인하고, 어긋나면 다시 적용한다(자가 복구)
+            bool drifted = false;
+            if (_originalMeleeActionTime > 0f)
+            {
+                float current = (float)_meleeActionTimeField.GetValue(_meleeAttackAction);
+                if (Mathf.Abs(current - wantActionTime) > 0.004f)
+                {
+                    drifted = true;
+                }
+            }
+            if (!drifted && _originalMeleeCd > 0f)
+            {
+                float current = (float)_meleeCdField.GetValue(_meleeAttackAction);
+                if (Mathf.Abs(current - wantCd) > 0.004f)
+                {
+                    drifted = true;
+                }
+            }
+            if (!drifted && level == _appliedMeleeSpeedLevel)
             {
                 return;
             }
 
             try
             {
-                float bonus = _skills.MeleeSpeedBonus(level);          // 0 … 0.5
-                float factor = Mathf.Clamp01(1f - bonus);
-                float cd = Mathf.Max(0.05f, _originalMeleeCd * factor);
-                float actionTime = Mathf.Max(0.05f, _originalMeleeActionTime * factor);
-                if (_meleeCdField != null)
+                if (_originalMeleeActionTime > 0f)
                 {
-                    _meleeCdField.SetValue(_meleeAttackAction, cd);
+                    _meleeActionTimeField.SetValue(_meleeAttackAction, wantActionTime);
                 }
-                if (_meleeActionTimeField != null)
+                if (_originalMeleeDealDamage > 0f)
                 {
-                    _meleeActionTimeField.SetValue(_meleeAttackAction, actionTime);
+                    _meleeDealDamageField.SetValue(_meleeAttackAction, wantDealDamage);
                 }
-                _appliedMeleeSpeedLevel = level;
-                Debug.Log("[Dskill] 근접 공격속도 적용 Lv." + level + " : 쿨타임 " + _originalMeleeCd.ToString("0.##") + " → " + cd.ToString("0.##") +
-                          "초 / 동작 " + _originalMeleeActionTime.ToString("0.##") + " → " + actionTime.ToString("0.##") + "초 (+" + (bonus * 100f).ToString("0.#") + "%)");
+                if (_originalMeleeCd > 0f)
+                {
+                    _meleeCdField.SetValue(_meleeAttackAction, wantCd);
+                }
+                if (level != _appliedMeleeSpeedLevel)
+                {
+                    _appliedMeleeSpeedLevel = level;
+                    Debug.Log("[Dskill] 근접 공격속도 적용 Lv." + level + " : 동작 " + _originalMeleeActionTime.ToString("0.##") + " → " + wantActionTime.ToString("0.##") +
+                              "초 / 피해판정 " + _originalMeleeDealDamage.ToString("0.##") + " → " + wantDealDamage.ToString("0.##") + "초 (+" + (bonus * 100f).ToString("0.#") + "%)");
+                }
             }
             catch (Exception e)
             {
