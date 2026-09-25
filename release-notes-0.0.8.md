@@ -15,6 +15,7 @@
 | 파밍 | 아이템 감지 시간 감소 **-100% → -70%** (감지가 느려짐) | 🔽 **너프** |
 | 근력 | 성장 임계 **70/90% → 60/80%** (더 가벼운 상태에서도 성장) | 🔼 **버프** |
 | 수리 | 내구도 1당 **30 → 5점** | 🔽 **너프** |
+| 경험치 곡선 | 만렙 누적 **48,000 → 25,000점** (레벨당 200 → 100점) | 🔼 **버프** |
 
 ## 🐞 버그 수정
 - **속성적응**: 레벨 효과와 엘리트 수치가 **뒤바뀌어 적용**되던 것
@@ -51,6 +52,7 @@
 | Looting | detection-time reduction **-100% → -70%** (detection is slower) | 🔽 **nerf** |
 | Strength | threshold **70/90% → 60/80%** (levels up while lighter) | 🔼 **buff** |
 | Repair | **30 → 5** pts per durability restored | 🔽 **nerf** |
+| XP curve | total to Lv.20 **48,000 → 25,000** (+200 → +100 per level) | 🔼 **buff** |
 
 ## 🐞 Fixes
 - **Elemental Adaptation**: level and elite values were applied **swapped**

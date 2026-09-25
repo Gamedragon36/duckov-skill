@@ -477,7 +477,6 @@ namespace Dskill
 
         private bool _meleeWeaponStatLogged;
         private readonly object _meleeSpeedToken = new object();   // 무기 AttackSpeed 수정자 토큰
-        private bool _meleeUseTimeLogged;   // (미사용 메서드용 — 정리 대상)
         private bool _wasDashing;
 
         /// <summary>[미사용 — 0.0.8 실패] 근접 무기에는 UsageUtilities(사용 시간)가 없어 이 방식은 쓰지 않는다.
@@ -496,11 +495,6 @@ namespace Dskill
             UsageUtilities usage = weapon.UsageUtilities;
             if (usage == null)
             {
-                if (!_meleeUseTimeLogged)
-                {
-                    _meleeUseTimeLogged = true;
-                    Debug.LogWarning("[Dskill] 근접 무기에 사용 시간(UsageUtilities)이 없어 useTime 방식은 건너뜁니다.");
-                }
                 return;
             }
 
@@ -511,11 +505,6 @@ namespace Dskill
                 _originalUseTime[weapon.TypeID] = original;
             }
             float target = Mathf.Max(0.05f, original * (1f - Mathf.Clamp01(bonus)));
-            if (!_meleeUseTimeLogged)
-            {
-                _meleeUseTimeLogged = true;
-                Debug.Log("[Dskill] 근접 무기 사용 시간 확인: " + original.ToString("0.###") + "초 → 목표 " + target.ToString("0.###") + "초");
-            }
             if (Mathf.Abs(usage.UseTime - target) > 0.001f)
             {
                 _useTimeField.SetValue(usage, target);
