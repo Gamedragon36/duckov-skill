@@ -40,6 +40,9 @@ namespace Dskill
             return false;
         }
 
+        /// <summary>근접 명중 간격 실측용 (공격속도 효과가 실제로 반영되는지 확인)</summary>
+        private float _lastMeleeHitTime = -10f;
+
         private void HandleHurt(Health health, DamageInfo info)
         {
             if (health == null || _skills == null || _main == null)
@@ -90,6 +93,13 @@ namespace Dskill
             if (from != null && from == _main && IsMeleeDamage(info))
             {
                 // 근접 전투: 명중할 때마다 (이전 버전에서 누락되어 있던 경험치)
+                float meleeNow = Time.time;
+                if (_lastMeleeHitTime > 0f)
+                {
+                    // 실측 로그: 이전 근접 명중과의 간격 — 공격속도(CA_Attack 시간 감소)가 반영되는지 확인용
+                    Debug.Log("[Dskill] 근접 공격 감지: 이전 명중과 " + (meleeNow - _lastMeleeHitTime).ToString("0.##") + "초 간격");
+                }
+                _lastMeleeHitTime = meleeNow;
                 _skills.AddXp("melee", Rates.MeleePerHit);
             }
             else if (from != null && from == _main)
