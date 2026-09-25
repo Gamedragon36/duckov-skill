@@ -42,6 +42,7 @@ eff.barter|Цена продажи +{0}%
 eff.throwing|Дальность броска +{0}%, урон взрыва +{1}%
 eff.looting|Время поиска предметов -{0}%
 eff.dash|Перезарядка -{0}%, время действия -{1}%, расход выносливости -{2}%
+eff.melee|Скорость атаки в ближнем бою +{0}%
 eff.hideout|Перезарядка пополнения торговца -{0}%
 eff.hideoutElite|, время добычи -{0}%
 eff.crafting|Шанс доп. продукции {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|Разброс пуль
 stat.GunCritDamageGain|Урон в голову
 stat.MeleeDamageMultiplier|Урон в ближнем бою
 stat.MeleeCritRateGain|Крит. шанс ближнего боя
-stat.AttackSpeed|Скорость атаки в ближнем бою
 stat.WalkSpeed|Скорость передвижения
 stat.RunSpeed|Скорость передвижения
 stat.WalkSoundRange|Звук ходьбы

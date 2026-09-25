@@ -73,7 +73,6 @@ namespace Dskill
             { "GunCritDamageGain", "헤드샷 대미지" },
             { "MeleeDamageMultiplier", "근접 대미지" },
             { "MeleeCritRateGain", "근접 치명타율" },
-            { "AttackSpeed", "근접 공격속도" },
             { "WalkSpeed", "이동 속도" },
             { "RunSpeed", "이동 속도" },
             { "WalkSoundRange", "보행 소리" },
@@ -216,6 +215,25 @@ namespace Dskill
             {
                 current = needed;
             }
+        }
+
+        /// <summary>근접 전투: 근접 공격속도 증가 비율 — 쿨타임·동작 시간(CA_Attack)을 같은 비율로 줄인다. (0.0.8)</summary>
+        public float MeleeSpeedBonus(int level)
+        {
+            if (level <= 0)
+            {
+                return 0f;
+            }
+            if (level > _config.MaxLevel)
+            {
+                level = _config.MaxLevel;
+            }
+            float value = Specials.MeleeSpeedPerLevel * level;      // 만렙 0.30
+            if (level >= _config.MaxLevel)
+            {
+                value += Specials.MeleeSpeedElite;                  // 엘리트 +0.20
+            }
+            return Mathf.Clamp(value, 0f, 0.95f);
         }
 
         /// <summary>구르기: 동작 시간 감소 비율 — 쿨타임과 같은 비율로 줄인다(사용자 요청: 동작 시간 우선).</summary>
@@ -483,6 +501,12 @@ namespace Dskill
                 {
                     AddPart(parts, FormatEffect(effect, effect.PerLevel));
                 }
+            }
+
+            if (id == "melee")
+            {
+                // 근접 공격속도는 스탯이 아니라 액션 시간(CA_Attack)을 줄이는 방식이라 문구를 직접 만든다 (0.0.8)
+                AddPart(parts, Locale.F("eff.melee", "근접 공격속도 +{0}%", (MeleeSpeedBonus(level) * 100f).ToString("0.#")));
             }
 
             foreach (string part in parts)

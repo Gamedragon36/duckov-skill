@@ -106,6 +106,12 @@ namespace Dskill
         public const float CraftingEliteBonus = 0.20f;         // 제작 엘리트: 확률 +20% (총 50%)
         public const float SurvivalDebuffResistPerLevel = 0.015f;  // 생존술: 디버프 저항 (만렙 30%)
 
+        /// <summary>근접 전투: 레벨당 근접 공격속도 증가 (만렙 +30%) — CA_Attack 의 쿨타임·동작 시간을 줄인다 (0.0.8)</summary>
+        public const float MeleeSpeedPerLevel = 0.015f;
+        /// <summary>근접 전투 엘리트: 근접 공격속도 추가 +20%</summary>
+        public const float MeleeSpeedElite = 0.20f;
+
+
         /// <summary>회복: 레벨당 치료 속도(사용 시간 감소) 비율. 만렙 40%</summary>
         public const float HealSpeedPerLevel = 0.02f;
         /// <summary>회복 엘리트: 치료 속도 추가 10%</summary>
@@ -273,15 +279,13 @@ namespace Dskill
                 {
                     new EffectDef("MeleeDamageMultiplier", StatModKind.PercentMultiply, 0.025f),  // 만렙 +50%
                     new EffectDef("MeleeCritRateGain", StatModKind.PercentMultiply, 0.025f),      // 만렙 +50%
-                    new EffectDef("AttackSpeed", StatModKind.PercentMultiply, 0.015f),            // 만렙 +30% 근접 공격속도 (0.0.8)
                     new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),              // 만렙 +10%
                     new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
                 },
                 EliteEffects = new[]
                 {
                     new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.10f),
-                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.10f),
-                    new EffectDef("AttackSpeed", StatModKind.PercentMultiply, 0.20f)      // 엘리트 +20% 근접 공격속도 (0.0.8)
+                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.10f)
                 }
             },
             new SkillDef

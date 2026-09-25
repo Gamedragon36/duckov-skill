@@ -42,6 +42,7 @@ eff.barter|售價 +{0}%
 eff.throwing|投擲距離 +{0}%，爆炸傷害 +{1}%
 eff.looting|物品搜索時間 -{0}%
 eff.dash|冷卻 -{0}%，動作時間 -{1}%，耐力消耗 -{2}%
+eff.melee|近戰攻擊速度 +{0}%
 eff.hideout|商人補貨冷卻 -{0}%
 eff.hideoutElite|，挖礦時間 -{0}%
 eff.crafting|額外產出機率 {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|子彈散布
 stat.GunCritDamageGain|爆頭傷害
 stat.MeleeDamageMultiplier|近戰傷害
 stat.MeleeCritRateGain|近戰爆擊率
-stat.AttackSpeed|近戰攻擊速度
 stat.WalkSpeed|移動速度
 stat.RunSpeed|移動速度
 stat.WalkSoundRange|走路聲音

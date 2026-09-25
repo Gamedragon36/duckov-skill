@@ -42,6 +42,7 @@ eff.barter|Precio de venta +{0}%
 eff.throwing|Distancia de lanzamiento +{0}%, daño de explosión +{1}%
 eff.looting|Tiempo de detección de objetos -{0}%
 eff.dash|Reutilización -{0}%, tiempo de acción -{1}%, costo de aguante -{2}%
+eff.melee|Velocidad de ataque cuerpo a cuerpo +{0}%
 eff.hideout|Reabastecimiento del comerciante -{0}%
 eff.hideoutElite|, tiempo de minado -{0}%
 eff.crafting|Probabilidad de producción extra {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|Dispersión de balas
 stat.GunCritDamageGain|Daño de disparo a la cabeza
 stat.MeleeDamageMultiplier|Daño cuerpo a cuerpo
 stat.MeleeCritRateGain|Prob. crítica cuerpo a cuerpo
-stat.AttackSpeed|Velocidad de ataque cuerpo a cuerpo
 stat.WalkSpeed|Velocidad de movimiento
 stat.RunSpeed|Velocidad de movimiento
 stat.WalkSoundRange|Ruido al caminar

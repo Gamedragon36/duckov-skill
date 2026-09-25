@@ -42,6 +42,7 @@ eff.barter|Sell price +{0}%
 eff.throwing|Throw range +{0}%, explosion damage +{1}%
 eff.looting|Item detection time -{0}%
 eff.dash|Cooldown -{0}%, action time -{1}%, stamina cost -{2}%
+eff.melee|Melee attack speed +{0}%
 eff.hideout|Trader restock cooldown -{0}%
 eff.hideoutElite|, mining time -{0}%
 eff.crafting|Extra output chance {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|Bullet spread
 stat.GunCritDamageGain|Headshot damage
 stat.MeleeDamageMultiplier|Melee damage
 stat.MeleeCritRateGain|Melee crit chance
-stat.AttackSpeed|Melee attack speed
 stat.WalkSpeed|Movement speed
 stat.RunSpeed|Movement speed
 stat.WalkSoundRange|Walking noise

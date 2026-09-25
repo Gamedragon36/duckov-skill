@@ -458,6 +458,7 @@ namespace Dskill
             ScanLoot(elapsed);
             CheckPickups();
             ApplyDashSettings();
+            ApplyMeleeSpeedSettings();
             DetectHideoutTime(elapsed);
             ApplyHideoutEffects(elapsed);
             DetectNightTime(elapsed);

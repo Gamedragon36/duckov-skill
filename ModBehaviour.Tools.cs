@@ -361,6 +361,80 @@ namespace Dskill
                 Debug.LogWarning("[Dskill] 구르기 거리 보정 실패(무시): " + e.Message);
             }
         }
+        // ---- 근접 공격속도 (0.0.8) ----
+        // CA_Attack 의 시간 필드(cd·attackActionTime)는 private 이라 리플렉션으로 접근한다.
+        // (구르기의 dashTime·coolTime 은 public 이라 직접 접근)
+        private CA_Attack _meleeAttackAction;
+        private float _originalMeleeCd = -1f;
+        private float _originalMeleeActionTime = -1f;
+        private int _appliedMeleeSpeedLevel = -1;
+        private static readonly System.Reflection.FieldInfo _meleeCdField =
+            typeof(CA_Attack).GetField("cd", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        private static readonly System.Reflection.FieldInfo _meleeActionTimeField =
+            typeof(CA_Attack).GetField("attackActionTime", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        /// <summary>근접 전투: 근접 공격 쿨타임(cd)과 동작 시간(attackActionTime)을 같은 비율로 줄인다.</summary>
+        private void ApplyMeleeSpeedSettings()
+        {
+            if (_skills == null || _main == null)
+            {
+                return;
+            }
+
+            if (_meleeAttackAction == null)
+            {
+                _meleeAttackAction = _main.attackAction;
+                if (_meleeAttackAction != null && _meleeCdField != null && _meleeActionTimeField != null)
+                {
+                    // 다른 모드가 비정상 값을 넣었을 가능성을 대비해 정상 범위만 원본으로 인정한다
+                    float cd = (float)_meleeCdField.GetValue(_meleeAttackAction);
+                    float actionTime = (float)_meleeActionTimeField.GetValue(_meleeAttackAction);
+                    if (cd > 0f && cd <= 10f)
+                    {
+                        _originalMeleeCd = cd;
+                    }
+                    if (actionTime > 0f && actionTime <= 5f)
+                    {
+                        _originalMeleeActionTime = actionTime;
+                    }
+                    Debug.Log("[Dskill] 근접 액션 확인: 쿨타임 " + cd.ToString("0.###") + "초 / 동작 " + actionTime.ToString("0.###") + "초");
+                }
+            }
+            if (_meleeAttackAction == null || _originalMeleeCd <= 0f)
+            {
+                return;
+            }
+
+            int level = _skills.GetLevel("melee");
+            if (level == _appliedMeleeSpeedLevel)
+            {
+                return;
+            }
+
+            try
+            {
+                float bonus = _skills.MeleeSpeedBonus(level);          // 0 … 0.5
+                float factor = Mathf.Clamp01(1f - bonus);
+                float cd = Mathf.Max(0.05f, _originalMeleeCd * factor);
+                float actionTime = Mathf.Max(0.05f, _originalMeleeActionTime * factor);
+                if (_meleeCdField != null)
+                {
+                    _meleeCdField.SetValue(_meleeAttackAction, cd);
+                }
+                if (_meleeActionTimeField != null)
+                {
+                    _meleeActionTimeField.SetValue(_meleeAttackAction, actionTime);
+                }
+                _appliedMeleeSpeedLevel = level;
+                Debug.Log("[Dskill] 근접 공격속도 적용 Lv." + level + " : 쿨타임 " + _originalMeleeCd.ToString("0.##") + " → " + cd.ToString("0.##") +
+                          "초 / 동작 " + _originalMeleeActionTime.ToString("0.##") + " → " + actionTime.ToString("0.##") + "초 (+" + (bonus * 100f).ToString("0.#") + "%)");
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 근접 공격속도 적용 실패(무시): " + e.Message);
+            }
+        }
+
         private bool _wasDashing;
         private float _loggedDashCool = -1f;      // 쿨타임 로그 중복 방지
         private float _lastDashLogTime = -10f;    // 구르기 간격 실측용

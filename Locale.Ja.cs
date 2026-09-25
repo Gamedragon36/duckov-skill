@@ -42,6 +42,7 @@ eff.barter|売却額 +{0}%
 eff.throwing|投擲距離 +{0}%、爆発ダメージ +{1}%
 eff.looting|アイテム探知時間 -{0}%
 eff.dash|クールタイム -{0}%、動作時間 -{1}%、スタミナ消費 -{2}%
+eff.melee|近接攻撃速度 +{0}%
 eff.hideout|商人の補充クールタイム -{0}%
 eff.hideoutElite|、採掘時間 -{0}%
 eff.crafting|追加生産確率 {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|弾の拡散
 stat.GunCritDamageGain|ヘッドショットダメージ
 stat.MeleeDamageMultiplier|近接ダメージ
 stat.MeleeCritRateGain|近接クリティカル率
-stat.AttackSpeed|近接攻撃速度
 stat.WalkSpeed|移動速度
 stat.RunSpeed|移動速度
 stat.WalkSoundRange|歩きの音

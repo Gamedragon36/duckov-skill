@@ -42,6 +42,7 @@ eff.barter|Verkaufspreis +{0}%
 eff.throwing|Wurfweite +{0}%, Explosionsschaden +{1}%
 eff.looting|Item-Erkennungszeit -{0}%
 eff.dash|Abklingzeit -{0}%, Aktionszeit -{1}%, Ausdauerkosten -{2}%
+eff.melee|Nahkampf-Angriffstempo +{0}%
 eff.hideout|Händler-Nachschub-Abklingzeit -{0}%
 eff.hideoutElite|, Abbauzeit -{0}%
 eff.crafting|Zusätzliche Ausgabechance {0}%
@@ -64,7 +65,6 @@ stat.GunScatterMultiplier|Kugelstreuung
 stat.GunCritDamageGain|Kopfschussschaden
 stat.MeleeDamageMultiplier|Nahkampfschaden
 stat.MeleeCritRateGain|Nahkampf-Kritchance
-stat.AttackSpeed|Nahkampf-Angriffsgeschwindigkeit
 stat.WalkSpeed|Bewegungsgeschwindigkeit
 stat.RunSpeed|Bewegungsgeschwindigkeit
 stat.WalkSoundRange|Gehgeräusch
