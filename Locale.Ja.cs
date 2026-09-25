@@ -64,6 +64,7 @@ stat.GunScatterMultiplier|弾の拡散
 stat.GunCritDamageGain|ヘッドショットダメージ
 stat.MeleeDamageMultiplier|近接ダメージ
 stat.MeleeCritRateGain|近接クリティカル率
+stat.AttackSpeed|近接攻撃速度
 stat.WalkSpeed|移動速度
 stat.RunSpeed|移動速度
 stat.WalkSoundRange|歩きの音

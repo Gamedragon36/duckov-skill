@@ -73,6 +73,7 @@ namespace Dskill
             { "GunCritDamageGain", "헤드샷 대미지" },
             { "MeleeDamageMultiplier", "근접 대미지" },
             { "MeleeCritRateGain", "근접 치명타율" },
+            { "AttackSpeed", "근접 공격속도" },
             { "WalkSpeed", "이동 속도" },
             { "RunSpeed", "이동 속도" },
             { "WalkSoundRange", "보행 소리" },

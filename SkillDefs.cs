@@ -268,18 +268,20 @@ namespace Dskill
             {
                 Id = "melee", NameKo = "근접 전투", Icon = "◀", Category = "전투",
                 TriggerKo = "근접 공격이 명중할 때 (1회 30점, 근접 처치 +60점)",
-                EliteKo = "이동 속도 +10% (추가)",
+                EliteKo = "이동 속도 +10%, 근접 공격속도 +20% (추가)",
                 Effects = new[]
                 {
                     new EffectDef("MeleeDamageMultiplier", StatModKind.PercentMultiply, 0.025f),  // 만렙 +50%
                     new EffectDef("MeleeCritRateGain", StatModKind.PercentMultiply, 0.025f),      // 만렙 +50%
+                    new EffectDef("AttackSpeed", StatModKind.PercentMultiply, 0.015f),            // 만렙 +30% 근접 공격속도 (0.0.8)
                     new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),              // 만렙 +10%
                     new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
                 },
                 EliteEffects = new[]
                 {
                     new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.10f),
-                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.10f)
+                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.10f),
+                    new EffectDef("AttackSpeed", StatModKind.PercentMultiply, 0.20f)      // 엘리트 +20% 근접 공격속도 (0.0.8)
                 }
             },
             new SkillDef

@@ -64,6 +64,7 @@ stat.GunScatterMultiplier|Kugelstreuung
 stat.GunCritDamageGain|Kopfschussschaden
 stat.MeleeDamageMultiplier|Nahkampfschaden
 stat.MeleeCritRateGain|Nahkampf-Kritchance
+stat.AttackSpeed|Nahkampf-Angriffsgeschwindigkeit
 stat.WalkSpeed|Bewegungsgeschwindigkeit
 stat.RunSpeed|Bewegungsgeschwindigkeit
 stat.WalkSoundRange|Gehgeräusch

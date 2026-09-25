@@ -64,6 +64,7 @@ stat.GunScatterMultiplier|Разброс пуль
 stat.GunCritDamageGain|Урон в голову
 stat.MeleeDamageMultiplier|Урон в ближнем бою
 stat.MeleeCritRateGain|Крит. шанс ближнего боя
+stat.AttackSpeed|Скорость атаки в ближнем бою
 stat.WalkSpeed|Скорость передвижения
 stat.RunSpeed|Скорость передвижения
 stat.WalkSoundRange|Звук ходьбы

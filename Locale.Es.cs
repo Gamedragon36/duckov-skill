@@ -64,6 +64,7 @@ stat.GunScatterMultiplier|Dispersión de balas
 stat.GunCritDamageGain|Daño de disparo a la cabeza
 stat.MeleeDamageMultiplier|Daño cuerpo a cuerpo
 stat.MeleeCritRateGain|Prob. crítica cuerpo a cuerpo
+stat.AttackSpeed|Velocidad de ataque cuerpo a cuerpo
 stat.WalkSpeed|Velocidad de movimiento
 stat.RunSpeed|Velocidad de movimiento
 stat.WalkSoundRange|Ruido al caminar

@@ -64,6 +64,7 @@ stat.GunScatterMultiplier|Bullet spread
 stat.GunCritDamageGain|Headshot damage
 stat.MeleeDamageMultiplier|Melee damage
 stat.MeleeCritRateGain|Melee crit chance
+stat.AttackSpeed|Melee attack speed
 stat.WalkSpeed|Movement speed
 stat.RunSpeed|Movement speed
 stat.WalkSoundRange|Walking noise

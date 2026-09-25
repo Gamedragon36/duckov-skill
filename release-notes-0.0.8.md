@@ -6,6 +6,7 @@
   - 만렙 각 속성 피해 **-10%**, ★엘리트 **-5% 추가** (합계 -15%)
 - 스킬 창에 **경험치 정수(현재/필요)** 와 **모든 스킬의 레벨당 수치** 표시
 - 스킬 창 제목을 `★ Duckov Skill` 로 정리
+- **근접 전투**에 **근접 공격속도** 효과 추가 — 만렙 **+30%**, ★엘리트 **+20% 추가** (🔼 버프)
 
 ## ⚖️ 변경 (🔼 버프 / 🔽 너프 / 🔁 방식 변경)
 | 스킬 | 변경 | 구분 |
@@ -56,6 +57,7 @@
   - Max level: each element **-10%** · ★Elite: **-5% more** (-15% total)
 - Skill window now shows **XP as numbers (current/needed)** and a **per-level value line for every skill**
 - Skill window title cleaned up to `★ Duckov Skill`
+- **Melee** now also grants **melee attack speed** — **+30%** at max level, ★Elite **+20% more** (🔼 buff)
 
 ## ⚖️ Changes (🔼 buff / 🔽 nerf / 🔁 rework)
 | Skill | Change | Kind |

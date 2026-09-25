@@ -50,7 +50,7 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | ★ | Assault | **when your bullet hits** (8 pts; firing alone gives none) | gun damage **+15%** | gun crit rate **+10%** |
 | ▽ | Recoil Control | fire your gun (ADS counts more) | recoil control **+0.2** | vertical/horizontal recoil **-15%** |
 | ◎ | Marksmanship | hit targets **beyond 20 m** (**150** pts, headshot **+200**) | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
-| ◀ | Melee | hit with melee weapons | melee damage **+50%**, melee crit **+50%**, movement **+10%** | movement **+10%** more |
+| ◀ | Melee | hit with melee weapons (30 pts, +60 on kill) | melee damage **+50%**, melee crit **+50%**, movement **+10%**, **melee attack speed +30%** | movement **+10%**, **melee attack speed +20%** more |
 | ▶ | Throwing | throw explosives | throw distance **+30%**, explosion damage **+50%** | distance **+20%**, **30% chance of instant detonation** |
 | ◁ | Perception | hear sounds around you | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
 
