@@ -91,10 +91,10 @@ stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
 # ==== 24 навыка ====
 skill.strength.name|Сила
-        skill.strength.trigger|Движение при весе более 60% (свыше 80% — быстрее)
+        skill.strength.trigger|Движение при весе более 60% (4 очка/с, свыше 80% — 8 очков/с)
 skill.strength.elite|Инвентарь +5 ячеек, скорость передвижения +10%
 skill.endurance.name|Выносливость
-skill.endurance.trigger|Во время бега
+skill.endurance.trigger|Во время бега (4 очка/с)
 skill.endurance.elite|Восстановление выносливости +30%
 skill.vitality.name|Живучесть
 skill.vitality.trigger|При получении урона (10 очков за единицу урона)
@@ -112,7 +112,7 @@ skill.nightvision.name|Ночное зрение
 skill.nightvision.trigger|При активности ночью (2 очка/с)
 skill.nightvision.elite|Ночное зрение +0.2 (полностью снимает ночной штраф)
 skill.assault.name|Стрельба
-skill.assault.trigger|Только при попадании
+skill.assault.trigger|Только при попадании (8 очков за попадание)
 skill.assault.elite|Крит. шанс оружия +10%
 skill.recoil.name|Контроль отдачи
 skill.recoil.trigger|При выстреле (2 очка за выстрел, 4 очка при прицеливании)
@@ -160,7 +160,7 @@ skill.fishing.name|Рыбалка
 skill.fishing.trigger|При поимке рыбы (250 очков за рыбу)
 skill.fishing.elite|Навык рыбалки и удача по +20% (дополнительно)
 skill.crafting.name|Изготовление
-skill.crafting.trigger|Изготовление (по стоимости материалов) + каждый новый рецепт
+skill.crafting.trigger|Изготовление (стоимость материалов × 8%, макс. 400 очков) + каждый новый рецепт (200 очков)
 skill.crafting.elite|Шанс доп. продукции +20% (итого 50%)
 
 ";

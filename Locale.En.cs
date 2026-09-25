@@ -91,10 +91,10 @@ stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
 # ==== 스킬 24종 ====
 skill.strength.name|Strength
-        skill.strength.trigger|Move while over 60% weight (80%+ gains faster)
+        skill.strength.trigger|Move while over 60% weight (4 pts/s, 8 pts/s above 80%)
 skill.strength.elite|Inventory space +5 slots, movement speed +10%
 skill.endurance.name|Endurance
-skill.endurance.trigger|While sprinting
+skill.endurance.trigger|While sprinting (4 pts/s)
 skill.endurance.elite|Stamina recovery rate +30%
 skill.vitality.name|Vitality
 skill.vitality.trigger|When you take damage (10 pts per damage)
@@ -112,7 +112,7 @@ skill.nightvision.name|Night Vision
 skill.nightvision.trigger|While active at night (2 pts/s)
 skill.nightvision.elite|Night vision ability +0.2 (fully cancels the night penalty)
 skill.assault.name|Rifleman
-skill.assault.trigger|Only when your bullet hits
+skill.assault.trigger|Only when your bullet hits (8 pts per hit)
 skill.assault.elite|Gun crit chance +10%
 skill.recoil.name|Recoil Control
 skill.recoil.trigger|When you fire a gun (2 pts per shot, 4 pts when aiming)
@@ -160,7 +160,7 @@ skill.fishing.name|Fishing
 skill.fishing.trigger|When you catch a fish (250 pts per fish)
 skill.fishing.elite|Fishing skill and luck +20% each (extra)
 skill.crafting.name|Crafting
-skill.crafting.trigger|Crafting (scales with the material value) plus each new recipe unlocked
+skill.crafting.trigger|Crafting (material value × 8%, max 400 pts) plus each new recipe unlocked (200 pts)
 skill.crafting.elite|Extra output chance +20% (50% total)
 # ==== config.ini 주석 ====
 cfg.header|Tarkov-style skill system - settings

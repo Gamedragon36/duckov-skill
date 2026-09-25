@@ -91,10 +91,10 @@ stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
 # ==== 24 Fertigkeiten ====
 skill.strength.name|Stärke
-        skill.strength.trigger|Bewegen mit über 60% Gewicht (ab 80% schneller)
+        skill.strength.trigger|Bewegen mit über 60% Gewicht (4 Pkt./s, ab 80% 8 Pkt./s)
 skill.strength.elite|Inventar +5 Plätze, Bewegungsgeschwindigkeit +10%
 skill.endurance.name|Ausdauer
-skill.endurance.trigger|Beim Rennen
+skill.endurance.trigger|Beim Rennen (4 Pkt./s)
 skill.endurance.elite|Ausdauererholung +30%
 skill.vitality.name|Vitalität
 skill.vitality.trigger|Wenn du Schaden erleidest (10 Pkt. pro Schaden)
@@ -112,7 +112,7 @@ skill.nightvision.name|Nachtsicht
 skill.nightvision.trigger|Bei Aktivität in der Nacht (2 Pkt./s)
 skill.nightvision.elite|Nachtsichtfähigkeit +0.2 (hebt den Nachtmalus vollständig auf)
 skill.assault.name|Schütze
-skill.assault.trigger|Nur wenn ein Schuss trifft
+skill.assault.trigger|Nur wenn ein Schuss trifft (8 Pkt. pro Treffer)
 skill.assault.elite|Schusswaffen-Kritchance +10%
 skill.recoil.name|Rückstoßkontrolle
 skill.recoil.trigger|Wenn du schießt (2 Pkt. pro Schuss, 4 Pkt. beim Zielen)
@@ -160,7 +160,7 @@ skill.fishing.name|Angeln
 skill.fishing.trigger|Wenn du einen Fisch fängst (250 Pkt. pro Fisch)
 skill.fishing.elite|Angelkunst und Glück je +20% (zusätzlich)
 skill.crafting.name|Herstellen
-skill.crafting.trigger|Herstellen (nach Materialwert) + jedes neue Rezept
+skill.crafting.trigger|Herstellen (Materialwert × 8%, max. 400 Pkt.) + jedes neue Rezept (200 Pkt.)
 skill.crafting.elite|Zusätzliche Ausgabechance +20% (insgesamt 50%)
 
 ";

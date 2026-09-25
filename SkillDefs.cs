@@ -134,7 +134,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "strength", NameKo = "근력", Icon = "◆", Category = "신체",
-                TriggerKo = "무게 60% 이상으로 이동 (80% 이상이면 2배 빠르게)",
+                TriggerKo = "무게 60% 이상으로 이동 (초당 4점, 80% 이상은 초당 8점)",
                 EliteKo = "가방 공간 +5칸, 이동 속도 +10%",
                 Effects = new[]
                 {
@@ -152,7 +152,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "endurance", NameKo = "지구력", Icon = "▲", Category = "신체",
-                TriggerKo = "달리는 동안",
+                TriggerKo = "달리는 동안 (초당 4점)",
                 EliteKo = "스태미나 회복 속도 +30%",
                 Effects = new[]
                 {
@@ -229,7 +229,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "assault", NameKo = "사격술", Icon = "★", Category = "전투",
-                TriggerKo = "총알이 적중했을 때만",
+                TriggerKo = "총알이 적중했을 때만 (1회 8점)",
                 EliteKo = "총기 치명타율 +10%",
                 Effects = new[]
                 {
@@ -455,7 +455,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "crafting", NameKo = "제작", Icon = "□", Category = "실용",
-                TriggerKo = "제작 완료 (재료 가치에 비례) · 새 레시피 해금",
+                TriggerKo = "제작 완료 (재료 가치 × 8%, 최대 400점) · 새 레시피 해금 (200점)",
                 EliteKo = "추가 생산 확률 +20% (총 50%)",
                 Effects = new EffectDef[0],        // 특수 처리: 30% 확률로 결과물 1개 추가
                 EliteEffects = new EffectDef[0]

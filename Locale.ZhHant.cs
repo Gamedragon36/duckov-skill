@@ -91,10 +91,10 @@ stat.SenseRange|感知範圍
 stat.HearingAbility|聽力
 # ==== 技能 24 種 ====
 skill.strength.name|力量
-        skill.strength.trigger|負重 60% 以上時移動（80% 以上更快）
+        skill.strength.trigger|負重 60% 以上時移動（每秒 4 點，80% 以上每秒 8 點）
 skill.strength.elite|背包空間 +5 格，移動速度 +10%
 skill.endurance.name|耐力
-skill.endurance.trigger|奔跑時
+skill.endurance.trigger|奔跑時（每秒 4 點）
 skill.endurance.elite|耐力恢復速度 +30%
 skill.vitality.name|生命
 skill.vitality.trigger|受到傷害時（每點傷害 10 點）
@@ -112,7 +112,7 @@ skill.nightvision.name|夜視
 skill.nightvision.trigger|夜晚活動時（每秒 2 點）
 skill.nightvision.elite|夜視能力 +0.2（完全抵消夜間懲罰）
 skill.assault.name|射擊術
-skill.assault.trigger|僅當子彈命中時
+skill.assault.trigger|僅當子彈命中時（每次 8 點）
 skill.assault.elite|槍械爆擊率 +10%
 skill.recoil.name|後座力控制
 skill.recoil.trigger|開槍時（每發 2 點，瞄準射擊 4 點）
@@ -160,7 +160,7 @@ skill.fishing.name|釣魚
 skill.fishing.trigger|釣到魚時（每條 250 點）
 skill.fishing.elite|釣魚能力與運氣各 +20%（額外）
 skill.crafting.name|製作
-skill.crafting.trigger|完成製作（與材料價值成正比）+ 解鎖新配方
+skill.crafting.trigger|完成製作（材料價值 × 8%，最多 400 點）+ 解鎖新配方（200 點）
 skill.crafting.elite|額外產出機率 +20%（合計 50%）
 # ==== config.ini 註解 ====
 cfg.header|塔科夫式技能系統 - 設定

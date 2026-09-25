@@ -91,10 +91,10 @@ stat.SenseRange|Raio de detecção
 stat.HearingAbility|Audição
 # ==== 24 habilidades ====
 skill.strength.name|Força
-        skill.strength.trigger|Mover-se com mais de 60% de peso (a partir de 80% é mais rápido)
+        skill.strength.trigger|Mover-se com mais de 60% de peso (4 pts/s, 8 pts/s a partir de 80%)
 skill.strength.elite|Inventário +5 espaços, velocidade de movimento +10%
 skill.endurance.name|Resistência
-skill.endurance.trigger|Enquanto corre
+skill.endurance.trigger|Enquanto corre (4 pts/s)
 skill.endurance.elite|Recuperação de stamina +30%
 skill.vitality.name|Vitalidade
 skill.vitality.trigger|Ao receber dano (10 pts por dano)
@@ -112,7 +112,7 @@ skill.nightvision.name|Visão noturna
 skill.nightvision.trigger|Ativo durante a noite (2 pts/s)
 skill.nightvision.elite|Visão noturna +0.2 (anula a penalidade noturna)
 skill.assault.name|Tiro
-skill.assault.trigger|Somente quando o tiro acerta
+skill.assault.trigger|Somente quando o tiro acerta (8 pts por acerto)
 skill.assault.elite|Chance de crítico da arma +10%
 skill.recoil.name|Controle de recuo
 skill.recoil.trigger|Ao disparar (2 pts por tiro, 4 pts ao mirar)
@@ -160,7 +160,7 @@ skill.fishing.name|Pesca
 skill.fishing.trigger|Ao pescar um peixe (250 pts por peixe)
 skill.fishing.elite|Habilidade de pesca e sorte +20% cada (extra)
 skill.crafting.name|Fabricação
-skill.crafting.trigger|Fabricação (conforme o valor dos materiais) + cada nova receita
+skill.crafting.trigger|Fabricação (valor dos materiais × 8%, máx. 400 pts) + cada nova receita (200 pts)
 skill.crafting.elite|Chance de produção extra +20% (50% no total)
 
 ";

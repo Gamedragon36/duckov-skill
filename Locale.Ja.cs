@@ -91,10 +91,10 @@ stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
 # ==== スキル 24 種 ====
 skill.strength.name|筋力
-        skill.strength.trigger|重量 60% 以上で移動（80% 以上でより速く）
+        skill.strength.trigger|重量 60% 以上で移動（毎秒 4 点、80% 以上は毎秒 8 点）
 skill.strength.elite|バッグ容量 +5 枠、移動速度 +10%
 skill.endurance.name|持久力
-skill.endurance.trigger|走っている間
+skill.endurance.trigger|走っている間（毎秒 4 点）
 skill.endurance.elite|スタミナ回復速度 +30%
 skill.vitality.name|生命力
 skill.vitality.trigger|ダメージを受けたとき（ダメージ 1 につき 10 点）
@@ -112,7 +112,7 @@ skill.nightvision.name|暗視
 skill.nightvision.trigger|夜間に活動したとき（毎秒 2 点）
 skill.nightvision.elite|暗視能力 +0.2（夜間ペナルティを完全に無効化）
 skill.assault.name|射撃術
-skill.assault.trigger|弾が命中したときのみ
+skill.assault.trigger|弾が命中したときのみ（1 回 8 点）
 skill.assault.elite|銃クリティカル率 +10%
 skill.recoil.name|反動制御
 skill.recoil.trigger|銃を発砲したとき（1 発 2 点、照準射撃は 4 点）
@@ -160,7 +160,7 @@ skill.fishing.name|釣り
 skill.fishing.trigger|魚を釣り上げたとき（1 匹 250 点）
 skill.fishing.elite|釣り能力・運がそれぞれ +20%（追加）
 skill.crafting.name|製作
-skill.crafting.trigger|製作完了（材料の価値に比例）＋ 新レシピ解放
+skill.crafting.trigger|製作完了（材料価値 × 8%、最大 400 点）＋ 新レシピ解放（200 点）
 skill.crafting.elite|追加生産確率 +20%（合計 50%）
 
 ";

@@ -35,8 +35,8 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
-| ◆ | Strength | move while above 60% carry weight (80%+ gains faster) | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
-| ▲ | Endurance | sprint | stamina drain **-40%**, movement **+10%** | stamina regen **+30%** |
+| ◆ | Strength | move while above 60% carry weight (4 pts/s, 8 pts/s above 80%) | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
+| ▲ | Endurance | sprint (4 pts/s) | stamina drain **-40%**, movement **+10%** | stamina regen **+30%** |
 | ● | Vitality | take damage | max health **+20** | **+5** |
 | ＋ | Healing | heal with items (10 pts per HP) | healing **speed -40%** (use time) | **-10%** more (total -50%) |
 | ◉ | Metabolism | eat / drink | hunger & water drain **-30%** | **no starvation damage** |
@@ -68,7 +68,7 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | ▣ | Looting | reveal items in containers | item detection time **-70%** (min 0.2 s) | **opening a container: 50% chance to reveal every item inside instantly** |
 | ■ | Hideout | stay at the hideout / construct buildings | merchant restock cooldown **-50%** | bitcoin miner time **-20%** |
 | ▪ | Fishing | catch fish | fishing ability **+30%**, fishing luck **+20%** | **+20%** each |
-| □ | Crafting | craft items / unlock recipes | **30% chance of a bonus item** | **+20%** (total 50%) |
+| □ | Crafting | craft items (material value × 8%, max 400 pts) / unlock recipes (200 pts) | **30% chance of a bonus item** | **+20%** (total 50%) |
 
 ## Growth speed
 
