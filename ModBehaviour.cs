@@ -53,9 +53,9 @@ namespace Dskill
 
         /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
         private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
-        /// <summary>정상 아이템의 DurabilityLoss 값(로그 실측 0.01) — 모드가 잘못 쓴 0 을 이 값으로 복구한다</summary>
-        private const float RepairLossDefault = 0.01f;
-        private int _repairedLossCount;   // 복구한 아이템 수(로그 1회만)
+        // 수리 손실 취소(엘리트): 직전 스캔의 `DurabilityLoss` 를 기억해, 수리로 늘어난 만큼을 되돌린다 (2026-09-27)
+        private readonly Dictionary<Item, float> _lastRepairLoss = new Dictionary<Item, float>();
+        private int _repairRestoreLogged;
         private float _repairStorageNextScan;   // 창고(PlayerStorage) 수리 감지 스로틀
         private readonly List<Item> _itemBuffer = new List<Item>();
 
@@ -622,31 +622,32 @@ namespace Dskill
 
                 // (수리 손실 관련 '쓰기'는 2026-09-27 전부 제거 — 아래 진단 로그만 남긴다)
 
-                // ⚠ 2026-09-27 사고 복구: 모드가 잘못 쓴 값(0)으로 남아 있는 아이템을 **정상값(0.01)** 으로 되돌린다.
-                //   (0 은 '최대 내구도 0'을 만드는 잘못된 값 — 로그 실측으로 확인: 정상 아이템은 0.01)
-                try
+                // ⚠ 2026-09-27 진단 결과: 게임은 수리할 때마다 `DurabilityLoss`(최대 내구도 손실 '비율')를 올리고,
+                //   표시 최대치 = MaxDurability × (1 − DurabilityLoss)  ← 실측 2건으로 확인(100×0.9835=98.35, 150×0.9823=147.34).
+                //   → 그래서 **수리 전 값을 기억했다가, 수리로 늘어난 만큼을 되돌린다**(엘리트 = 100% 취소).
+                //   ⚠ 0 은 '손실 없음'이 맞지만(새 아이템의 값), 게임이 값을 다시 계산하는 경로가 있어 **추측해서 쓰지 않는다**.
+                float lossNow = item.DurabilityLoss;
+                float lossBefore;
+                if (_lastRepairLoss.TryGetValue(item, out lossBefore) && lossNow > lossBefore + 0.0001f)
                 {
-                    if (item.DurabilityLoss <= 0.0005f)
+                    float reduction = _skills.RepairLossReduction(_skills.GetLevel("repair"));
+                    if (reduction > 0f)
                     {
-                        float broken = item.DurabilityLoss;
-                        item.DurabilityLoss = RepairLossDefault;
-                        _repairedLossCount++;
-                        if (_repairedLossCount == 1)
+                        float restoredLoss = lossBefore + (lossNow - lossBefore) * (1f - reduction);
+                        if (Mathf.Abs(restoredLoss - lossNow) > 0.0001f)
                         {
-                            Debug.Log("[Dskill] 수리 값 복구: 잘못된 값(" + broken.ToString("0.####") +
-                                      ")을 정상값(" + RepairLossDefault.ToString("0.####") +
-                                      ")으로 되돌립니다 (예: TypeID " + item.TypeID + ")");
-                        }
-                        else if (_repairedLossCount == 50)
-                        {
-                            Debug.Log("[Dskill] 수리 값 복구: 50개 이상 복구됨 — 계속 진행합니다.");
+                            item.DurabilityLoss = restoredLoss;
+                            lossNow = restoredLoss;
+                            if (_repairRestoreLogged++ == 0)
+                            {
+                                Debug.Log("[Dskill] 수리 손실 취소: TypeID " + item.TypeID +
+                                          " DurabilityLoss " + lossBefore.ToString("0.####") + " → " + lossNow.ToString("0.####") +
+                                          " (수리 손실 -" + (reduction * 100f).ToString("0.#") + "% 취소, 엘리트는 100% 취소)");
+                            }
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Debug.LogWarning("[Dskill] 수리 값 복구 실패(무시): " + e.Message);
-                }
+                _lastRepairLoss[item] = lossNow;
 
                 // 진단 프로브(읽기 전용): 수리(내구도 증가)가 감지되면 관련 값을 전부 남긴다.
                 //  → 어떤 값이 실제로 '최대 내구도'를 깎는지 로그로 확정한다 (2026-09-27, 값은 절대 쓰지 않음)
@@ -682,6 +683,18 @@ namespace Dskill
                     if (key == null || !_itemBuffer.Contains(key))
                     {
                         _lastDurability.Remove(key);
+                        _lastRepairLoss.Remove(key);   // 수리 손실 추적도 함께 정리
+                    }
+                }
+            }
+            if (_lastRepairLoss.Count > _itemBuffer.Count + 32)
+            {
+                List<Item> lossKeys = new List<Item>(_lastRepairLoss.Keys);
+                foreach (Item key in lossKeys)
+                {
+                    if (key == null || !_itemBuffer.Contains(key))
+                    {
+                        _lastRepairLoss.Remove(key);
                     }
                 }
             }
