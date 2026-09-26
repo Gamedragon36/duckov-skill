@@ -53,8 +53,9 @@ namespace Dskill
 
         /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
         private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
-        // 수리 엘리트: 직전 스캔의 **최대 내구도**를 기억해 두고, 수리로 줄었으면 되돌린다 (2026-09-27)
-        private readonly Dictionary<Item, float> _lastMaxDurability = new Dictionary<Item, float>();
+        /// <summary>정상 아이템의 DurabilityLoss 값(로그 실측 0.01) — 모드가 잘못 쓴 0 을 이 값으로 복구한다</summary>
+        private const float RepairLossDefault = 0.01f;
+        private int _repairedLossCount;   // 복구한 아이템 수(로그 1회만)
         private float _repairStorageNextScan;   // 창고(PlayerStorage) 수리 감지 스로틀
         private readonly List<Item> _itemBuffer = new List<Item>();
 
@@ -619,29 +620,50 @@ namespace Dskill
                     continue;
                 }
 
-                // 수리 손실 감소(수리 스킬)를 '이 아이템'에 걸어 둔다
-                //  — 게임은 아이템의 `DurabilityLoss`(수리 시 깎이는 최대 내구도)를 읽는다 (2026-09-27 수정)
-                _skills.ApplyRepairLoss(item);
+                // (수리 손실 관련 '쓰기'는 2026-09-27 전부 제거 — 아래 진단 로그만 남긴다)
 
-                // 수리 엘리트: 수리로 **최대 내구도가 줄었으면** 직전 값으로 되돌린다(값이 이미 깎인 경우 대비)
-                float maxNow = item.MaxDurability;
-                float prevMax;
-                if (_lastMaxDurability.TryGetValue(item, out prevMax) && maxNow < prevMax - 0.01f)
+                // ⚠ 2026-09-27 사고 복구: 모드가 잘못 쓴 값(0)으로 남아 있는 아이템을 **정상값(0.01)** 으로 되돌린다.
+                //   (0 은 '최대 내구도 0'을 만드는 잘못된 값 — 로그 실측으로 확인: 정상 아이템은 0.01)
+                try
                 {
-                    if (_skills.TryRestoreMaxDurability(item, prevMax))
+                    if (item.DurabilityLoss <= 0.0005f)
                     {
-                        Debug.Log("[Dskill] 수리 엘리트: 최대 내구도 감소를 복구했습니다 " +
-                                  maxNow.ToString("0.#") + " → " + item.MaxDurability.ToString("0.#") + " (수리 손실 없음)");
-                        maxNow = item.MaxDurability;
+                        float broken = item.DurabilityLoss;
+                        item.DurabilityLoss = RepairLossDefault;
+                        _repairedLossCount++;
+                        if (_repairedLossCount == 1)
+                        {
+                            Debug.Log("[Dskill] 수리 값 복구: 잘못된 값(" + broken.ToString("0.####") +
+                                      ")을 정상값(" + RepairLossDefault.ToString("0.####") +
+                                      ")으로 되돌립니다 (예: TypeID " + item.TypeID + ")");
+                        }
+                        else if (_repairedLossCount == 50)
+                        {
+                            Debug.Log("[Dskill] 수리 값 복구: 50개 이상 복구됨 — 계속 진행합니다.");
+                        }
                     }
                 }
-                _lastMaxDurability[item] = maxNow;
+                catch (Exception e)
+                {
+                    Debug.LogWarning("[Dskill] 수리 값 복구 실패(무시): " + e.Message);
+                }
 
+                // 진단 프로브(읽기 전용): 수리(내구도 증가)가 감지되면 관련 값을 전부 남긴다.
+                //  → 어떤 값이 실제로 '최대 내구도'를 깎는지 로그로 확정한다 (2026-09-27, 값은 절대 쓰지 않음)
                 float current = item.Durability;
                 float previous;
-                if (_lastDurability.TryGetValue(item, out previous) && current > previous)
+                if (_lastDurability.TryGetValue(item, out previous))
                 {
-                    gained += current - previous;
+                    if (current > previous + 0.01f)
+                    {
+                        gained += current - previous;
+                        Debug.Log("[Dskill] 수리 감지(진단): TypeID " + item.TypeID +
+                                  " 내구도 " + previous.ToString("0.##") + " → " + current.ToString("0.##") +
+                                  " / MaxDurability " + item.MaxDurability.ToString("0.##") +
+                                  " / MaxWithLoss " + item.MaxDurabilityWithLoss.ToString("0.##") +
+                                  " / DurabilityLoss " + item.DurabilityLoss.ToString("0.####") +
+                                  " / UseDurability " + item.UseDurability);
+                    }
                 }
                 _lastDurability[item] = current;
             }
@@ -660,18 +682,6 @@ namespace Dskill
                     if (key == null || !_itemBuffer.Contains(key))
                     {
                         _lastDurability.Remove(key);
-                        _lastMaxDurability.Remove(key);   // 최대 내구도 추적도 함께 정리
-                    }
-                }
-            }
-            if (_lastMaxDurability.Count > _itemBuffer.Count + 32)
-            {
-                List<Item> maxKeys = new List<Item>(_lastMaxDurability.Keys);
-                foreach (Item key in maxKeys)
-                {
-                    if (key == null || !_itemBuffer.Contains(key))
-                    {
-                        _lastMaxDurability.Remove(key);
                     }
                 }
             }
