@@ -916,6 +916,8 @@ namespace Dskill
         private readonly object _adsTimeToken = new object();
         private Item _adsTimeItem;
         private int _appliedAdsTimeLevel = -1;
+        /// <summary>게임과 같은 방식의 스탯 키 해시 (`"ADSTime".GetHashCode()`) — 측정용</summary>
+        private static readonly int _adsTimeKey = "ADSTime".GetHashCode();
 
         private void ApplyAssaultAdsSpeed()
         {
@@ -950,12 +952,21 @@ namespace Dskill
                 gun.RemoveAllModifiersFrom(_adsTimeToken);
 
                 float reduction = Specials.AssaultAdsTimePerLevel * level;   // 만렙 -50%
+
+                // 적용 **전/후를 숫자로** 남긴다 — 체감이 어려울 때 실제로 바뀌었는지 확인용 (2026-09-27)
+                float before = gun.GetStatValue(_adsTimeKey);
                 bool ok = gun.AddModifier("ADSTime",
                     new Modifier(ModifierType.PercentageMultiply, -reduction, _adsTimeToken));
+                float after = gun.GetStatValue(_adsTimeKey);
                 if (ok)
                 {
-                    Debug.Log("[Dskill] 사격술: 조준 시간 -" + (reduction * 100f).ToString("0.#") +
-                              "% 적용(Lv." + level + ", 키 ADSTime)");
+                    float speedBefore = 1f / Mathf.Max(0.01f, before);
+                    float speedAfter = 1f / Mathf.Max(0.01f, after);
+                    Debug.Log("[Dskill] 조준 시간 -" + (reduction * 100f).ToString("0.#") +
+                              "% 적용(Lv." + level + ", 키 ADSTime) / 측정: ADSTime " +
+                              before.ToString("0.####") + " → " + after.ToString("0.####") +
+                              "초, 조준 속도 " + speedBefore.ToString("0.##") + " → " + speedAfter.ToString("0.##") +
+                              " (총 " + (speedAfter / Mathf.Max(0.01f, speedBefore)).ToString("0.##") + "배)");
                 }
                 else
                 {
