@@ -60,30 +60,30 @@ namespace Dskill
         public const float AssaultPerHit = 8f;              // 적중 시 (0.0.6: 발사 XP 를 없애고 적중에만 지급)
         public const float RecoilPerShot = 2f;              // 발사 1발 (0.0.7: 3 → 2)
         public const float RecoilPerAdsShot = 4f;           // 조준 사격 1발 (0.0.7: 6 → 4)
-        public const float MarksmanshipPerHit = 150f;       // 원거리 명중 (0.0.7: 20m 유지 대신 45 → 150)
-        public const float MarksmanshipPerCrit = 200f;       // 원거리 헤드샷 보너스 (0.0.7: 70 → 200)
-        public const float MarksmanshipMinDistance = 20f;   // 원거리 기준 거리(m) — 저격용으로 20m 유지(의도)
+        public const float MarksmanshipPerHit = 600f;       // 원거리 명중 — 2026-09-26: 사용자 요청 4배(150 → 600)
+        public const float MarksmanshipPerCrit = 800f;       // 원거리 헤드샷 보너스 — 2026-09-26: 4배(200 → 800)
+        public const float MarksmanshipMinDistance = 25f;   // 원거리 기준 거리(m) — 2026-09-26: 사용자 요청 20 → 25
         public const float MeleePerHit = 45f;               // 근접 명중 — 2026-09-26: 사용자 요청으로 1.5배(30 → 45)
         public const float MeleePerKill = 90f;              // 근접 처치 보너스 — 2026-09-26: 1.5배(60 → 90)
         public const float SurvivalPerDebuff = 300f;        // 상태이상 1회
         public const float SurvivalPerTickDamage = 12f;     // 지속 피해
         public const float ElementPerDamage = 20f;          // 받은 '속성' 피해 1당 (속성적응 — 화염·독·전기·얼음·유령·우주)
-        public const float ReloadPerComplete = 40f;         // 재장전 1회
+        public const float ReloadPerComplete = 50f;         // 재장전 1회 — 2026-09-26: 사용자 요청 40 → 50
         public const float RepairPerDurability = 5f;        // 수리한 내구도 1당 점수
         // 2026-09-25 확인·수정: 30 → 5.  30 이면 **수리 1회(내구도 30 회복)에 900점**이라
         //   Lv.1 필요치(500)를 한 번에 넘고 만렙(누적 48,000)까지 53회면 끝났습니다(비정상적으로 빠름).
         //   5 로 낮추면 같은 수리가 150점 → 만렙까지 320회(내구도 9,600)로 다른 스킬과 비슷해집니다.
-        public const float BarterPer1000 = 5f;              // 거래 금액 1,000당 (0.0.7: 10 → 5)
+        public const float BarterPer1000 = 10f;             // 거래 금액 1,000당 — 2026-09-26: 사용자 요청 5 → 10
         public const float MetabolismPerPoint = 20f;        // 포만감/수분 회복량
         public const float ThrowingPerThrow = 100f;         // 폭발물 투척 1회 (0.0.7: 200 → 100)
         public const float ThrowingPerExplosionDamage = 2f; // 폭발 피해 1당
         public const float LootingPerItem = 20f;            // 아이템 감지 완료 1개 (0.0.7: 40 → 20)
         public const float LootingPerPickup = 10f;          // 아이템 획득 1개 (0.0.7: 15 → 10)
-        public const float DashPerUse = 4f;                 // 구르기 1회 (0.0.7: 8 → 4)
+        public const float DashPerUse = 6f;                 // 구르기 1회 — 2026-09-26: 사용자 요청 4 → 6
         public const float HideoutPerSecond = 0.5f;         // 기지(하이드아웃) 체류(초) (0.0.7: 1 → 0.5)
         public const float HideoutPerBuilding = 500f;       // 건물 신축·업그레이드 1회
         public const float FishingPerCatch = 250f;          // 물고기 1마리
-        public const float PerceptionPerSound = 4f;         // 소리 감지 1회 (1초에 최대 1번)
+        public const float PerceptionPerSound = 12f;        // 소리 감지 1회 — 2026-09-26 사용자 요청 B안(4 → 12, 캡 0.5초)
         public const float NightVisionPerSecond = 2f;       // 밤 시간(초)
         public const float CraftingPerCraft = 200f;         // 제작 완료 1회
         public const float CraftingPerUnlock = 400f;        // 새 레시피 해금 1회
@@ -100,14 +100,18 @@ namespace Dskill
         public const float ThrowingRangePerLevel = 0.015f;  // 투척: 레벨당 거리 증가 (만렙 +30%)
         public const float ThrowingEliteRange = 0.20f;      // 투척 엘리트: 거리 +20%
         public const float ThrowingDamagePerLevel = 0.025f; // 투척: 레벨당 폭발 대미지 (만렙 +50%)
-        public const float ThrowingInstantChance = 0.30f;   // 투척 엘리트: 즉시 폭발 확률
+        // 2026-09-26 사용자 요청: 기존 '30% 확률 즉시 폭발'(ThrowingInstantChance)을 폐지하고
+        //   ★엘리트 = **지면에 닿으면 100% 즉시 폭발**(신관 지연 0)로 변경했다.
         public const float LootingSpeedPerLevel = 0.035f;   // 파밍: 레벨당 감지 시간 감소 (만렙 -70%) — 2026-09-25: 0.05 → 0.035 (사용자 요청: -70%)
         public const float LootingMinInspectTime = 0.2f;    // 파밍: 만렙(-70%)에서도 0초가 되지 않게 유지하는 최소 감지 시간(초)
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
+        /// <summary>사격술: 레벨당 조준(ADS) 시간 감소 (만렙 -50%).
+        ///  조준 시간은 총기(무기)가 읽는 스탯 `AdsTime` 이라 **장착한 총 아이템**에 적용한다 (2026-09-26 사용자 요청)</summary>
+        public const float AssaultAdsTimePerLevel = 0.025f;
         public const float DashReductionPerLevel = 0.02f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -40%)
         public const float DashEliteReduction = 0.10f;      // 구르기 엘리트: 각각 -10% 추가
-        public const float EnduranceStaminaPerLevel = 0.02f;  // 지구력: 레벨당 스태미나 소모 감소 (만렙 -40%)
-        public const float EnduranceStaminaMax = 0.40f;       // 지구력: 스태미나 소모 감소 상한 (-40%)
+        public const float EnduranceStaminaPerLevel = 0.03f;  // 지구력: 레벨당 스태미나 소모 감소 (만렙 -60%) — 2026-09-26: 0.02 → 0.03
+        public const float EnduranceStaminaMax = 0.60f;       // 지구력: 스태미나 소모 감소 상한 (-60%)
         public const float MerchantCooldownPerLevel = 0.025f;  // 하이드아웃: 상인 쿨타임 감소 (만렙 -50%)
         public const float MinerEliteTimeReduction = 0.20f;    // 하이드아웃 엘리트: 채굴 시간 -20%
         public const float CraftingBonusPerLevel = 0.015f;     // 제작: 레벨당 추가 생산 확률 (만렙 30%)
@@ -164,10 +168,8 @@ namespace Dskill
                 EliteKo = "스태미나 회복 속도 +30%",
                 Effects = new[]
                 {
-                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -Specials.EnduranceStaminaPerLevel),  // 만렙 -40% (구르기 중첩 계산과 같은 상수 공유)
-                    // 신진대사에서 옮겨온 이동 속도 (만렙 +10%)
-                    new EffectDef("WalkSpeed", StatModKind.PercentMultiply, 0.005f),
-                    new EffectDef("RunSpeed", StatModKind.PercentMultiply, 0.005f)
+                    new EffectDef("StaminaDrainRate", StatModKind.PercentMultiply, -Specials.EnduranceStaminaPerLevel),  // 만렙 -60% (구르기 중첩 계산과 같은 상수 공유)
+                    // 2026-09-26 사용자 요청: 이동 속도(+10%)는 **근력**으로 옮겼다(근력에 이미 있음).
                 },
                 EliteEffects = new[]
                 {
@@ -213,7 +215,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "dash", NameKo = "구르기", Icon = "○", Category = "신체",
-                TriggerKo = "구르기를 사용할 때 (1회 4점)",
+                TriggerKo = "구르기를 사용할 때 (1회 6점)",
                 EliteKo = "쿨타임·동작 시간·스태미나 소모 각각 -10% 추가",
                 Effects = new EffectDef[0],        // 특수 처리: 쿨타임 -30%, 스태미나 소모 -30%
                 EliteEffects = new EffectDef[0]
@@ -266,7 +268,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "marksmanship", NameKo = "정밀 사격", Icon = "◎", Category = "전투",
-                TriggerKo = "20m 이상 거리에서 명중 (1회 150점, 헤드샷은 +200점)",
+                TriggerKo = "25m 이상 거리에서 명중 (1회 600점, 헤드샷은 +800점)",
                 EliteKo = "헤드샷 대미지 +10%",
                 Effects = new[]
                 {
@@ -300,14 +302,14 @@ namespace Dskill
             {
                 Id = "throwing", NameKo = "투척술", Icon = "▶", Category = "전투",
                 TriggerKo = "폭발물을 던질 때 (1회 100점, 폭발 피해 1당 2점)",
-                EliteKo = "거리 +20% (추가), 폭발물 즉시 폭발 확률 30%",
+                EliteKo = "거리 +20% (추가), 지면에 닿으면 즉시 폭발",
                 Effects = new EffectDef[0],        // 특수 처리: 투척 거리 +30%, 폭발 대미지 +50%
                 EliteEffects = new EffectDef[0]
             },
             new SkillDef
             {
                 Id = "perception", NameKo = "인지/정찰", Icon = "◁", Category = "전투",
-                TriggerKo = "주변 소리를 감지할 때 (1회 4점, 1초에 최대 1번)",
+                TriggerKo = "주변 소리를 감지할 때 (1회 12점, 0.5초에 최대 1번)",
                 EliteKo = "시야·감지 +10%, 청력 +20% 추가",
                 Effects = new[]
                 {
@@ -349,8 +351,8 @@ namespace Dskill
                 EliteKo = "받는 물리 피해 -10%",
                 Effects = new[]
                 {
-                    new EffectDef("BodyArmor", StatModKind.Add, 0.1f),   // 만렙 +2.0
-                    new EffectDef("HeadArmor", StatModKind.Add, 0.1f)    // 만렙 +2.0
+                    new EffectDef("BodyArmor", StatModKind.Add, 0.075f),   // 만렙 +1.5 — 2026-09-26: 사용자 요청 2.0 → 1.5
+                    new EffectDef("HeadArmor", StatModKind.Add, 0.075f)    // 만렙 +1.5 — 위와 동일
                 },
                 EliteEffects = new[]
                 {
@@ -401,7 +403,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "reload", NameKo = "재장전", Icon = "◑", Category = "실용",
-                TriggerKo = "재장전을 끝낼 때 (1회 40점)",
+                TriggerKo = "재장전을 끝낼 때 (1회 50점)",
                 EliteKo = "재장전 속도 +10% (추가)",
                 Effects = new[]
                 {
@@ -423,7 +425,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "barter", NameKo = "흥정", Icon = "※", Category = "실용",
-                TriggerKo = "아이템을 사고팔 때 (거래 금액 1,000당 5점)",
+                TriggerKo = "아이템을 사고팔 때 (거래 금액 1,000당 10점)",
                 EliteKo = "암시장 갱신 쿨타임 -50%",
                 Effects = new EffectDef[0],        // 특수 처리: 판매 금액 보너스
                 EliteEffects = new EffectDef[0]
@@ -463,7 +465,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "crafting", NameKo = "제작", Icon = "□", Category = "실용",
-                TriggerKo = "제작 완료 (재료 가치 × 8%, 최대 400점) · 새 레시피 해금 (200점)",
+                TriggerKo = "제작 완료 (재료 가치 × 10%) · 새 레시피 해금 (200점)",
                 EliteKo = "추가 생산 확률 +20% (총 50%)",
                 Effects = new EffectDef[0],        // 특수 처리: 30% 확률로 결과물 1개 추가
                 EliteEffects = new EffectDef[0]

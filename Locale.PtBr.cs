@@ -43,6 +43,7 @@ eff.throwing|Distância de arremesso +{0}%, dano de explosão +{1}%
 eff.looting|Tempo de detecção de itens -{0}%
 eff.dash|Recarga -{0}%, tempo de ação -{1}%, custo de stamina -{2}%
 eff.melee|Velocidade de ataque corpo a corpo +{0}%
+eff.assaultAds|, tempo de mira -{0}%
 eff.hideout|Reabastecimento do comerciante -{0}%
 eff.hideoutElite|, tempo de mineração -{0}%
 eff.crafting|Chance de produção extra {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|Metabolismo
 skill.metabolism.trigger|Ao encher fome/sede com comida ou água (10 pts por ponto)
 skill.metabolism.elite|Sem dano mesmo com fome/sede em 0
 skill.dash.name|Rolamento
-skill.dash.trigger|Ao usar o rolamento (4 pts por vez)
+skill.dash.trigger|Ao usar o rolamento (6 pts por vez)
 skill.dash.elite|Recarga, tempo de ação e custo de stamina -10% a mais cada
 skill.nightvision.name|Visão noturna
 skill.nightvision.trigger|Ativo durante a noite (2 pts/s)
@@ -118,16 +119,16 @@ skill.recoil.name|Controle de recuo
 skill.recoil.trigger|Ao disparar (2 pts por tiro, 4 pts ao mirar)
 skill.recoil.elite|Recuo vertical e horizontal -15%
 skill.marksmanship.name|Precisão
-skill.marksmanship.trigger|Acertar a 20 m ou mais (150 pts, +200 na cabeça)
+skill.marksmanship.trigger|Acertar a 25 m ou mais (600 pts, +800 na cabeça)
 skill.marksmanship.elite|Dano na cabeça +10%
 skill.melee.name|Corpo a corpo
 skill.melee.trigger|Quando um ataque corpo a corpo acerta (45 pts, +90 por abate)
 skill.melee.elite|Velocidade de movimento +10% (extra)
 skill.throwing.name|Arremessos
 skill.throwing.trigger|Ao arremessar um explosivo (100 pts, 2 pts por dano de explosão)
-skill.throwing.elite|Alcance +20% (extra), 30% de chance de explodir na hora
+skill.throwing.elite|Alcance +20% (extra), explode na hora ao tocar o chão
 skill.perception.name|Percepção
-skill.perception.trigger|Ao notar um som por perto (4 pts, no máximo 1 vez por segundo)
+skill.perception.trigger|Ao notar um som por perto (12 pts, no máximo 1 vez por 0.5 s)
 skill.perception.elite|Visão e detecção +10%, audição +20% (extra)
 skill.covert.name|Movimento furtivo
 skill.covert.trigger|Ao andar (corrida excluída, 1 pt/s + 0.7 pts/m)
@@ -142,13 +143,13 @@ skill.survival.name|Sobrevivência
 skill.survival.trigger|Ao sofrer um estado (sangramento/veneno/queimadura) (300 pts, 12 pts por tick)
 skill.survival.elite|Imunidade a sangramento (30% de resistência é o efeito base)
 skill.reload.name|Recarga
-skill.reload.trigger|Ao concluir a recarga (40 pts)
+skill.reload.trigger|Ao concluir a recarga (50 pts)
 skill.reload.elite|Velocidade de recarga +10% (extra)
 skill.repair.name|Reparo
         skill.repair.trigger|Ao reparar equipamento (5 pts por ponto de durabilidade)
 skill.repair.elite|Sem perda de durabilidade máxima
 skill.barter.name|Pechincha
-skill.barter.trigger|Ao comprar ou vender (5 pts por 1.000 negociados)
+skill.barter.trigger|Ao comprar ou vender (10 pts por 1.000 negociados)
 skill.barter.elite|Reabastecimento do mercado negro -50%
 skill.looting.name|Saque
 skill.looting.trigger|Ao procurar em caixas ou corpos (20 pts por achado, 10 pts por coleta)
@@ -160,7 +161,7 @@ skill.fishing.name|Pesca
 skill.fishing.trigger|Ao pescar um peixe (250 pts por peixe)
 skill.fishing.elite|Habilidade de pesca e sorte +20% cada (extra)
 skill.crafting.name|Fabricação
-skill.crafting.trigger|Fabricação (valor dos materiais × 8%, máx. 400 pts) + cada nova receita (200 pts)
+skill.crafting.trigger|Fabricação (valor dos materiais × 10%) + cada nova receita (200 pts)
 skill.crafting.elite|Chance de produção extra +20% (50% no total)
 
 ";

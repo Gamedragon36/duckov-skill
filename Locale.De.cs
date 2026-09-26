@@ -43,6 +43,7 @@ eff.throwing|Wurfweite +{0}%, Explosionsschaden +{1}%
 eff.looting|Item-Erkennungszeit -{0}%
 eff.dash|Abklingzeit -{0}%, Aktionszeit -{1}%, Ausdauerkosten -{2}%
 eff.melee|Nahkampf-Angriffstempo +{0}%
+eff.assaultAds|, Zielzeit -{0}%
 eff.hideout|Händler-Nachschub-Abklingzeit -{0}%
 eff.hideoutElite|, Abbauzeit -{0}%
 eff.crafting|Zusätzliche Ausgabechance {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|Stoffwechsel
 skill.metabolism.trigger|Wenn Essen oder Wasser Hunger/Durst füllt (20 Pkt. pro Punkt)
 skill.metabolism.elite|Kein Schaden bei Hunger/Durst 0
 skill.dash.name|Rollen
-skill.dash.trigger|Wenn du rollst (4 Pkt. pro Rolle)
+skill.dash.trigger|Wenn du rollst (6 Pkt. pro Rolle)
 skill.dash.elite|Abklingzeit, Aktionszeit und Ausdauerkosten je -10% mehr
 skill.nightvision.name|Nachtsicht
 skill.nightvision.trigger|Bei Aktivität in der Nacht (2 Pkt./s)
@@ -118,16 +119,16 @@ skill.recoil.name|Rückstoßkontrolle
 skill.recoil.trigger|Wenn du schießt (2 Pkt. pro Schuss, 4 Pkt. beim Zielen)
 skill.recoil.elite|Vertikaler und horizontaler Rückstoß -15%
 skill.marksmanship.name|Präzisionsschuss
-skill.marksmanship.trigger|Treffer aus 20 m oder mehr (150 Pkt., +200 bei Kopfschuss)
+skill.marksmanship.trigger|Treffer aus 25 m oder mehr (600 Pkt., +800 bei Kopfschuss)
 skill.marksmanship.elite|Kopfschussschaden +10%
 skill.melee.name|Nahkampf
 skill.melee.trigger|Wenn ein Nahkampfangriff trifft (45 Pkt., +90 bei Nahkampf-Kill)
 skill.melee.elite|Bewegungsgeschwindigkeit +10% (zusätzlich)
 skill.throwing.name|Wurfwaffen
 skill.throwing.trigger|Wenn du Sprengstoff wirfst (100 Pkt., 2 Pkt. pro Explosionsschaden)
-skill.throwing.elite|Reichweite +20% (zusätzlich), 30% Chance auf Sofortzündung
+skill.throwing.elite|Reichweite +20% (zusätzlich), explodiert sofort beim Bodenkontakt
 skill.perception.name|Wahrnehmung
-skill.perception.trigger|Wenn du ein Geräusch bemerkst (4 Pkt., max. 1x pro Sekunde)
+skill.perception.trigger|Wenn du ein Geräusch bemerkst (12 Pkt., max. 1x pro 0.5 Sekunden)
 skill.perception.elite|Sicht und Erkennung +10%, Gehör +20% (zusätzlich)
 skill.covert.name|Tarnbewegung
 skill.covert.trigger|Beim Gehen (Rennen ausgenommen, 1 Pkt./s + 0.7 Pkt./m)
@@ -142,13 +143,13 @@ skill.survival.name|Überleben
 skill.survival.trigger|Bei einem Statuseffekt (Blutung/Gift/Brand) (300 Pkt., 12 Pkt. pro Tick)
 skill.survival.elite|Blutungsimmunität (30% Debuff-Widerstand ist der Basiseffekt)
 skill.reload.name|Nachladen
-skill.reload.trigger|Wenn du das Nachladen beendest (40 Pkt.)
+skill.reload.trigger|Wenn du das Nachladen beendest (50 Pkt.)
 skill.reload.elite|Nachladegeschwindigkeit +10% (zusätzlich)
 skill.repair.name|Reparatur
         skill.repair.trigger|Wenn du Ausrüstung reparierst (5 Pkt. pro Haltbarkeit)
 skill.repair.elite|Kein Verlust der max. Haltbarkeit
 skill.barter.name|Feilschen
-skill.barter.trigger|Beim Kaufen oder Verkaufen (5 Pkt. pro 1.000 Handel)
+skill.barter.trigger|Beim Kaufen oder Verkaufen (10 Pkt. pro 1.000 Handel)
 skill.barter.elite|Schwarzmarkt-Abklingzeit -50%
 skill.looting.name|Plündern
 skill.looting.trigger|Beim Durchsuchen von Kisten oder Leichen (20 Pkt. pro Fund, 10 Pkt. pro Aufnahme)
@@ -160,7 +161,7 @@ skill.fishing.name|Angeln
 skill.fishing.trigger|Wenn du einen Fisch fängst (250 Pkt. pro Fisch)
 skill.fishing.elite|Angelkunst und Glück je +20% (zusätzlich)
 skill.crafting.name|Herstellen
-skill.crafting.trigger|Herstellen (Materialwert × 8%, max. 400 Pkt.) + jedes neue Rezept (200 Pkt.)
+skill.crafting.trigger|Herstellen (Materialwert × 10%) + jedes neue Rezept (200 Pkt.)
 skill.crafting.elite|Zusätzliche Ausgabechance +20% (insgesamt 50%)
 
 ";

@@ -43,6 +43,7 @@ eff.throwing|投擲距離 +{0}%、爆発ダメージ +{1}%
 eff.looting|アイテム探知時間 -{0}%
 eff.dash|クールタイム -{0}%、動作時間 -{1}%、スタミナ消費 -{2}%
 eff.melee|近接攻撃速度 +{0}%
+eff.assaultAds|、エイム時間 -{0}%
 eff.hideout|商人の補充クールタイム -{0}%
 eff.hideoutElite|、採掘時間 -{0}%
 eff.crafting|追加生産確率 {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|代謝
 skill.metabolism.trigger|食べ物・水で空腹/水分を回復したとき（1 につき 20 点）
 skill.metabolism.elite|空腹・水分が 0 でもダメージを受けない
 skill.dash.name|ローリング
-skill.dash.trigger|ローリングを使ったとき（1 回 4 点）
+skill.dash.trigger|ローリングを使ったとき（1 回 6 点）
 skill.dash.elite|クールタイム・動作時間・スタミナ消費がさらに -10%
 skill.nightvision.name|暗視
 skill.nightvision.trigger|夜間に活動したとき（毎秒 2 点）
@@ -118,16 +119,16 @@ skill.recoil.name|反動制御
 skill.recoil.trigger|銃を発砲したとき（1 発 2 点、照準射撃は 4 点）
 skill.recoil.elite|縦・横反動 -15%
 skill.marksmanship.name|精密射撃
-skill.marksmanship.trigger|20m 以上の距離で命中（1 回 150 点、ヘッドショットは +200 点）
+skill.marksmanship.trigger|25m 以上の距離で命中（1 回 600 点、ヘッドショットは +800 点）
 skill.marksmanship.elite|ヘッドショットダメージ +10%
 skill.melee.name|近接戦闘
 skill.melee.trigger|近接攻撃が命中したとき（1 回 45 点、近接撃破 +90 点）
 skill.melee.elite|移動速度 +10%（追加）
 skill.throwing.name|投擲術
 skill.throwing.trigger|爆発物を投げたとき（1 回 100 点、爆発ダメージ 1 につき 2 点）
-skill.throwing.elite|距離 +20%（追加）、30% の確率で即時爆発
+skill.throwing.elite|距離 +20%（追加）、地面に触れると即時爆発
 skill.perception.name|認知・偵察
-skill.perception.trigger|周囲の音を感知したとき（1 回 4 点、1 秒に最大 1 回）
+skill.perception.trigger|周囲の音を感知したとき（1 回 12 点、0.5 秒に最大 1 回）
 skill.perception.elite|視界・感知 +10%、聴力 +20%（追加）
 skill.covert.name|隠密移動
 skill.covert.trigger|歩いて移動したとき（走りは除く、毎秒 1 点 + 1m あたり 0.7 点）
@@ -142,13 +143,13 @@ skill.survival.name|サバイバル
 skill.survival.trigger|状態異常（出血・中毒・燃焼）になったとき（1 回 300 点、継続ダメージ 1 につき 12 点）
 skill.survival.elite|出血しない（30% のデバフ耐性は基本効果）
 skill.reload.name|リロード
-skill.reload.trigger|リロードを完了したとき（1 回 40 点）
+skill.reload.trigger|リロードを完了したとき（1 回 50 点）
 skill.reload.elite|リロード速度 +10%（追加）
 skill.repair.name|修理
         skill.repair.trigger|装備を修理したとき（修理した耐久度 1 につき 5 点）
 skill.repair.elite|最大耐久度が減らなくなる
 skill.barter.name|値切り
-skill.barter.trigger|アイテムを売買したとき（取引額 1,000 につき 5 点）
+skill.barter.trigger|アイテムを売買したとき（取引額 1,000 につき 10 点）
 skill.barter.elite|闇市場の補充クールタイム -50%
 skill.looting.name|漁り
 skill.looting.trigger|箱や死体からアイテムを見つけたとき（1 個 20 点、拾得 1 個 10 点）
@@ -160,7 +161,7 @@ skill.fishing.name|釣り
 skill.fishing.trigger|魚を釣り上げたとき（1 匹 250 点）
 skill.fishing.elite|釣り能力・運がそれぞれ +20%（追加）
 skill.crafting.name|製作
-skill.crafting.trigger|製作完了（材料価値 × 8%、最大 400 点）＋ 新レシピ解放（200 点）
+skill.crafting.trigger|製作完了（材料価値 × 10%）＋ 新レシピ解放（200 点）
 skill.crafting.elite|追加生産確率 +20%（合計 50%）
 
 ";

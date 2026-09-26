@@ -30,10 +30,14 @@ namespace Dskill
         ///  (2026-09-26 사용자 요청 · 게임 입력 파이프라인을 그대로 이용 — 쿨타임·스태미나 검사는 게임이 수행)</summary>
         public bool DashHoldRepeat = true;
 
+        /// <summary>근접 무기를 들고 공격 버튼(마우스 왼쪽)을 꾹 누르고 있으면 계속 휘두른다.
+        ///  (2026-09-26 사용자 요청 · 총을 들고 있을 때는 동작하지 않아 자동 사격이 되지 않는다)</summary>
+        public bool MeleeHoldRepeat = true;
+
         // ----- 제작 스킬 밸런스 (값은 여기서 자유롭게 조정) -----
         public float CraftUnlockXp = 200f;    // 새 레시피 해금 XP (여러 개가 한꺼번에 풀리면 1회만 인정)
-        public float CraftXpPerValue = 0.08f; // 제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)
-        public float CraftXpCap = 400f;       // 제작 1회 최대 XP (0 = 제한 없음)
+        public float CraftXpPerValue = 0.10f; // 제작 1회 XP = 재료 가치 × 이 값 (0.10 = 10%) — 2026-09-26 사용자 요청
+        public float CraftXpCap = 0f;         // 제작 1회 최대 XP (0 = 제한 없음) — 2026-09-26: 상한 폐지(400 → 0)
 
         /// <summary>하이드아웃(기지)에서 경험치를 받을 수 있는 스킬 (쉼표 구분).
         ///  여기 없는 스킬은 기지에서 오르지 않는다(기지 배회·정리로 오르는 문제 방지).</summary>
@@ -69,7 +73,7 @@ namespace Dskill
                 {
                     config.Parse(File.ReadAllLines(config.ConfigPath));
                     // 구버전 config.ini 에는 없는 새 옵션을 한 줄 추가해 준다(값은 코드 기본값 그대로 동작)
-                    config.EnsureDashHoldOption();
+                    config.EnsureHoldOptions();
                 }
                 else
                 {
@@ -124,6 +128,7 @@ namespace Dskill
                     case "xp_step": XpStep = ParseFloat(value, XpStep); break;
             case "melee_speed_test": MeleeSpeedTest = ParseFloat(value, MeleeSpeedTest); break;
                     case "dash_hold_repeat": DashHoldRepeat = ParseBool(value, DashHoldRepeat); break;
+                    case "melee_hold_repeat": MeleeHoldRepeat = ParseBool(value, MeleeHoldRepeat); break;
                     case "xp_multiplier": XpMultiplier = ParseFloat(value, XpMultiplier); break;
                     case "hotkey": Hotkey = value; break;
                     case "notify_levelup": NotifyLevelUp = ParseBool(value, NotifyLevelUp); break;
@@ -211,9 +216,10 @@ namespace Dskill
             lines.Add("xp_stage = 5          # " + Locale.T("cfg.xpStage", "경험치 난이도 1~5 (1=가장 빠름, 5=기본)"));
             lines.Add("melee_speed_test = 0    # " + Locale.T("cfg.meleeSpeedTest", "작성자 테스트용: 근접 공격속도 강제 감소 (0=끔, 0.9=-90%)"));
             lines.Add(DashHoldRepeatLine());
+            lines.Add(MeleeHoldRepeatLine());
             lines.Add("craft_unlock_xp = 200    # " + Locale.T("cfg.craftUnlockXp", "새 레시피 해금 XP (한꺼번에 여러 개가 풀리면 1회만 인정)"));
-            lines.Add("craft_xp_per_value = 0.08 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.08 = 8%)"));
-            lines.Add("craft_xp_cap = 400       # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));
+            lines.Add("craft_xp_per_value = 0.10 # " + Locale.T("cfg.craftXpPerValue", "제작 1회 XP = 재료 가치 × 이 값 (0.10 = 10%)"));
+            lines.Add("craft_xp_cap = 0          # " + Locale.T("cfg.craftXpCap", "제작 1회 최대 XP (0 = 제한 없음)"));
             lines.Add("hideout_skills = hideout,crafting,repair,barter,metabolism # " + Locale.T("cfg.hideoutSkills", "기지에서 경험치를 받을 스킬(쉼표 구분) — 나머지는 기지에서 오르지 않음"));
             lines.Add("upload_now = false    # " + Locale.T("cfg.uploadNow", "true 로 두고 실행하면 창작마당 업로드를 1회 실행 (제작자용)"));
             lines.Add("");
@@ -277,8 +283,15 @@ namespace Dskill
                    Locale.T("cfg.dashHoldRepeat", "구르기 키를 꾹 누르면 쿨타임마다 자동으로 다시 구르기 (true/false)");
         }
 
-        /// <summary>구버전 config.ini 에 새 옵션(dash_hold_repeat)이 없으면 맨 끝에 한 줄 추가한다.</summary>
-        private void EnsureDashHoldOption()
+        /// <summary>설정 파일에 쓸 melee_hold_repeat 한 줄 (기본값·설명 포함)</summary>
+        private string MeleeHoldRepeatLine()
+        {
+            return "melee_hold_repeat = " + (MeleeHoldRepeat ? "true" : "false") + "    # " +
+                   Locale.T("cfg.meleeHoldRepeat", "근접 무기로 공격 버튼을 꾹 누르면 계속 휘두르기 (true/false)");
+        }
+
+        /// <summary>구버전 config.ini 에 새 옵션(홀드 반복 2종)이 없으면 맨 끝에 추가한다.</summary>
+        private void EnsureHoldOptions()
         {
             try
             {
@@ -286,26 +299,36 @@ namespace Dskill
                 {
                     return;
                 }
-                string[] lines = File.ReadAllLines(ConfigPath);
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].TrimStart().StartsWith("dash_hold_repeat"))
-                    {
-                        return;   // 이미 있음
-                    }
-                }
 
-                string[] bigger = new string[lines.Length + 2];
-                Array.Copy(lines, bigger, lines.Length);
-                bigger[lines.Length] = "";
-                bigger[lines.Length + 1] = DashHoldRepeatLine();
-                File.WriteAllLines(ConfigPath, bigger, new System.Text.UTF8Encoding(false));
-                UnityEngine.Debug.Log("[Dskill] 설정 파일에 새 옵션을 추가했습니다: dash_hold_repeat");
+                List<string> lines = new List<string>(File.ReadAllLines(ConfigPath));
+                bool added = false;
+                added |= AppendOptionIfMissing(lines, "dash_hold_repeat", DashHoldRepeatLine());
+                added |= AppendOptionIfMissing(lines, "melee_hold_repeat", MeleeHoldRepeatLine());
+                if (added)
+                {
+                    File.WriteAllLines(ConfigPath, lines.ToArray(), new System.Text.UTF8Encoding(false));
+                    UnityEngine.Debug.Log("[Dskill] 설정 파일에 새 옵션을 추가했습니다 (dash_hold_repeat / melee_hold_repeat)");
+                }
             }
             catch (Exception e)
             {
                 UnityEngine.Debug.LogWarning("[Dskill] 설정 파일 옵션 추가 실패: " + e.Message);
             }
+        }
+
+        /// <summary>해당 키 줄이 없으면 빈 줄 + 옵션 줄을 붙인다.</summary>
+        private static bool AppendOptionIfMissing(List<string> lines, string key, string optionLine)
+        {
+            foreach (string raw in lines)
+            {
+                if (raw.TrimStart().StartsWith(key))
+                {
+                    return false;   // 이미 있음
+                }
+            }
+            lines.Add("");
+            lines.Add(optionLine);
+            return true;
         }
 
         /// <summary>게임 안(스킬 창)에서 난이도를 바꾸고 설정 파일에 저장한다.</summary>

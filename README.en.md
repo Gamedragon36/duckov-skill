@@ -27,7 +27,7 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | Saving | XP is stored **per save slot** |
 | Inheritance | Skills earned in **other saves** boost the XP rate of the current run (roguelike) |
 | Config | All values are adjustable in `config.ini` next to the DLL |
-| Controls | **Holding the dash key (Space)** rolls again automatically each cooldown (`dash_hold_repeat`, on by default) |
+| Controls | **Holding the dash key (Space)** keeps rolling each cooldown (`dash_hold_repeat`) · **holding the attack button with a melee weapon** keeps swinging (`melee_hold_repeat`) — both on by default |
 | Languages | All **10 languages** the game supports (Korean, English, Simplified/Traditional Chinese, Japanese, German, Russian, Spanish, French, Portuguese-BR) — follows the language you selected in the game (falls back to your OS language), or set `language` in `config.ini` |
 
 ## Skills
@@ -37,39 +37,39 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
 | ◆ | Strength | move while above 60% carry weight (1.6 pts/m) | max weight **+20**, movement **+10%** | bag **+5 slots**, movement **+10%** |
-| ▲ | Endurance | sprint or dash (1.04 pts/m) | stamina drain **-40%** (also stacks on dash), movement **+10%** | stamina regen **+30%** |
+| ▲ | Endurance | sprint or dash (1.04 pts/m) | stamina drain **-60%** (also stacks on dash) | stamina regen **+30%** |
 | ● | Vitality | take damage | max health **+20** | **+5** |
 | ＋ | Healing | heal with items (10 pts per HP) | healing **speed -40%** (use time) | **-10%** more (total -50%) |
 | ◉ | Metabolism | eat / drink | hunger & water drain **-30%** | **no starvation damage** |
-| ○ | Dash | dodge-roll (4 pts per roll) | cooldown, **action time** & stamina **-40%** (distance kept via speed compensation) | each **-10%** more |
+| ○ | Dash | dodge-roll (6 pts per roll) | cooldown, **action time** & stamina **-40%** (distance kept via speed compensation) | each **-10%** more |
 | ▼ | Night Vision | spend time at night (raids) | night vision ability **+0.3** | **+0.2** (total 1.0 = no night penalty) |
 
 ### Combat
 
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
-| ★ | Assault | **when your bullet hits** (8 pts; firing alone gives none) | gun damage **+15%** | gun crit rate **+10%** |
+| ★ | Assault | **when your bullet hits** (8 pts; firing alone gives none) | gun damage **+15%**, aim time **-50%** | gun crit rate **+10%** |
 | ▽ | Recoil Control | fire your gun (ADS counts more) | recoil control **+0.2** | vertical/horizontal recoil **-15%** |
-| ◎ | Marksmanship | hit targets **beyond 20 m** (**150** pts, headshot **+200**) | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
+| ◎ | Marksmanship | hit targets **beyond 25 m** (**600** pts, headshot **+800**) | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
 | ◀ | Melee | hit with melee weapons (45 pts, +90 on kill) | melee damage **+50%**, melee crit **+50%**, movement **+10%**, **melee attack speed +30%** | movement **+10%**, **melee attack speed +20%** more |
-| ▶ | Throwing | throw explosives | throw distance **+30%**, explosion damage **+50%** | distance **+20%**, **30% chance of instant detonation** |
-| ◁ | Perception | hear sounds around you | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
+| ▶ | Throwing | throw explosives | throw distance **+30%**, explosion damage **+50%** | distance **+20%**, **detonates instantly on ground contact** |
+| ◁ | Perception | hear sounds around you (12 pts, max once per 0.5 s) | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
 
 ### Practical
 
 | Icon | Skill | How to level up | Max effect | ★Elite |
 |---|---|---|---|---|
 | ◐ | Covert Movement | walk (not sprint, 1 pt/s + 0.7 pts/m) | walk sound **-20%**, run sound **-10%** | walk/run sound **-25%** more |
-| ◇ | Armor | take damage while wearing armor | body & head armor **+2.0** | physical damage taken **-10%** |
+| ◇ | Armor | take damage while wearing armor | body & head armor **+1.5** | physical damage taken **-10%** |
 | ⊙ | Elemental Adaptation | take elemental damage (fire/poison/electric/ice/ghost/space) (20 pts per damage) | each element damage **-10%** | each element **-5%** more (-15% total) |
 | ☆ | Survival | get debuffs | **30% debuff resistance**, fire & poison damage **-10%** | **bleed immunity** |
-| ◑ | Reloading | finish a reload | reload speed **+30%** | **+10%** more |
+| ◑ | Reloading | finish a reload (50 pts) | reload speed **+30%** | **+10%** more |
 | ◈ | Repair | repair gear | max durability loss **-50%** | **no max durability loss** |
-| ※ | Bartering | buy & sell items | sale price **+10%** | black-market refresh **-50%** |
+| ※ | Bartering | buy & sell items (10 pts per 1,000) | sale price **+10%** | black-market refresh **-50%** |
 | ▣ | Looting | reveal items in containers | item detection time **-70%** (min 0.2 s) | **opening a container: 50% chance to reveal every item inside instantly** |
 | ■ | Hideout | stay at the hideout / construct buildings | merchant restock cooldown **-50%** | bitcoin miner time **-20%** |
 | ▪ | Fishing | catch fish | fishing ability **+30%**, fishing luck **+20%** | **+20%** each |
-| □ | Crafting | craft items (material value × 8%, max 400 pts) / unlock recipes (200 pts) | **30% chance of a bonus item** | **+20%** (total 50%) |
+| □ | Crafting | craft items (material value × 10%) / unlock recipes (200 pts) | **30% chance of a bonus item** | **+20%** (total 50%) |
 
 ## Growth speed
 
@@ -105,7 +105,8 @@ xp_step = 100           # XP added per level
 xp_multiplier = 1.0     # global XP gain multiplier (0.5 = half, 2.0 = double)
 hotkey = F6             # key that opens the skill window
 notify_levelup = true   # show level-up notifications
-dash_hold_repeat = true # hold the dash key to keep rolling automatically
+dash_hold_repeat = true  # hold the dash key to keep rolling automatically
+melee_hold_repeat = true # hold the attack button with a melee weapon to keep swinging
 
 [meta]
 meta_enabled = true          # roguelike inheritance

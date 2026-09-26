@@ -212,7 +212,9 @@ namespace Dskill
         /// <summary>업로드가 끝날 때까지 기다렸다가 설정 파일을 원래 자리로 되돌린다.</summary>
         private System.Collections.IEnumerator RestoreConfigAfterUpload(string configPath, string backupPath)
         {
-            yield return new WaitForSeconds(45f);   // 업로드(약 5~10초) + 여유
+            yield return new WaitForSecondsRealtime(45f);   // 업로드(약 5~10초) + 여유
+            // ⚠ WaitForSeconds(스케일 시간) 를 쓰면 **메인 메뉴(시간 정지)에서 영원히 멈춘다**
+            //    (0.0.9 업로드에서 실제로 겪음) → 실시간 대기로 바꿔 메뉴에서도 복구되게 한다.
             try
             {
                 if (System.IO.File.Exists(backupPath) && !System.IO.File.Exists(configPath))
@@ -327,6 +329,7 @@ namespace Dskill
             HandleInput();
             DetectDash();
             HandleDashHold();   // 구르기 키를 꾹 누르면 자동으로 다시 구르게 한다 (0.0.9)
+            HandleMeleeHold();  // 근접 무기를 들고 공격 버튼을 꾹 누르면 계속 휘두르게 한다 (0.0.9)
 
             _tickTimer += Time.unscaledDeltaTime;
             if (_tickTimer >= 0.5f)
@@ -477,6 +480,7 @@ namespace Dskill
             CheckPickups();
             ApplyDashSettings();
             ApplyMeleeSpeedSettings();
+            ApplyAssaultAdsTime();   // 사격술: 총기 조준 시간 감소 (2026-09-26)
             DetectHideoutTime(elapsed);
             ApplyHideoutEffects(elapsed);
             DetectNightTime(elapsed);

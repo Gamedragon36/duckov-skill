@@ -43,6 +43,7 @@ eff.throwing|Throw range +{0}%, explosion damage +{1}%
 eff.looting|Item detection time -{0}%
 eff.dash|Cooldown -{0}%, action time -{1}%, stamina cost -{2}%
 eff.melee|Melee attack speed +{0}%
+eff.assaultAds|, aim time -{0}%
 eff.hideout|Trader restock cooldown -{0}%
 eff.hideoutElite|, mining time -{0}%
 eff.crafting|Extra output chance {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|Metabolism
 skill.metabolism.trigger|When food or water restores hunger/thirst (20 pts per point)
 skill.metabolism.elite|No damage even at zero hunger/thirst
 skill.dash.name|Roll
-skill.dash.trigger|When you roll (4 pts per roll)
+skill.dash.trigger|When you roll (6 pts per roll)
 skill.dash.elite|Cooldown, action time and stamina cost -10% more each
 skill.nightvision.name|Night Vision
 skill.nightvision.trigger|While active at night (2 pts/s)
@@ -118,16 +119,16 @@ skill.recoil.name|Recoil Control
 skill.recoil.trigger|When you fire a gun (2 pts per shot, 4 pts when aiming)
 skill.recoil.elite|Vertical and horizontal recoil -15%
 skill.marksmanship.name|Marksmanship
-skill.marksmanship.trigger|Hit a target from 20 m or more (150 pts, +200 for a headshot)
+skill.marksmanship.trigger|Hit a target from 25 m or more (600 pts, +800 for a headshot)
 skill.marksmanship.elite|Headshot damage +10%
 skill.melee.name|Melee Combat
 skill.melee.trigger|When a melee attack hits (45 pts, +90 for a melee kill)
 skill.melee.elite|Movement speed +10% (extra)
 skill.throwing.name|Throwables
 skill.throwing.trigger|When you throw an explosive (100 pts, 2 pts per explosion damage)
-skill.throwing.elite|Range +20% (extra), 30% chance to detonate instantly
+skill.throwing.elite|Range +20% (extra), detonates instantly on ground contact
 skill.perception.name|Awareness
-skill.perception.trigger|When you notice a sound nearby (4 pts, at most once per second)
+skill.perception.trigger|When you notice a sound nearby (12 pts, at most once per 0.5 s)
 skill.perception.elite|View and detection +10%, hearing +20% (extra)
 skill.covert.name|Stealth Movement
 skill.covert.trigger|While walking (sprinting excluded, 1 pt/s + 0.7 pts/m)
@@ -142,13 +143,13 @@ skill.survival.name|Survival
 skill.survival.trigger|When you get a status effect (bleed/poison/burn) (300 pts, 12 pts per damage-over-time tick)
 skill.survival.elite|Bleed immunity (30% debuff resistance is the base effect)
 skill.reload.name|Reloading
-skill.reload.trigger|When you finish a reload (40 pts)
+skill.reload.trigger|When you finish a reload (50 pts)
 skill.reload.elite|Reload speed +10% (extra)
 skill.repair.name|Repair
         skill.repair.trigger|When you repair gear (5 pts per durability restored)
 skill.repair.elite|No max durability loss
 skill.barter.name|Bartering
-skill.barter.trigger|When you buy or sell items (5 pts per 1,000 traded)
+skill.barter.trigger|When you buy or sell items (10 pts per 1,000 traded)
 skill.barter.elite|Black market restock cooldown -50%
 skill.looting.name|Scavenging
 skill.looting.trigger|When you search containers or bodies (20 pts per find, 10 pts per pickup)
@@ -160,7 +161,7 @@ skill.fishing.name|Fishing
 skill.fishing.trigger|When you catch a fish (250 pts per fish)
 skill.fishing.elite|Fishing skill and luck +20% each (extra)
 skill.crafting.name|Crafting
-skill.crafting.trigger|Crafting (material value × 8%, max 400 pts) plus each new recipe unlocked (200 pts)
+skill.crafting.trigger|Crafting (material value × 10%) plus each new recipe unlocked (200 pts)
 skill.crafting.elite|Extra output chance +20% (50% total)
 # ==== config.ini 주석 ====
 cfg.header|Tarkov-style skill system - settings
@@ -185,6 +186,7 @@ cfg.language|UI language: auto (follows the language you chose in the game), or 
 cfg.xpStage|XP gain difficulty stage 1-5 (1 = fastest, 5 = default rate)
 cfg.uploadNow|Developer: set true and launch to upload this mod to the Steam Workshop once
 cfg.dashHoldRepeat|Hold the dash key to keep rolling automatically (each cooldown)
+cfg.meleeHoldRepeat|Hold the attack button with a melee weapon to keep swinging
 cfg.craftUnlockXp|XP for unlocking a new recipe (a batch unlock counts once)
 cfg.craftXpPerValue|Crafting XP = material value x this value (0.08 = 8%)
 cfg.craftXpCap|Maximum XP per craft (0 = no limit)

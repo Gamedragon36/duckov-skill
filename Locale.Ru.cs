@@ -43,6 +43,7 @@ eff.throwing|Дальность броска +{0}%, урон взрыва +{1}%
 eff.looting|Время поиска предметов -{0}%
 eff.dash|Перезарядка -{0}%, время действия -{1}%, расход выносливости -{2}%
 eff.melee|Скорость атаки в ближнем бою +{0}%
+eff.assaultAds|, время прицеливания -{0}%
 eff.hideout|Перезарядка пополнения торговца -{0}%
 eff.hideoutElite|, время добычи -{0}%
 eff.crafting|Шанс доп. продукции {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|Метаболизм
 skill.metabolism.trigger|При восстановлении сытости/воды (10 очков за единицу)
 skill.metabolism.elite|Нет урона при нулевой сытости и воде
 skill.dash.name|Кувырок
-skill.dash.trigger|При использовании кувырка (4 очка за раз)
+skill.dash.trigger|При использовании кувырка (6 очков за раз)
 skill.dash.elite|Перезарядка, время действия и расход выносливости ещё -10%
 skill.nightvision.name|Ночное зрение
 skill.nightvision.trigger|При активности ночью (2 очка/с)
@@ -118,16 +119,16 @@ skill.recoil.name|Контроль отдачи
 skill.recoil.trigger|При выстреле (2 очка за выстрел, 4 очка при прицеливании)
 skill.recoil.elite|Вертикальная и горизонтальная отдача -15%
 skill.marksmanship.name|Точная стрельба
-skill.marksmanship.trigger|Попадание с 20 м и далее (150 очков, +200 за выстрел в голову)
+skill.marksmanship.trigger|Попадание с 25 м и далее (600 очков, +800 за выстрел в голову)
 skill.marksmanship.elite|Урон в голову +10%
 skill.melee.name|Ближний бой
 skill.melee.trigger|При попадании в ближнем бою (45 очков, +90 за убийство)
 skill.melee.elite|Скорость передвижения +10% (дополнительно)
 skill.throwing.name|Метательное
 skill.throwing.trigger|При броске взрывчатки (100 очков, 2 очка за единицу урона взрыва)
-skill.throwing.elite|Дальность +20% (дополнительно), 30% шанс мгновенного взрыва
+skill.throwing.elite|Дальность +20% (дополнительно), мгновенный взрыв при касании земли
 skill.perception.name|Восприятие
-skill.perception.trigger|При обнаружении звука рядом (4 очка, не чаще 1 раза в секунду)
+skill.perception.trigger|При обнаружении звука рядом (12 очков, не чаще 1 раза в 0.5 секунды)
 skill.perception.elite|Обзор и обнаружение +10%, слух +20% (дополнительно)
 skill.covert.name|Скрытное движение
 skill.covert.trigger|При ходьбе (кроме бега, 1 очко/с + 0.7 очка/м)
@@ -142,13 +143,13 @@ skill.survival.name|Выживание
 skill.survival.trigger|При получении статуса (кровотечение/яд/огонь) (300 очков, 12 очков за тик)
 skill.survival.elite|Иммунитет к кровотечению (30% сопротивление — базовый эффект)
 skill.reload.name|Перезарядка
-skill.reload.trigger|При завершении перезарядки (40 очков)
+skill.reload.trigger|При завершении перезарядки (50 очков)
 skill.reload.elite|Скорость перезарядки +10% (дополнительно)
 skill.repair.name|Ремонт
         skill.repair.trigger|При ремонте снаряжения (5 очков за единицу прочности)
 skill.repair.elite|Макс. прочность больше не снижается
 skill.barter.name|Торговля
-skill.barter.trigger|При покупке или продаже (5 очков за 1 000 оборота)
+skill.barter.trigger|При покупке или продаже (10 очков за 1 000 оборота)
 skill.barter.elite|Перезарядка чёрного рынка -50%
 skill.looting.name|Обыск
 skill.looting.trigger|При поиске в ящиках и телах (20 очков за находку, 10 очков за подбор)
@@ -160,7 +161,7 @@ skill.fishing.name|Рыбалка
 skill.fishing.trigger|При поимке рыбы (250 очков за рыбу)
 skill.fishing.elite|Навык рыбалки и удача по +20% (дополнительно)
 skill.crafting.name|Изготовление
-skill.crafting.trigger|Изготовление (стоимость материалов × 8%, макс. 400 очков) + каждый новый рецепт (200 очков)
+skill.crafting.trigger|Изготовление (стоимость материалов × 10%) + каждый новый рецепт (200 очков)
 skill.crafting.elite|Шанс доп. продукции +20% (итого 50%)
 
 ";

@@ -23,6 +23,7 @@ namespace Dskill
         private static MetaProgress _drawMeta;
         private static bool _positionInitialized;
         private static Vector2 _listScroll;
+        private static float _loggedHeight = -1f;    // 창 높이 로그 중복 방지(검증용)
         private const int WindowId = 710426;
 
         /// <summary>Tab 키로 카테고리 전환</summary>
@@ -129,22 +130,35 @@ namespace Dskill
             DrawDivider();
 
             // 스킬이 많아도 창이 화면을 넘지 않도록 목록만 필요할 때 스크롤한다
-            int rowCount = 0;
+            float contentWidth = Mathf.Max(260f, _windowRect.width - 26f);
+            float listHeight = 0f;
             foreach (SkillDef def in SkillDefs.All)
             {
                 if (def.Category == category)
                 {
-                    rowCount++;
+                    listHeight += RowHeight(system, def, contentWidth);
                 }
             }
-            float listHeight = rowCount * 62f;   // 줄이 하나 늘어(레벨당 수치) 46 → 62
-            float maxListHeight = Mathf.Max(160f, Screen.height * 0.6f);
+            // 스크롤 기준을 '창 높이 상한'과 일치시킨다 → 창이 화면보다 커져 잘리는 일이 없게
+            float headerHeight = 176f + (_drawMeta != null ? 18f : 0f);
+            float windowCap = Mathf.Max(240f, Screen.height - 40f);
+            float maxListHeight = Mathf.Max(160f, Mathf.Min(Screen.height * 0.6f, windowCap - headerHeight));
             float displayListHeight = Mathf.Min(listHeight, maxListHeight);
 
-            // 창 높이 = 헤더/탭/푸터(약 140) + 목록 높이 (+ 계승 줄)
+            // 창 높이 = 헤더/탭/푸터(약 176) + 목록 높이 (+ 계승 줄)
             // 화면보다 커지지 않게 제한한다.
-            _autoHeight = 168f + displayListHeight + (_drawMeta != null ? 18f : 0f);
-            _autoHeight = Mathf.Min(_autoHeight, Mathf.Max(240f, Screen.height - 40f));
+            _autoHeight = headerHeight + displayListHeight;
+            _autoHeight = Mathf.Min(_autoHeight, windowCap);
+
+            // 검증용: 창 높이 계산 결과를 남긴다(잘림 여부를 로그로 확인)
+            if (Mathf.Abs(_loggedHeight - _autoHeight) > 0.5f)
+            {
+                _loggedHeight = _autoHeight;
+                Debug.Log("[Dskill] 스킬 창 높이: 헤더 " + headerHeight.ToString("0") + " + 목록 " + displayListHeight.ToString("0") +
+                          " (전체 필요 " + listHeight.ToString("0") + ", 화면 상한 " + maxListHeight.ToString("0") + ")" +
+                          " = 창 " + _autoHeight.ToString("0") + " / 화면 " + Screen.height +
+                          (listHeight > maxListHeight ? " → 목록 스크롤 사용" : " → 스크롤 없음"));
+            }
 
             if (listHeight > maxListHeight)
             {
@@ -219,6 +233,37 @@ namespace Dskill
             GUILayout.Space(4f);
         }
 
+        /// <summary>줄 하나가 차지하는 실제 높이를 계산한다.
+        ///  (예전에는 '줄당 62px' 고정이라, 문구가 줄바꿈되면 목록이 계산보다 커져 **아래가 잘렸다** — 2026-09-26 수정)</summary>
+        private static float RowHeight(SkillSystem system, SkillDef def, float contentWidth)
+        {
+            int level = system.GetLevel(def.Id);
+
+            // 1줄: 아이콘·이름·레벨·막대·퍼센트 + 효과 문구(남은 폭, 줄바꿈될 수 있음)
+            float effectWidth = Mathf.Max(120f, contentWidth - 430f);
+            string effects = system.DescribeEffects(def.Id, level);
+            float rowLine = Mathf.Max(22f, _effectLabel.CalcHeight(new GUIContent(effects), effectWidth) + 4f);
+
+            // 성장 문구 — DrawRow 가 그리는 **문자열과 똑같이** 만들어 계산한다(색 태그도 레이아웃에 포함되므로)
+            string growthText = "<color=#8FA3B8>       " + Locale.F("ui.growth", "성장: {0}", Locale.SkillTrigger(def));
+            if (system.IsElite(def.Id))
+            {
+                growthText += "   ★" + Locale.SkillElite(def);
+            }
+            growthText += "</color>";
+            float growthLine = _subLabel.CalcHeight(new GUIContent(growthText), contentWidth) + 3f;
+
+            // 레벨당 수치 줄(있을 때만) — DrawRow 와 같은 접두 공백 포함
+            float perLevelLine = 0f;
+            string perLevel = system.DescribePerLevel(def);
+            if (!string.IsNullOrEmpty(perLevel))
+            {
+                perLevelLine = _subLabel.CalcHeight(new GUIContent("<color=#7FB8E8>       " + perLevel + "</color>"), contentWidth) + 3f;
+            }
+
+            return rowLine + growthLine + perLevelLine + 10f;   // 마지막 10 = 행 사이 여백(안전 여유 포함)
+        }
+
         /// <summary>경험치 막대를 색 사각형으로 그린다.</summary>
         private static void DrawBar(float ratio)
         {
@@ -253,8 +298,8 @@ namespace Dskill
             _nameLabel = new GUIStyle(GUI.skin.label) { fontSize = 15, richText = true };
             _levelLabel = new GUIStyle(GUI.skin.label) { fontSize = 14, richText = true };
             _percentLabel = new GUIStyle(GUI.skin.label) { fontSize = 13, alignment = TextAnchor.MiddleRight };
-            _effectLabel = new GUIStyle(GUI.skin.label) { fontSize = 14, richText = true };
-            _subLabel = new GUIStyle(GUI.skin.label) { fontSize = 12, richText = true };
+            _effectLabel = new GUIStyle(GUI.skin.label) { fontSize = 14, richText = true, wordWrap = true };
+            _subLabel = new GUIStyle(GUI.skin.label) { fontSize = 12, richText = true, wordWrap = true };
             _footerLabel = new GUIStyle(GUI.skin.label) { fontSize = 12 };
             _stylesReady = true;
         }

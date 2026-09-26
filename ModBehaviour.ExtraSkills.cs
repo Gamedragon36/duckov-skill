@@ -24,7 +24,8 @@ namespace Dskill
             {
                 return;
             }
-            if (Time.time - _lastSoundXpTime < 1f)
+            // 2026-09-26 사용자 요청 B안: 캡 1초 → 0.5초 (소리 1회당 점수는 Rates.PerceptionPerSound = 12)
+            if (Time.time - _lastSoundXpTime < 0.5f)
             {
                 return;
             }

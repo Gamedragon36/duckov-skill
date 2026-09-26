@@ -43,6 +43,7 @@ eff.throwing|投擲距離 +{0}%，爆炸傷害 +{1}%
 eff.looting|物品搜索時間 -{0}%
 eff.dash|冷卻 -{0}%，動作時間 -{1}%，耐力消耗 -{2}%
 eff.melee|近戰攻擊速度 +{0}%
+eff.assaultAds|，瞄準時間 -{0}%
 eff.hideout|商人補貨冷卻 -{0}%
 eff.hideoutElite|，挖礦時間 -{0}%
 eff.crafting|額外產出機率 {0}%
@@ -106,7 +107,7 @@ skill.metabolism.name|新陳代謝
 skill.metabolism.trigger|用食物或水補充飢餓/水分時（每點 20 點）
 skill.metabolism.elite|飢餓、水分為 0 時也不會受到傷害
 skill.dash.name|翻滾
-skill.dash.trigger|使用翻滾時（每次 4 點）
+skill.dash.trigger|使用翻滾時（每次 6 點）
 skill.dash.elite|冷卻、動作時間與耐力消耗各再 -10%
 skill.nightvision.name|夜視
 skill.nightvision.trigger|夜晚活動時（每秒 2 點）
@@ -118,16 +119,16 @@ skill.recoil.name|後座力控制
 skill.recoil.trigger|開槍時（每發 2 點，瞄準射擊 4 點）
 skill.recoil.elite|垂直、水平後座力 -15%
 skill.marksmanship.name|精準射擊
-skill.marksmanship.trigger|在 20 公尺以上距離命中（每次 150 點，爆頭 +200 點）
+skill.marksmanship.trigger|在 25 公尺以上距離命中（每次 600 點，爆頭 +800 點）
 skill.marksmanship.elite|爆頭傷害 +10%
 skill.melee.name|近戰
 skill.melee.trigger|近戰攻擊命中時（每次 45 點，近戰擊殺 +90 點）
 skill.melee.elite|移動速度 +10%（額外）
 skill.throwing.name|投擲
 skill.throwing.trigger|投擲爆炸物時（每次 100 點，每點爆炸傷害 2 點）
-skill.throwing.elite|距離 +20%（額外），30% 機率立即爆炸
+skill.throwing.elite|距離 +20%（額外），觸地即爆
 skill.perception.name|感知
-skill.perception.trigger|察覺到周圍聲響時（每次 4 點，每秒最多 1 次）
+skill.perception.trigger|察覺到周圍聲響時（每次 12 點，每 0.5 秒最多 1 次）
 skill.perception.elite|視野與感知 +10%，聽力 +20%（額外）
 skill.covert.name|潛行移動
 skill.covert.trigger|走路移動時（不含奔跑，每秒 1 點 + 每公尺 0.7 點）
@@ -142,13 +143,13 @@ skill.survival.name|生存術
 skill.survival.trigger|陷入異常狀態（流血、中毒、燃燒）時（每次 300 點，每點持續傷害 12 點）
 skill.survival.elite|不會流血（30% 負面狀態抗性為預設效果）
 skill.reload.name|裝彈
-skill.reload.trigger|完成裝彈時（每次 40 點）
+skill.reload.trigger|完成裝彈時（每次 50 點）
 skill.reload.elite|裝彈速度 +10%（額外）
 skill.repair.name|維修
         skill.repair.trigger|維修裝備時（每點修復耐久度 5 點）
 skill.repair.elite|最大耐久度不再下降
 skill.barter.name|討價還價
-skill.barter.trigger|買賣物品時（每 1,000 交易額 5 點）
+skill.barter.trigger|買賣物品時（每 1,000 交易額 10 點）
 skill.barter.elite|黑市刷新冷卻 -50%
 skill.looting.name|搜刮
 skill.looting.trigger|在箱子或屍體中發現物品時（每件 20 點，拾取 1 件 10 點）
@@ -160,7 +161,7 @@ skill.fishing.name|釣魚
 skill.fishing.trigger|釣到魚時（每條 250 點）
 skill.fishing.elite|釣魚能力與運氣各 +20%（額外）
 skill.crafting.name|製作
-skill.crafting.trigger|完成製作（材料價值 × 8%，最多 400 點）+ 解鎖新配方（200 點）
+skill.crafting.trigger|完成製作（材料價值 × 10%）+ 解鎖新配方（200 點）
 skill.crafting.elite|額外產出機率 +20%（合計 50%）
 # ==== config.ini 註解 ====
 cfg.header|塔科夫式技能系統 - 設定
@@ -185,6 +186,7 @@ cfg.language|介面語言：auto（跟隨遊戲內選擇的語言），或 en、
 cfg.xpStage|經驗倍率檔位 1~5（1=最快，5=預設）
 cfg.uploadNow|作者專用：設為 true 並啟動遊戲可上傳一次到工作坊
 cfg.dashHoldRepeat|按住翻滾鍵即可自動連續翻滾（每次冷卻結束）
+cfg.meleeHoldRepeat|手持近戰武器時按住攻擊鍵即可連續揮砍
 cfg.craftUnlockXp|解鎖新配方的經驗（批次解鎖只算一次）
 cfg.craftXpPerValue|製作經驗 = 材料價值 × 此值（0.08 = 8%）
 cfg.craftXpCap|單次製作經驗上限（0 = 不限制）

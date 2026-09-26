@@ -110,10 +110,12 @@ namespace Dskill
                     }
                 }
 
-                // 엘리트: 확률로 즉시 폭발
-                if (elite && !grenade.isLandmine && UnityEngine.Random.value < Specials.ThrowingInstantChance)
+                // 엘리트: **지면에 닿으면 100% 즉시 폭발** (2026-09-26 사용자 요청 — 기존 '30% 확률 즉시 폭발' 폐지)
+                //   delayFromCollide = true → 충돌(지면) 시점부터 신관이 돌고,
+                //   delayTime = 0 → 닿는 즉시 터진다.
+                if (elite && !grenade.isLandmine)
                 {
-                    grenade.delayFromCollide = false;
+                    grenade.delayFromCollide = true;
                     grenade.delayTime = 0f;
                 }
             }
@@ -464,6 +466,11 @@ namespace Dskill
                 return;
             }
 
+            // 홀드 자동 반복의 '휘두름 간격' = 동작 시간 기준(없으면 0.6초), 하한 0.2초.
+            //  (조금 일찍 넣어도 게임이 무시하고 준비되면 휘두르므로 실질 속도는 게임이 정한다)
+            float swing = _originalMeleeActionTime > 0f ? _originalMeleeActionTime : 0.6f;
+            _meleeHoldInterval = Mathf.Max(0.2f, swing * 0.8f);
+
             int level = _skills.GetLevel("melee");
             float bonus = _skills.MeleeSpeedBonus(level);           // 0 … 0.5
             if (level == _appliedMeleeSpeedLevel)
@@ -524,6 +531,72 @@ namespace Dskill
 
         private bool _meleeWeaponStatLogged;
         private readonly object _meleeSpeedToken = new object();   // 무기 AttackSpeed 수정자 토큰
+
+        // ---- 사격술: 조준(ADS) 시간 감소 (2026-09-26 사용자 요청) ----
+        //  조준 시간은 **총기(무기)가 읽는 스탯 `AdsTime`** 이라 캐릭터가 아니라 장착한 총에 건다
+        //  (근접 AttackSpeed 와 같은 방식 — 캐릭터에 걸면 거부된다).
+        private readonly object _adsTimeToken = new object();
+        private Item _adsTimeItem;
+        private int _appliedAdsTimeLevel = -1;
+        private bool _adsTimeStatLogged;
+
+        /// <summary>사격술: 장착한 총의 조준 시간(AdsTime)을 레벨에 따라 줄인다 (만렙 -50%).</summary>
+        private void ApplyAssaultAdsTime()
+        {
+            if (_skills == null)
+            {
+                return;
+            }
+
+            Item gun = _gun != null ? _gun.Item : null;
+            int level = _skills.GetLevel("assault");
+            float reduction = level > 0 ? Specials.AssaultAdsTimePerLevel * level : 0f;
+
+            if (gun == _adsTimeItem && level == _appliedAdsTimeLevel)
+            {
+                return;   // 이미 같은 총·같은 레벨로 처리됨
+            }
+
+            try
+            {
+                // 총을 바꿨으면 이전 총에서 제거
+                if (_adsTimeItem != null && _adsTimeItem != gun)
+                {
+                    _adsTimeItem.RemoveAllModifiersFrom(_adsTimeToken);
+                }
+                _adsTimeItem = gun;
+                _appliedAdsTimeLevel = level;
+
+                if (gun == null)
+                {
+                    return;
+                }
+                gun.RemoveAllModifiersFrom(_adsTimeToken);
+                if (reduction <= 0f)
+                {
+                    return;
+                }
+
+                if (gun.AddModifier("AdsTime", new Modifier(ModifierType.PercentageMultiply, -reduction, _adsTimeToken)))
+                {
+                    if (!_adsTimeStatLogged)
+                    {
+                        _adsTimeStatLogged = true;
+                        Debug.Log("[Dskill] 사격술: 총기 AdsTime(조준 시간) -" + (reduction * 100f).ToString("0.#") +
+                                  "% 적용 성공 (무기 스탯, Lv." + level + ")");
+                    }
+                }
+                else if (!_adsTimeStatLogged)
+                {
+                    _adsTimeStatLogged = true;
+                    Debug.LogWarning("[Dskill] 총기에서 AdsTime 스탯이 거부되었습니다 — 조준 시간 감소가 적용되지 않습니다(다른 방식 필요).");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 사격술 조준 시간 적용 실패(무시): " + e.Message);
+            }
+        }
         private bool _wasDashing;
 
         /// <summary>[미사용 — 0.0.8 실패] 근접 무기에는 UsageUtilities(사용 시간)가 없어 이 방식은 쓰지 않는다.
@@ -719,6 +792,13 @@ namespace Dskill
                 return;
             }
 
+            // UI(인벤토리·루팅·메뉴)가 열려 있으면 주입하지 않는다 — 메뉴 조작이 꼬이는 것을 막는다
+            if (Duckov.UI.View.ActiveView != null)
+            {
+                _dashInjectPhase = 0;
+                return;
+            }
+
             // 이번 세션에서 구르기를 한 번도 못 봤다면 아무것도 하지 않는다.
             //  (구르기 키를 스페이스바가 아닌 다른 키로 바꾼 경우 오작동을 막는 안전장치)
             if (_lastDashStartTime <= 0f)
@@ -771,6 +851,114 @@ namespace Dskill
             {
                 Debug.LogWarning("[Dskill] 구르기 홀드 입력 주입 실패(무시): " + e.Message);
                 _dashInjectPhase = 0;
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // 근접 공격 꾹 누르기 → 자동 반복 (2026-09-26 사용자 요청)
+        // ------------------------------------------------------------------
+        //  구르기와 같은 방식(A안): 게임 입력 파이프라인에 "떼기 → (다음 프레임) 누르기"를 주입한다.
+        //  대상은 마우스 왼쪽 버튼(게임의 '발사/공격' 입력)이고, **근접 무기를 들었을 때만** 동작한다
+        //  (총을 들고 있으면 절대 주입하지 않아 자동 사격이 되지 않는다).
+        private int _meleeHoldPhase;                  // 0 = 대기, 1 = '떼기' 주입됨
+        private float _lastMeleeInjectTime = -10f;    // 주입 최소 간격
+        private float _meleeHoldInterval = 0.5f;      // 휘두름 간격(동작 시간 기준, ApplyMeleeSpeedSettings 가 갱신)
+
+        /// <summary>근접 무기를 들고 공격 버튼을 꾹 누르면 계속 휘두른다 (매 프레임).</summary>
+        private void HandleMeleeHold()
+        {
+            if (_config == null || !_config.MeleeHoldRepeat)
+            {
+                _meleeHoldPhase = 0;
+                return;
+            }
+
+            if (_main == null)
+            {
+                _meleeHoldPhase = 0;
+                return;
+            }
+
+            // **지금 손에 든 것**이 근접 무기일 때만 동작한다.
+            //  ⚠ `_melee`(GetMeleeWeapon) 는 '슬롯에 있기만 하면' 반환되어,
+            //    총·아이템을 쓸 때도 주입이 일어나 **모든 좌클릭이 연속 클릭이 되는 버그**가 있었다(2026-09-26 수정).
+            var heldItem = _main.CurrentHoldItemAgent;
+            if (!(heldItem is ItemAgent_MeleeWeapon) || heldItem.Item == null)
+            {
+                _meleeHoldPhase = 0;
+                return;
+            }
+
+            // UI(인벤토리·루팅·메뉴)가 열려 있으면 주입하지 않는다 — UI 클릭이 연속 클릭이 되는 것을 막는다
+            if (Duckov.UI.View.ActiveView != null)
+            {
+                _meleeHoldPhase = 0;
+                return;
+            }
+
+            Mouse mouse = Mouse.current;
+            if (mouse == null)
+            {
+                return;
+            }
+
+            // '떼기'를 이미 넣었으면 다음 프레임에 '누르기'를 넣어 한 번의 누름을 완성한다
+            //  (중간에 취소하면 왼쪽 버튼이 떼진 상태로 남는다)
+            if (_meleeHoldPhase == 1)
+            {
+                PushMouseState(mouse, true);
+                _meleeHoldPhase = 0;
+                _lastMeleeInjectTime = Time.time;
+                return;
+            }
+
+            if (!mouse.leftButton.isPressed)
+            {
+                return;   // 공격 버튼을 누르고 있지 않음
+            }
+            if (Time.time - _lastMeleeInjectTime < _meleeHoldInterval)
+            {
+                return;   // 아직 휘두름 동작 중일 가능성이 큼 (게임이 어차피 무시하므로 주입을 아낀다)
+            }
+
+            PushMouseState(mouse, false);
+            _meleeHoldPhase = 1;
+        }
+
+        /// <summary>마우스의 위치·델타·스크롤·다른 버튼은 그대로 두고, **왼쪽 버튼만** 뗀/누른 상태를 입력 시스템에 넣는다.
+        ///  (위치·델타를 유지해야 시점(카메라)에 영향이 없다)</summary>
+        private void PushMouseState(Mouse mouse, bool leftPressed)
+        {
+            try
+            {
+                MouseState state = new MouseState
+                {
+                    position = mouse.position.ReadValue(),
+                    delta = mouse.delta.ReadValue(),
+                    scroll = mouse.scroll.ReadValue(),
+                };
+
+                ushort buttons = 0;
+                if (leftPressed)
+                {
+                    buttons |= (ushort)(1 << (int)MouseButton.Left);
+                }
+                if (mouse.rightButton.isPressed)
+                {
+                    buttons |= (ushort)(1 << (int)MouseButton.Right);
+                }
+                if (mouse.middleButton.isPressed)
+                {
+                    buttons |= (ushort)(1 << (int)MouseButton.Middle);
+                }
+                state.buttons = buttons;
+
+                InputSystem.QueueStateEvent(mouse, state);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 근접 홀드 입력 주입 실패(무시): " + e.Message);
+                _meleeHoldPhase = 0;
             }
         }
 

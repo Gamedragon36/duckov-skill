@@ -514,6 +514,13 @@ namespace Dskill
                 AddPart(parts, Locale.F("eff.melee", "근접 공격속도 +{0}%", (MeleeSpeedBonus(level) * 100f).ToString("0.#")));
             }
 
+            if (id == "assault")
+            {
+                // 조준(ADS) 시간 감소는 총기(무기) 스탯에 직접 거는 방식이라 문구를 직접 만든다 (2026-09-26)
+                AddPart(parts, Locale.F("eff.assaultAds", "조준 시간 -{0}%",
+                    (Specials.AssaultAdsTimePerLevel * level * 100f).ToString("0.#")));
+            }
+
             foreach (string part in parts)
             {
                 if (sb.Length > 0)
