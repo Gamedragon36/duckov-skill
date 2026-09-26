@@ -93,10 +93,10 @@ namespace Dskill
             { "EnergyCost", "배고픔 소모" },
             { "WaterCost", "수분 소모" },
             { "NightVisionAbility", "야간 시야" },
-            { "ViewDistance", "시야 거리" },
-            { "ViewRange", "플레이어 감지 거리" },
+            { "ViewDistance", "플레이어 감지 거리" },
             { "SenseRange", "감지 범위" },
             { "HearingAbility", "청력" },
+            { "ADSTime", "조준 시간" },
             { "FishingTime", "낚시 속도" },
             { "FishingQualityFactor", "낚시 등급" },
             { "ElementFactor_Physics", "받는 물리 피해" }
@@ -519,7 +519,11 @@ namespace Dskill
 
             if (id == "assault")
             {
-                // 2026-09-27: 조준(ADS) 시간 감소는 게임이 스탯을 받지 않아 **효과를 제거**했다(문구도 없음).
+                // 2026-09-27: 조준(ADS) 시간 감소 — 게임 코드 확인으로 키가 **"ADSTime"** 임을 찾아 **적용 가능**해졌다.
+                //  다만 **아이템(총기)** 스탯이라 캐릭터 아이템에 걸면 거부되므로, 실제 적용은
+                //  `ModBehaviour.ApplyAssaultAdsSpeed()` 가 **장착한 총 아이템**에 직접 건다(표시 문구만 여기서 만든다).
+                AddPart(parts, Locale.F("eff.assaultAds", "조준 시간 -{0}%",
+                    (Specials.AssaultAdsTimePerLevel * level * 100f).ToString("0.#")));
             }
 
             foreach (string part in parts)

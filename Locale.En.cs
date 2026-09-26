@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>영어 (기본 언어이자 대체 언어)</summary>
     internal static class LocEn
@@ -43,7 +43,7 @@ eff.throwing|Throw range +{0}%, explosion damage +{1}%
 eff.looting|Item detection time -{0}%
 eff.dash|Cooldown -{0}%, action time -{1}%, stamina cost -{2}%
 eff.melee|Melee attack speed +{0}%
-eff.assaultAds|, aim time -{0}%
+eff.assaultAds|aim time -{0}%
 eff.hideout|Trader restock cooldown -{0}%
 eff.hideoutElite|, mining time -{0}%
 eff.crafting|Extra output chance {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Reload speed
 stat.EnergyCost|Hunger drain
 stat.WaterCost|Thirst drain
 stat.NightVisionAbility|Night vision
-stat.ViewDistance|View distance
+stat.ViewDistance|Player detection range
 stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
-stat.ViewRange|Player detection range
+stat.ADSTime|Aim time
 stat.FishingTime|Fishing speed
 stat.FishingQualityFactor|Fishing grade
 # ==== 스킬 24종 ====

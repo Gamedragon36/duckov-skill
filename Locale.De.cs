@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>Deutsch (German)</summary>
     internal static class LocDe
@@ -43,7 +43,7 @@ eff.throwing|Wurfweite +{0}%, Explosionsschaden +{1}%
 eff.looting|Item-Erkennungszeit -{0}%
 eff.dash|Abklingzeit -{0}%, Aktionszeit -{1}%, Ausdauerkosten -{2}%
 eff.melee|Nahkampf-Angriffstempo +{0}%
-eff.assaultAds|, Zielzeit -{0}%
+eff.assaultAds|Zielzeit -{0}%
 eff.hideout|Händler-Nachschub-Abklingzeit -{0}%
 eff.hideoutElite|, Abbauzeit -{0}%
 eff.crafting|Zusätzliche Ausgabechance {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Nachladegeschwindigkeit
 stat.EnergyCost|Hungerverbrauch
 stat.WaterCost|Durstverbrauch
 stat.NightVisionAbility|Nachtsicht
-stat.ViewDistance|Sichtweite
+stat.ViewDistance|Spieler-Erkennungsreichweite
 stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
-stat.ViewRange|Spieler-Erkennungsreichweite
+stat.ADSTime|Zielzeit
 stat.FishingTime|Angelgeschwindigkeit
 stat.FishingQualityFactor|Angelqualität
 # ==== 24 Fertigkeiten ====

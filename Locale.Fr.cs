@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>Français (French)</summary>
     internal static class LocFr
@@ -43,7 +43,7 @@ eff.throwing|Distance de lancer +{0}%, dégâts d'explosion +{1}%
 eff.looting|Temps de détection des objets -{0}%
 eff.dash|Recharge -{0}%, temps d'action -{1}%, coût d'endurance -{2}%
 eff.melee|Vitesse d'attaque au corps à corps +{0}%
-eff.assaultAds|, temps de visée -{0}%
+eff.assaultAds|temps de visée -{0}%
 eff.hideout|Réapprovisionnement du marchand -{0}%
 eff.hideoutElite|, temps d'extraction -{0}%
 eff.crafting|Chance de production supplémentaire {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Vitesse de rechargement
 stat.EnergyCost|Consommation de faim
 stat.WaterCost|Consommation d'eau
 stat.NightVisionAbility|Vision nocturne
-stat.ViewDistance|Distance de vision
+stat.ViewDistance|Détection (joueur)
 stat.SenseRange|Rayon de détection
 stat.HearingAbility|Ouïe
-stat.ViewRange|Détection (joueur)
+stat.ADSTime|Temps de visée
 stat.FishingTime|Vitesse de pêche
 stat.FishingQualityFactor|Qualité de pêche
 # ==== 24 compétences ====

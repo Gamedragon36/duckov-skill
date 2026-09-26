@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>日本語 (Japanese)</summary>
     internal static class LocJa
@@ -43,7 +43,7 @@ eff.throwing|投擲距離 +{0}%、爆発ダメージ +{1}%
 eff.looting|アイテム探知時間 -{0}%
 eff.dash|クールタイム -{0}%、動作時間 -{1}%、スタミナ消費 -{2}%
 eff.melee|近接攻撃速度 +{0}%
-eff.assaultAds|、エイム時間 -{0}%
+eff.assaultAds|エイム時間 -{0}%
 eff.hideout|商人の補充クールタイム -{0}%
 eff.hideoutElite|、採掘時間 -{0}%
 eff.crafting|追加生産確率 {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|リロード速度
 stat.EnergyCost|空腹消費
 stat.WaterCost|水分消費
 stat.NightVisionAbility|暗視能力
-stat.ViewDistance|視界距離
+stat.ViewDistance|プレイヤー感知距離
 stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
-stat.ViewRange|プレイヤー感知距離
+stat.ADSTime|エイム時間
 stat.FishingTime|釣りの速度
 stat.FishingQualityFactor|釣りの品質
 # ==== スキル 24 種 ====

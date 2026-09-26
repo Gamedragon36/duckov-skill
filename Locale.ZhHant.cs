@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>繁體中文 (Traditional Chinese)</summary>
     internal static class LocZhHant
@@ -43,7 +43,7 @@ eff.throwing|投擲距離 +{0}%，爆炸傷害 +{1}%
 eff.looting|物品搜索時間 -{0}%
 eff.dash|冷卻 -{0}%，動作時間 -{1}%，耐力消耗 -{2}%
 eff.melee|近戰攻擊速度 +{0}%
-eff.assaultAds|，瞄準時間 -{0}%
+eff.assaultAds|瞄準時間 -{0}%
 eff.hideout|商人補貨冷卻 -{0}%
 eff.hideoutElite|，挖礦時間 -{0}%
 eff.crafting|額外產出機率 {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|裝彈速度
 stat.EnergyCost|飢餓消耗
 stat.WaterCost|水分消耗
 stat.NightVisionAbility|夜視能力
-stat.ViewDistance|視野距離
+stat.ViewDistance|玩家偵測距離
 stat.SenseRange|感知範圍
 stat.HearingAbility|聽力
-stat.ViewRange|玩家偵測距離
+stat.ADSTime|瞄準時間
 stat.FishingTime|釣魚速度
 stat.FishingQualityFactor|釣魚品質
 # ==== 技能 24 種 ====

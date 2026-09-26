@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>Português (Brasil)</summary>
     internal static class LocPtBr
@@ -43,7 +43,7 @@ eff.throwing|Distância de arremesso +{0}%, dano de explosão +{1}%
 eff.looting|Tempo de detecção de itens -{0}%
 eff.dash|Recarga -{0}%, tempo de ação -{1}%, custo de stamina -{2}%
 eff.melee|Velocidade de ataque corpo a corpo +{0}%
-eff.assaultAds|, tempo de mira -{0}%
+eff.assaultAds|tempo de mira -{0}%
 eff.hideout|Reabastecimento do comerciante -{0}%
 eff.hideoutElite|, tempo de mineração -{0}%
 eff.crafting|Chance de produção extra {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Velocidade de recarga
 stat.EnergyCost|Consumo de fome
 stat.WaterCost|Consumo de água
 stat.NightVisionAbility|Visão noturna
-stat.ViewDistance|Distância de visão
+stat.ViewDistance|Detecção (jogador)
 stat.SenseRange|Raio de detecção
 stat.HearingAbility|Audição
-stat.ViewRange|Detecção (jogador)
+stat.ADSTime|Tempo de mira
 stat.FishingTime|Velocidade de pesca
 stat.FishingQualityFactor|Qualidade de pesca
 # ==== 24 habilidades ====

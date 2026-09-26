@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>Español (Latinoamérica)</summary>
     internal static class LocEs
@@ -43,7 +43,7 @@ eff.throwing|Distancia de lanzamiento +{0}%, daño de explosión +{1}%
 eff.looting|Tiempo de detección de objetos -{0}%
 eff.dash|Reutilización -{0}%, tiempo de acción -{1}%, costo de aguante -{2}%
 eff.melee|Velocidad de ataque cuerpo a cuerpo +{0}%
-eff.assaultAds|, tiempo de apuntado -{0}%
+eff.assaultAds|tiempo de apuntado -{0}%
 eff.hideout|Reabastecimiento del comerciante -{0}%
 eff.hideoutElite|, tiempo de minado -{0}%
 eff.crafting|Probabilidad de producción extra {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Velocidad de recarga
 stat.EnergyCost|Consumo de hambre
 stat.WaterCost|Consumo de agua
 stat.NightVisionAbility|Visión nocturna
-stat.ViewDistance|Distancia de visión
+stat.ViewDistance|Detección (jugador)
 stat.SenseRange|Radio de detección
 stat.HearingAbility|Oído
-stat.ViewRange|Detección (jugador)
+stat.ADSTime|Tiempo de apuntado
 stat.FishingTime|Velocidad de pesca
 stat.FishingQualityFactor|Calidad de pesca
 # ==== 24 habilidades ====

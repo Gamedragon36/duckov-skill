@@ -533,9 +533,8 @@ namespace Dskill
         private readonly object _meleeSpeedToken = new object();   // 무기 AttackSpeed 수정자 토큰
 
         // ---- 사격술: 조준(ADS) 시간 감소 ----
-        //  2026-09-26 실측: 총기 아이템에 `AdsTime` 을 걸면 **게임이 거부**한다 →
-        //  캐릭터 스탯(EffectDef "AdsTime")으로 적용한다 (SkillDefs.cs 의 assault Effects 참조).
-        //  (무기 쪽 적용 코드는 거부되는 죽은 경로라 제거함)
+        //  ★ 2026-09-27 정정: 키는 **`ADSTime`**(`AdsTime` 아님) — 게임 코드 확인으로 **적용 가능**해졌다.
+        //  아이템(총기) 스탯이라 **장착한 총 아이템**에 건다(`ApplyAssaultAdsSpeed()` 참조).
 
         private bool _wasDashing;
 
@@ -908,18 +907,19 @@ namespace Dskill
             }
         }
 
-        // ---- 사격술: 조준(ADS) 속도 — 대안 탐색 (2026-09-27) ----
-        //  `AdsTime` 스탯은 캐릭터·총기 **모두 거부** ✗ → 게임에 **`AdsSpeed`** 가 있으므로 그것으로 시도한다.
-        //  수락/거부를 로그로 남기고, 거부되면 총기 에이전트의 조준 관련 멤버 이름을 함께 남겨 다음 단계를 잡는다.
-        private readonly object _adsSpeedToken = new object();
-        private readonly object _adsProbeToken = new object();
-        private Item _adsSpeedItem;
-        private int _appliedAdsSpeedLevel = -1;
-        private bool _adsProbeLogged;
+        // ---- 사격술: 조준(ADS) 시간 감소 (2026-09-27) ----
+        //  ★ 게임 코드 확인 결과 키는 **`"ADSTime"`** 이다(`AdsTime` 아님!) — `Item.Agent_Gun` 디컴파일:
+        //     private static int AdsTimeHash = "ADSTime".GetHashCode();
+        //     public float AdsSpeed => 1f / Mathf.Max(0.01f, base.Item.GetStatValue(AdsTimeHash));
+        //     private void UpdateAds(){ ... adsValue = Mathf.MoveTowards(adsValue, num, Time.deltaTime * AdsSpeed); }
+        //  → `ADSTime` 를 줄이면 조준 전환이 그만큼 빨라진다(아이템 스탯이므로 **총기 아이템**에 건다).
+        private readonly object _adsTimeToken = new object();
+        private Item _adsTimeItem;
+        private int _appliedAdsTimeLevel = -1;
 
         private void ApplyAssaultAdsSpeed()
         {
-            if (_skills == null || _main == null || _gun == null)
+            if (_skills == null || _gun == null)
             {
                 return;
             }
@@ -934,79 +934,32 @@ namespace Dskill
             {
                 return;
             }
-            if (gun == _adsSpeedItem && level == _appliedAdsSpeedLevel)
+            if (gun == _adsTimeItem && level == _appliedAdsTimeLevel)
             {
                 return;
             }
 
             try
             {
-                if (_adsSpeedItem != null && _adsSpeedItem != gun)
+                if (_adsTimeItem != null && _adsTimeItem != gun)
                 {
-                    _adsSpeedItem.RemoveAllModifiersFrom(_adsSpeedToken);
+                    _adsTimeItem.RemoveAllModifiersFrom(_adsTimeToken);
                 }
-                _adsSpeedItem = gun;
-                _appliedAdsSpeedLevel = level;
-                gun.RemoveAllModifiersFrom(_adsSpeedToken);
+                _adsTimeItem = gun;
+                _appliedAdsTimeLevel = level;
+                gun.RemoveAllModifiersFrom(_adsTimeToken);
 
                 float reduction = Specials.AssaultAdsTimePerLevel * level;   // 만렙 -50%
-                bool gunOk = gun.AddModifier("AdsSpeed",
-                    new Modifier(ModifierType.PercentageMultiply, -reduction, _adsSpeedToken));
-
-                if (!_adsProbeLogged)
+                bool ok = gun.AddModifier("ADSTime",
+                    new Modifier(ModifierType.PercentageMultiply, -reduction, _adsTimeToken));
+                if (ok)
                 {
-                    _adsProbeLogged = true;
-
-                    // 캐릭터 아이템에서도 시도(진단용, 아주 작은 값 → 바로 제거)
-                    bool charOk = false;
-                    try
-                    {
-                        if (_mainItem != null)
-                        {
-                            charOk = _mainItem.AddModifier("AdsSpeed",
-                                new Modifier(ModifierType.PercentageMultiply, -0.0001f, _adsProbeToken));
-                            _mainItem.RemoveAllModifiersFrom(_adsProbeToken);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    // 총기 에이전트의 조준 관련 멤버 이름 수집(다음 후보 찾기)
-                    string members = "";
-                    try
-                    {
-                        System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public |
-                                                               System.Reflection.BindingFlags.NonPublic |
-                                                               System.Reflection.BindingFlags.Instance;
-                        foreach (System.Reflection.PropertyInfo p in _gun.GetType().GetProperties(flags))
-                        {
-                            if (p.Name.IndexOf("Ads", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                p.Name.IndexOf("Aim", StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                members += p.Name + (p.CanWrite ? "(w)" : "(r)") + ",";
-                            }
-                        }
-                        foreach (System.Reflection.FieldInfo f in _gun.GetType().GetFields(flags))
-                        {
-                            if (f.Name.IndexOf("Ads", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                f.Name.IndexOf("Aim", StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                members += f.Name + ",";
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    Debug.Log("[Dskill] 조준(ADS) 진단: 총기 AdsSpeed 수락=" + gunOk + " / 캐릭터 AdsSpeed 수락=" + charOk +
-                              " / 총기 에이전트 조준 멤버: " + (members.Length > 0 ? members : "(없음)"));
-                    if (gunOk)
-                    {
-                        Debug.Log("[Dskill] 사격술: 총기 AdsSpeed -" + (reduction * 100f).ToString("0.#") +
-                                  "% 적용 — 조준이 빨라지는지 게임에서 확인해 주세요");
-                    }
+                    Debug.Log("[Dskill] 사격술: 조준 시간 -" + (reduction * 100f).ToString("0.#") +
+                              "% 적용(Lv." + level + ", 키 ADSTime)");
+                }
+                else
+                {
+                    Debug.LogWarning("[Dskill] 조준 시간(ADSTime) 스탯이 거부되었습니다 — 이 총에서는 적용되지 않습니다");
                 }
             }
             catch (Exception e)

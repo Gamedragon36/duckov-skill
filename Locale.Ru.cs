@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>Русский (Russian)</summary>
     internal static class LocRu
@@ -43,7 +43,7 @@ eff.throwing|Дальность броска +{0}%, урон взрыва +{1}%
 eff.looting|Время поиска предметов -{0}%
 eff.dash|Перезарядка -{0}%, время действия -{1}%, расход выносливости -{2}%
 eff.melee|Скорость атаки в ближнем бою +{0}%
-eff.assaultAds|, время прицеливания -{0}%
+eff.assaultAds|время прицеливания -{0}%
 eff.hideout|Перезарядка пополнения торговца -{0}%
 eff.hideoutElite|, время добычи -{0}%
 eff.crafting|Шанс доп. продукции {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|Скорость перезарядки
 stat.EnergyCost|Расход сытости
 stat.WaterCost|Расход воды
 stat.NightVisionAbility|Ночное зрение
-stat.ViewDistance|Дальность обзора
+stat.ViewDistance|Обнаружение (игрок)
 stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
-stat.ViewRange|Обнаружение (игрок)
+stat.ADSTime|Время прицеливания
 stat.FishingTime|Скорость рыбалки
 stat.FishingQualityFactor|Качество рыбалки
 # ==== 24 навыка ====

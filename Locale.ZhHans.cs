@@ -1,4 +1,4 @@
-namespace Dskill
+﻿namespace Dskill
 {
     /// <summary>简体中文 (Simplified Chinese)</summary>
     internal static class LocZhHans
@@ -43,7 +43,7 @@ eff.throwing|投掷距离 +{0}%，爆炸伤害 +{1}%
 eff.looting|物品搜索时间 -{0}%
 eff.dash|冷却 -{0}%，动作时间 -{1}%，耐力消耗 -{2}%
 eff.melee|近战攻击速度 +{0}%
-eff.assaultAds|，瞄准时间 -{0}%
+eff.assaultAds|瞄准时间 -{0}%
 eff.hideout|商人补货冷却 -{0}%
 eff.hideoutElite|，挖矿时间 -{0}%
 eff.crafting|额外产出概率 {0}%
@@ -87,10 +87,10 @@ stat.ReloadSpeedGain|装弹速度
 stat.EnergyCost|饥饿消耗
 stat.WaterCost|水分消耗
 stat.NightVisionAbility|夜视能力
-stat.ViewDistance|视野距离
+stat.ViewDistance|玩家侦测距离
 stat.SenseRange|感知范围
 stat.HearingAbility|听力
-stat.ViewRange|玩家侦测距离
+stat.ADSTime|瞄准时间
 stat.FishingTime|钓鱼速度
 stat.FishingQualityFactor|钓鱼品质
 # ==== 技能 24 种 ====

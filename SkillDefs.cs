@@ -106,7 +106,9 @@ namespace Dskill
         public const float LootingMinInspectTime = 0.2f;    // 파밍: 만렙(-70%)에서도 0초가 되지 않게 유지하는 최소 감지 시간(초)
         public const float LootingInstantChance = 0.50f;    // 파밍 엘리트: 즉시 감지 확률
         /// <summary>사격술: 레벨당 조준(ADS) 시간 감소 (만렙 -50%).
-        ///  조준 시간은 총기(무기)가 읽는 스탯 `AdsTime` 이라 **장착한 총 아이템**에 적용한다 (2026-09-26 사용자 요청)</summary>
+        ///  ★ 키는 **`ADSTime`** 이다(`AdsTime` 아님 — 2026-09-27 게임 코드 확인).
+        ///  게임의 `ItemAgent_Gun.AdsSpeed = 1 / ADSTime` 이므로 시간을 줄이면 조준이 빨라진다.
+        ///  **아이템(총기)** 스탯이라 장착한 총 아이템에 건다.</summary>
         public const float AssaultAdsTimePerLevel = 0.025f;
         public const float DashReductionPerLevel = 0.02f;  // 구르기: 레벨당 쿨타임·스태미나 감소 (만렙 -40%)
         public const float DashEliteReduction = 0.10f;      // 구르기 엘리트: 각각 -10% 추가
@@ -244,8 +246,13 @@ namespace Dskill
                 Effects = new[]
                 {
                     new EffectDef("GunDamageMultiplier", StatModKind.PercentMultiply, 0.0075f)  // 만렙 +15%
-                    // ⚠ 2026-09-27: 조준(ADS) 시간 감소는 **게임이 스탯을 받지 않아**(캐릭터·총기 모두 '없는 스탯' 경고)
-                    //   효과를 제거했다. (스탯 키 AdsTime 은 존재하나 어느 객체도 읽지 않는 값)
+                    // ★ 2026-09-27 정정: 조준 시간은 **적용 가능**하다! 키 철자가 "AdsTime" 이 아니라 **"ADSTime"** 이었다.
+                    //   게임 코드(ItemAgent_Gun) 확인:
+                    //     private static int AdsTimeHash = "ADSTime".GetHashCode();
+                    //     public float AdsSpeed => 1f / Mathf.Max(0.01f, base.Item.GetStatValue(AdsTimeHash));
+                    //   → **아이템(총기)** 스탯이므로 캐릭터가 아니라 장착한 총에 걸어야 한다.
+                    //   일반 효과 경로(캐릭터 아이템)로는 거부되므로 `ModBehaviour.ApplyAssaultAdsSpeed()` 에서 총기 아이템에 직접 건다.
+                    //   (표시 문구는 SkillSystem 의 assault 블록에서 eff.assaultAds 로 만든다)
                 },
                 EliteEffects = new[]
                 {
@@ -315,16 +322,20 @@ namespace Dskill
                 EliteKo = "감지 거리·감지 범위 +10%, 청력 +20% 추가",
                 Effects = new[]
                 {
-                    // 2026-09-27: 게임 내부에서 'AI 감지'와 '플레이어 감지'가 별도로 취급되므로,
-                    //  AI 쪽으로 보이는 ViewDistance(시야 거리)는 제거하고 **플레이어 감지 거리(ViewRange)** 로 몰아준다.
-                    //  (ViewRange = DLL 의 viewRangeHash. 게임이 거부하면 로그에 '없는 스탯' 경고가 남는다)
-                    new EffectDef("ViewRange", StatModKind.PercentMultiply, 0.02f),       // 만렙 +40%
+                    // ★ 2026-09-27 정정: `ViewRange` 는 **존재하지 않는 키**였다 ✗ (게임이 거부 → 로그 '없는 스탯').
+                    //  게임 코드(CharacterMainControl) 확인:
+                    //    private int viewDistanceHash = "ViewDistance".GetHashCode();
+                    //    public float ViewDistance => GetFloatStatValue(viewDistanceHash);
+                    //  → 캐릭터 자신의 **감지 거리**가 `ViewDistance` 이고, 이 값을 **플레이어 캐릭터**에게 걸면
+                    //    "플레이어가 감지하는 거리"(= 플레이어 감지 거리)가 된다. AI 는 자기 캐릭터의 값으로 따로 계산되므로
+                    //    플레이어 쪽만 올리면 AI 감지에는 영향이 없다(둘은 별개 — 제작자 지시).
+                    new EffectDef("ViewDistance", StatModKind.PercentMultiply, 0.02f),     // 만렙 +40%
                     new EffectDef("SenseRange", StatModKind.PercentMultiply, 0.01f),      // 만렙 +20%
                     new EffectDef("HearingAbility", StatModKind.PercentMultiply, 0.015f)  // 만렙 +30% (그대로)
                 },
                 EliteEffects = new[]
                 {
-                    new EffectDef("ViewRange", StatModKind.PercentMultiply, 0.10f),       // 엘리트 +10% → 합계 +50%
+                    new EffectDef("ViewDistance", StatModKind.PercentMultiply, 0.10f),     // 엘리트 +10% → 합계 +50%
                     new EffectDef("SenseRange", StatModKind.PercentMultiply, 0.10f),
                     new EffectDef("HearingAbility", StatModKind.PercentMultiply, 0.20f)
                 }
