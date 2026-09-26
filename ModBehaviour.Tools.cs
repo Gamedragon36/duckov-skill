@@ -908,6 +908,113 @@ namespace Dskill
             }
         }
 
+        // ---- 사격술: 조준(ADS) 속도 — 대안 탐색 (2026-09-27) ----
+        //  `AdsTime` 스탯은 캐릭터·총기 **모두 거부** ✗ → 게임에 **`AdsSpeed`** 가 있으므로 그것으로 시도한다.
+        //  수락/거부를 로그로 남기고, 거부되면 총기 에이전트의 조준 관련 멤버 이름을 함께 남겨 다음 단계를 잡는다.
+        private readonly object _adsSpeedToken = new object();
+        private readonly object _adsProbeToken = new object();
+        private Item _adsSpeedItem;
+        private int _appliedAdsSpeedLevel = -1;
+        private bool _adsProbeLogged;
+
+        private void ApplyAssaultAdsSpeed()
+        {
+            if (_skills == null || _main == null || _gun == null)
+            {
+                return;
+            }
+            Item gun = _gun.Item;
+            if (gun == null)
+            {
+                return;
+            }
+
+            int level = _skills.GetLevel("assault");
+            if (level <= 0)
+            {
+                return;
+            }
+            if (gun == _adsSpeedItem && level == _appliedAdsSpeedLevel)
+            {
+                return;
+            }
+
+            try
+            {
+                if (_adsSpeedItem != null && _adsSpeedItem != gun)
+                {
+                    _adsSpeedItem.RemoveAllModifiersFrom(_adsSpeedToken);
+                }
+                _adsSpeedItem = gun;
+                _appliedAdsSpeedLevel = level;
+                gun.RemoveAllModifiersFrom(_adsSpeedToken);
+
+                float reduction = Specials.AssaultAdsTimePerLevel * level;   // 만렙 -50%
+                bool gunOk = gun.AddModifier("AdsSpeed",
+                    new Modifier(ModifierType.PercentageMultiply, -reduction, _adsSpeedToken));
+
+                if (!_adsProbeLogged)
+                {
+                    _adsProbeLogged = true;
+
+                    // 캐릭터 아이템에서도 시도(진단용, 아주 작은 값 → 바로 제거)
+                    bool charOk = false;
+                    try
+                    {
+                        if (_mainItem != null)
+                        {
+                            charOk = _mainItem.AddModifier("AdsSpeed",
+                                new Modifier(ModifierType.PercentageMultiply, -0.0001f, _adsProbeToken));
+                            _mainItem.RemoveAllModifiersFrom(_adsProbeToken);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    // 총기 에이전트의 조준 관련 멤버 이름 수집(다음 후보 찾기)
+                    string members = "";
+                    try
+                    {
+                        System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public |
+                                                               System.Reflection.BindingFlags.NonPublic |
+                                                               System.Reflection.BindingFlags.Instance;
+                        foreach (System.Reflection.PropertyInfo p in _gun.GetType().GetProperties(flags))
+                        {
+                            if (p.Name.IndexOf("Ads", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                p.Name.IndexOf("Aim", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                members += p.Name + (p.CanWrite ? "(w)" : "(r)") + ",";
+                            }
+                        }
+                        foreach (System.Reflection.FieldInfo f in _gun.GetType().GetFields(flags))
+                        {
+                            if (f.Name.IndexOf("Ads", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                f.Name.IndexOf("Aim", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                members += f.Name + ",";
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    Debug.Log("[Dskill] 조준(ADS) 진단: 총기 AdsSpeed 수락=" + gunOk + " / 캐릭터 AdsSpeed 수락=" + charOk +
+                              " / 총기 에이전트 조준 멤버: " + (members.Length > 0 ? members : "(없음)"));
+                    if (gunOk)
+                    {
+                        Debug.Log("[Dskill] 사격술: 총기 AdsSpeed -" + (reduction * 100f).ToString("0.#") +
+                                  "% 적용 — 조준이 빨라지는지 게임에서 확인해 주세요");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 조준(ADS) 적용 실패(무시): " + e.Message);
+            }
+        }
+
         /// <summary>모드를 끌 때 구르기 값을 원래대로 돌려놓는다.</summary>
         private void RestoreDash()
         {

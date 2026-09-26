@@ -484,6 +484,7 @@ namespace Dskill
             CheckPickups();
             ApplyDashSettings();
             ApplyMeleeSpeedSettings();
+            ApplyAssaultAdsSpeed();   // 사격술: 조준(ADS) 속도 — 대안 탐색 (2026-09-27)
             DetectHideoutTime(elapsed);
             ApplyHideoutEffects(elapsed);
             DetectNightTime(elapsed);
