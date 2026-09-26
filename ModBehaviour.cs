@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.9";
+        public const string Version = "0.0.10";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.9: distance-based movement XP (strength 1.6/m, endurance 1.04/m, covert 1/s+0.7/m) / melee 45&90 / fixed melee+gun+marksmanship HIT xp (was dead code) / marksmanship 20m distance fix / dash counts as sprint / dash stamina stacks with endurance / hold dash key to chain rolls / looting elite reveals whole container";
+        private const string ChangeNote = "0.0.10: +assault aim time -50% / +hold melee attack to keep swinging / dash 6 pts / marksmanship 600&800 at 25m / throwing elite instant on ground contact / perception 12 pts per 0.5s / crafting 10% no cap / endurance stamina -60% / armor +1.5 / reload 50 / barter 10 / fixes: melee-hold no longer hijacks left click, skill window clipping, upload config restore";
 
         private Config _config;
         private MetaProgress _meta;
