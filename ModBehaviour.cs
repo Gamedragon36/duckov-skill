@@ -645,6 +645,7 @@ namespace Dskill
                         item.DurabilityLoss = target;
                         lossNow = target;
                         _lastRepairLoss[item] = target;
+                        NotifyDurabilityChanged(item);   // 게임 UI 가 듣는 이벤트를 직접 발생시켜 표시를 갱신
                         if (_repairRestoreLogged++ < 5)
                         {
                             Debug.Log("[Dskill] 수리 손실 취소: TypeID " + item.TypeID +
@@ -723,6 +724,33 @@ namespace Dskill
                         _lastRepairLoss.Remove(key);
                     }
                 }
+            }
+        }
+
+        /// <summary>아이템의 내구도 변경 이벤트(`onDurabilityChanged`)를 직접 발생시킨다.
+        ///  게임 UI(툴팁·아이콘)가 이 이벤트를 듣기 때문에, 모드가 값을 되돌린 뒤 이것을 발생시키지 않으면
+        ///  화면에는 깎인 값이 그대로 남는다(2026-09-27 '수리하면 최대 내구도가 내려간 채로 남는다' 증상).</summary>
+        private static readonly System.Reflection.FieldInfo _durabilityChangedField =
+            typeof(Item).GetField("onDurabilityChanged",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        private static void NotifyDurabilityChanged(Item item)
+        {
+            try
+            {
+                if (_durabilityChangedField == null || item == null)
+                {
+                    return;
+                }
+                Action<Item> handler = _durabilityChangedField.GetValue(item) as Action<Item>;
+                if (handler != null)
+                {
+                    handler(item);   // 구독자(게임 UI 등)에게 알린다
+                }
+            }
+            catch (Exception)
+            {
+                // 알림 실패는 치명적이지 않다(다음 갱신에 반영될 수 있음)
             }
         }
 
