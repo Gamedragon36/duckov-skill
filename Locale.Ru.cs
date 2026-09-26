@@ -90,6 +90,9 @@ stat.NightVisionAbility|Ночное зрение
 stat.ViewDistance|Дальность обзора
 stat.SenseRange|Радиус обнаружения
 stat.HearingAbility|Слух
+stat.ViewRange|Обнаружение (игрок)
+stat.FishingTime|Скорость рыбалки
+stat.FishingQualityFactor|Качество рыбалки
 # ==== 24 навыка ====
 skill.strength.name|Сила
         skill.strength.trigger|Движение при весе более 60% (1.6 очка/м)
@@ -129,7 +132,7 @@ skill.throwing.trigger|При броске взрывчатки (100 очков,
 skill.throwing.elite|Дальность +20% (дополнительно), мгновенный взрыв при касании земли
 skill.perception.name|Восприятие
 skill.perception.trigger|Звук рядом (12 очков, каждые 0.5 с)
-skill.perception.elite|Обзор и обнаружение +10%, слух +20% (дополнительно)
+skill.perception.elite|Обнаружение +10%, слух +20% (дополнительно)
 skill.covert.name|Скрытное движение
 skill.covert.trigger|При ходьбе (кроме бега, 1 очко/с + 0.7 очка/м)
 skill.covert.elite|Звук ходьбы и бега ещё -25% (итого -45% / -35%)

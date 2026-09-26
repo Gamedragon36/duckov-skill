@@ -90,6 +90,9 @@ stat.NightVisionAbility|Visión nocturna
 stat.ViewDistance|Distancia de visión
 stat.SenseRange|Radio de detección
 stat.HearingAbility|Oído
+stat.ViewRange|Detección (jugador)
+stat.FishingTime|Velocidad de pesca
+stat.FishingQualityFactor|Calidad de pesca
 # ==== 24 habilidades ====
 skill.strength.name|Fuerza
         skill.strength.trigger|Moverse con más del 60% de peso (1.6 ptos/m)
@@ -129,7 +132,7 @@ skill.throwing.trigger|Al lanzar un explosivo (100 ptos, 2 ptos por punto de da�
 skill.throwing.elite|Alcance +20% (extra), detona al instante al tocar el suelo
 skill.perception.name|Percepción
 skill.perception.trigger|Sonido cercano (12 ptos, cada 0.5 s)
-skill.perception.elite|Visión y detección +10%, oído +20% (extra)
+skill.perception.elite|Detección +10%, oído +20% (extra)
 skill.covert.name|Movimiento sigiloso
 skill.covert.trigger|Al caminar (sin correr, 1 pto/s + 0.7 ptos/m)
 skill.covert.elite|Ruido al caminar y correr -25% más (-45% / -35% en total)

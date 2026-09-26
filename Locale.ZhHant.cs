@@ -90,6 +90,9 @@ stat.NightVisionAbility|夜視能力
 stat.ViewDistance|視野距離
 stat.SenseRange|感知範圍
 stat.HearingAbility|聽力
+stat.ViewRange|玩家偵測距離
+stat.FishingTime|釣魚速度
+stat.FishingQualityFactor|釣魚品質
 # ==== 技能 24 種 ====
 skill.strength.name|力量
         skill.strength.trigger|負重 60% 以上時移動（每公尺 1.6 點）
@@ -129,7 +132,7 @@ skill.throwing.trigger|投擲爆炸物時（每次 100 點，每點爆炸傷害 
 skill.throwing.elite|距離 +20%（額外），觸地即爆
 skill.perception.name|感知
 skill.perception.trigger|察覺周圍聲響（每次 12 點，每 0.5 秒）
-skill.perception.elite|視野與感知 +10%，聽力 +20%（額外）
+skill.perception.elite|感知 +10%，聽力 +20%（額外）
 skill.covert.name|潛行移動
 skill.covert.trigger|走路移動時（不含奔跑，每秒 1 點 + 每公尺 0.7 點）
 skill.covert.elite|走路與奔跑聲音再 -25%（合計 -45% / -35%）

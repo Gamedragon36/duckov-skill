@@ -90,6 +90,9 @@ stat.NightVisionAbility|暗視能力
 stat.ViewDistance|視界距離
 stat.SenseRange|感知範囲
 stat.HearingAbility|聴力
+stat.ViewRange|プレイヤー感知距離
+stat.FishingTime|釣りの速度
+stat.FishingQualityFactor|釣りの品質
 # ==== スキル 24 種 ====
 skill.strength.name|筋力
         skill.strength.trigger|重量 60% 以上で移動（1m あたり 1.6 点）
@@ -129,7 +132,7 @@ skill.throwing.trigger|爆発物を投げたとき（1 回 100 点、爆発ダ�
 skill.throwing.elite|距離 +20%（追加）、地面に触れると即時爆発
 skill.perception.name|認知・偵察
 skill.perception.trigger|周囲の音を感知（1 回 12 点、0.5 秒間隔）
-skill.perception.elite|視界・感知 +10%、聴力 +20%（追加）
+skill.perception.elite|感知 +10%、聴力 +20%（追加）
 skill.covert.name|隠密移動
 skill.covert.trigger|歩いて移動したとき（走りは除く、毎秒 1 点 + 1m あたり 0.7 点）
 skill.covert.elite|歩き・走りの音がさらに -25%（合計 -45% / -35%）

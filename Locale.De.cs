@@ -90,6 +90,9 @@ stat.NightVisionAbility|Nachtsicht
 stat.ViewDistance|Sichtweite
 stat.SenseRange|Erkennungsradius
 stat.HearingAbility|Gehör
+stat.ViewRange|Spieler-Erkennungsreichweite
+stat.FishingTime|Angelgeschwindigkeit
+stat.FishingQualityFactor|Angelqualität
 # ==== 24 Fertigkeiten ====
 skill.strength.name|Stärke
         skill.strength.trigger|Bewegen mit über 60% Gewicht (1.6 Pkt./m)
@@ -129,7 +132,7 @@ skill.throwing.trigger|Wenn du Sprengstoff wirfst (100 Pkt., 2 Pkt. pro Explosio
 skill.throwing.elite|Reichweite +20% (zusätzlich), explodiert sofort beim Bodenkontakt
 skill.perception.name|Wahrnehmung
 skill.perception.trigger|Geräusch bemerkt (12 Pkt., alle 0.5 s)
-skill.perception.elite|Sicht und Erkennung +10%, Gehör +20% (zusätzlich)
+skill.perception.elite|Erkennung +10%, Gehör +20% (zusätzlich)
 skill.covert.name|Tarnbewegung
 skill.covert.trigger|Beim Gehen (Rennen ausgenommen, 1 Pkt./s + 0.7 Pkt./m)
 skill.covert.elite|Geh- und Laufgeräusch -25% mehr (insgesamt -45% / -35%)

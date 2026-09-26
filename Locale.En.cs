@@ -90,6 +90,9 @@ stat.NightVisionAbility|Night vision
 stat.ViewDistance|View distance
 stat.SenseRange|Detection range
 stat.HearingAbility|Hearing
+stat.ViewRange|Player detection range
+stat.FishingTime|Fishing speed
+stat.FishingQualityFactor|Fishing grade
 # ==== 스킬 24종 ====
 skill.strength.name|Strength
         skill.strength.trigger|Move while over 60% weight (1.6 pts/m)
@@ -129,7 +132,7 @@ skill.throwing.trigger|When you throw an explosive (100 pts, 2 pts per explosion
 skill.throwing.elite|Range +20% (extra), detonates instantly on ground contact
 skill.perception.name|Awareness
 skill.perception.trigger|Sound nearby (12 pts, every 0.5 s)
-skill.perception.elite|View and detection +10%, hearing +20% (extra)
+skill.perception.elite|Detection +10%, hearing +20% (extra)
 skill.covert.name|Stealth Movement
 skill.covert.trigger|While walking (sprinting excluded, 1 pt/s + 0.7 pts/m)
 skill.covert.elite|Walking and sprint noise -25% more (-45% / -35% total)

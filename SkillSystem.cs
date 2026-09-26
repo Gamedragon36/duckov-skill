@@ -94,8 +94,11 @@ namespace Dskill
             { "WaterCost", "수분 소모" },
             { "NightVisionAbility", "야간 시야" },
             { "ViewDistance", "시야 거리" },
+            { "ViewRange", "플레이어 감지 거리" },
             { "SenseRange", "감지 범위" },
             { "HearingAbility", "청력" },
+            { "FishingTime", "낚시 속도" },
+            { "FishingQualityFactor", "낚시 등급" },
             { "ElementFactor_Physics", "받는 물리 피해" }
         };
 
@@ -516,9 +519,7 @@ namespace Dskill
 
             if (id == "assault")
             {
-                // 조준(ADS) 시간 감소는 총기(무기) 스탯에 직접 거는 방식이라 문구를 직접 만든다 (2026-09-26)
-                AddPart(parts, Locale.F("eff.assaultAds", "조준 시간 -{0}%",
-                    (Specials.AssaultAdsTimePerLevel * level * 100f).ToString("0.#")));
+                // 2026-09-27: 조준(ADS) 시간 감소는 게임이 스탯을 받지 않아 **효과를 제거**했다(문구도 없음).
             }
 
             foreach (string part in parts)

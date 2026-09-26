@@ -243,9 +243,9 @@ namespace Dskill
                 EliteKo = "총기 치명타율 +10%",
                 Effects = new[]
                 {
-                    new EffectDef("GunDamageMultiplier", StatModKind.PercentMultiply, 0.0075f),  // 만렙 +15%
-                    // 조준(ADS) 시간 감소 — 캐릭터 스탯으로 적용 (총기 아이템에서는 거부됨: 2026-09-26 실측)
-                    new EffectDef("AdsTime", StatModKind.PercentMultiply, -Specials.AssaultAdsTimePerLevel)  // 만렙 -50%
+                    new EffectDef("GunDamageMultiplier", StatModKind.PercentMultiply, 0.0075f)  // 만렙 +15%
+                    // ⚠ 2026-09-27: 조준(ADS) 시간 감소는 **게임이 스탯을 받지 않아**(캐릭터·총기 모두 '없는 스탯' 경고)
+                    //   효과를 제거했다. (스탯 키 AdsTime 은 존재하나 어느 객체도 읽지 않는 값)
                 },
                 EliteEffects = new[]
                 {
@@ -312,16 +312,19 @@ namespace Dskill
             {
                 Id = "perception", NameKo = "인지/정찰", Icon = "◁", Category = "전투",
                 TriggerKo = "소리 감지 (1회 12점, 0.5초 간격)",
-                EliteKo = "시야·감지 +10%, 청력 +20% 추가",
+                EliteKo = "감지 거리·감지 범위 +10%, 청력 +20% 추가",
                 Effects = new[]
                 {
-                    new EffectDef("ViewDistance", StatModKind.PercentMultiply, 0.01f),      // 만렙 +20%
-                    new EffectDef("SenseRange", StatModKind.PercentMultiply, 0.01f),        // 만렙 +20%
-                    new EffectDef("HearingAbility", StatModKind.PercentMultiply, 0.015f)    // 만렙 +30%
+                    // 2026-09-27: 게임 내부에서 'AI 감지'와 '플레이어 감지'가 별도로 취급되므로,
+                    //  AI 쪽으로 보이는 ViewDistance(시야 거리)는 제거하고 **플레이어 감지 거리(ViewRange)** 로 몰아준다.
+                    //  (ViewRange = DLL 의 viewRangeHash. 게임이 거부하면 로그에 '없는 스탯' 경고가 남는다)
+                    new EffectDef("ViewRange", StatModKind.PercentMultiply, 0.02f),       // 만렙 +40%
+                    new EffectDef("SenseRange", StatModKind.PercentMultiply, 0.01f),      // 만렙 +20%
+                    new EffectDef("HearingAbility", StatModKind.PercentMultiply, 0.015f)  // 만렙 +30% (그대로)
                 },
                 EliteEffects = new[]
                 {
-                    new EffectDef("ViewDistance", StatModKind.PercentMultiply, 0.10f),
+                    new EffectDef("ViewRange", StatModKind.PercentMultiply, 0.10f),       // 엘리트 +10% → 합계 +50%
                     new EffectDef("SenseRange", StatModKind.PercentMultiply, 0.10f),
                     new EffectDef("HearingAbility", StatModKind.PercentMultiply, 0.20f)
                 }
