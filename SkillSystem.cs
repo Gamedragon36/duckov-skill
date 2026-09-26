@@ -36,11 +36,10 @@ namespace Dskill
         /// <summary>현재 보너스를 적용해 둔 캐릭터 아이템</summary>
         private Item _appliedItem;
 
-        // 수리 손실 감소: **수리 대상 아이템**(무기·장비)마다 원래 계수를 기억해 둔다.
-        //  ⚠ 2026-09-26 수정: 예전에는 캐릭터 아이템 1개에만 걸었는데, 게임은 **수리하는 아이템**이 가진
-        //   WeaponRepairLossFactor / EquipmentRepairLossFactor 를 읽어 손실을 계산한다 → 아이템마다 걸어야 효과가 난다.
-        private readonly Dictionary<Item, float> _repairLossWeaponOriginal = new Dictionary<Item, float>();
-        private readonly Dictionary<Item, float> _repairLossEquipOriginal = new Dictionary<Item, float>();
+        // 수리 손실 감소: **수리 대상 아이템**(무기·장비)마다 원래 값을 기억해 둔다.
+        //  ⚠ 2026-09-26 1차: 캐릭터 → 아이템. 2026-09-27 2차: 게임이 안 쓰는 RepairLossFactor 대신
+        //   `Item.DurabilityLoss`(수리 시 깎이는 최대 내구도)를 조절한다.
+        private readonly Dictionary<Item, float> _repairLossOriginal = new Dictionary<Item, float>();
         private bool _repairLossLogged;
 
         public event Action<string, int> OnLevelUp;
@@ -783,8 +782,9 @@ namespace Dskill
 
         /// <summary>수리 스킬: 게임은 수리 손실 계수를 'Constants' 에서 읽으므로 직접 값을 넣어 준다.</summary>
         /// <summary>수리 손실 감소를 **한 아이템**(무기·장비)에 적용한다.
-        ///  게임은 '수리하는 아이템'이 가진 WeaponRepairLossFactor / EquipmentRepairLossFactor 를 읽어 손실을 계산하므로
-        ///  캐릭터가 아니라 아이템마다 걸어야 효과가 난다 (2026-09-26 수정).</summary>
+        ///  게임 `Item` 에는 **`DurabilityLoss`(수리 시 깎이는 최대 내구도, 설정 가능)** 가 있고
+        ///  화면 표시는 `MaxDurabilityWithLoss` = `MaxDurability` − `DurabilityLoss` 로 계산된다.
+        ///  (2026-09-26 1차 수정: 캐릭터→아이템. 2026-09-27 2차: `RepairLossFactor` 계열은 게임이 쓰지 않아 **`DurabilityLoss` 로 변경**)</summary>
         public void ApplyRepairLoss(Item item)
         {
             if (item == null)
@@ -799,44 +799,62 @@ namespace Dskill
                 return;
             }
 
-            float originalWeapon;
-            float originalEquip;
-            if (!_repairLossWeaponOriginal.TryGetValue(item, out originalWeapon))
+            float originalLoss;
+            if (!_repairLossOriginal.TryGetValue(item, out originalLoss))
             {
-                if (_repairLossWeaponOriginal.Count > 512)
+                if (_repairLossOriginal.Count > 512)
                 {
                     RestoreAllRepairLoss();   // 추적이 너무 커지면 안전하게 전부 원래대로 하고 다시 시작
                 }
-                originalWeapon = item.GetFloat("WeaponRepairLossFactor", 1f);
-                originalEquip = item.GetFloat("EquipmentRepairLossFactor", 1f);
-                _repairLossWeaponOriginal[item] = originalWeapon;
-                _repairLossEquipOriginal[item] = originalEquip;
-            }
-            else if (!_repairLossEquipOriginal.TryGetValue(item, out originalEquip))
-            {
-                originalEquip = 1f;   // 방어구 계수만 없던 경우(안전)
+                originalLoss = item.DurabilityLoss;
+                _repairLossOriginal[item] = originalLoss;
             }
 
-            float weaponNow = Mathf.Max(0f, originalWeapon * (1f - reduction));
-            float equipNow = Mathf.Max(0f, originalEquip * (1f - reduction));
+            float lossNow = Mathf.Max(0f, originalLoss * (1f - reduction));
 
             // 이미 원하는 값이면 쓰지 않는다(2초마다 전 아이템을 도므로 불필요한 갱신 방지)
-            if (Mathf.Abs(item.GetFloat("WeaponRepairLossFactor", 1f) - weaponNow) < 0.0001f &&
-                Mathf.Abs(item.GetFloat("EquipmentRepairLossFactor", 1f) - equipNow) < 0.0001f)
+            if (Mathf.Abs(item.DurabilityLoss - lossNow) >= 0.0001f)
             {
-                return;
+                item.DurabilityLoss = lossNow;
+
+                // 검증용 1회 로그: 값이 실제로 바뀌었는지 숫자로 확인
+                if (!_repairLossLogged)
+                {
+                    _repairLossLogged = true;
+                    Debug.Log("[Dskill] 수리: 아이템 DurabilityLoss(수리 시 최대 내구도 감소) " +
+                              (reduction * 100f).ToString("0.#") + "% 감소 적용 (" +
+                              originalLoss.ToString("0.##") + " → " + lossNow.ToString("0.##") + ")");
+                }
             }
+        }
 
-            item.SetFloat("WeaponRepairLossFactor", weaponNow);
-            item.SetFloat("EquipmentRepairLossFactor", equipNow);
+        /// <summary>수리 스킬이 엘리트(만렙)인가 — '최대 내구도 감소 없음' 판정</summary>
+        public bool IsRepairElite()
+        {
+            return RepairLossReduction(GetLevel("repair")) >= 1f;
+        }
 
-            // 검증용 1회 로그: 계수가 실제로 바뀌었는지 숫자로 확인
-            if (!_repairLossLogged)
+        /// <summary>수리로 줄어든 **최대 내구도**를 되돌린다(엘리트 전용).
+        ///  `DurabilityLoss` 를 0 으로 두어도 게임이 이미 깎아 버린 값은 남으므로, 스캔에서 감소를 감지해 복구한다.</summary>
+        public bool TryRestoreMaxDurability(Item item, float target)
+        {
+            if (item == null || !IsRepairElite())
             {
-                _repairLossLogged = true;
-                Debug.Log("[Dskill] 수리: 아이템 수리 손실 감소 " + (reduction * 100f).ToString("0.#") +
-                          "% 적용 (무기 계수 " + originalWeapon.ToString("0.##") + " → " + weaponNow.ToString("0.##") +
-                          ", 장비 계수 " + originalEquip.ToString("0.##") + " → " + equipNow.ToString("0.##") + ")");
+                return false;
+            }
+            try
+            {
+                if (item.MaxDurability + 0.01f >= target)
+                {
+                    return false;
+                }
+                item.MaxDurability = target;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Dskill] 최대 내구도 복구 실패(무시): " + e.Message);
+                return false;
             }
         }
 
@@ -847,35 +865,28 @@ namespace Dskill
                 return;
             }
 
-            float originalWeapon;
-            float originalEquip;
-            if (_repairLossWeaponOriginal.TryGetValue(item, out originalWeapon))
+            float originalLoss;
+            if (_repairLossOriginal.TryGetValue(item, out originalLoss))
             {
-                item.SetFloat("WeaponRepairLossFactor", originalWeapon);
-                _repairLossWeaponOriginal.Remove(item);
-            }
-            if (_repairLossEquipOriginal.TryGetValue(item, out originalEquip))
-            {
-                item.SetFloat("EquipmentRepairLossFactor", originalEquip);
-                _repairLossEquipOriginal.Remove(item);
+                item.DurabilityLoss = originalLoss;
+                _repairLossOriginal.Remove(item);
             }
         }
 
-        /// <summary>걸어 둔 모든 아이템의 수리 손실 계수를 원래대로 돌린다(모드 해제·추적 상한 초과 시).</summary>
+        /// <summary>걸어 둔 모든 아이템의 수리 손실 값을 원래대로 돌린다(모드 해제·추적 상한 초과 시).</summary>
         private void RestoreAllRepairLoss()
         {
             try
             {
-                List<Item> items = new List<Item>(_repairLossWeaponOriginal.Keys);
+                List<Item> items = new List<Item>(_repairLossOriginal.Keys);
                 foreach (Item item in items)
                 {
                     RestoreRepairLoss(item);
                 }
-                _repairLossEquipOriginal.Clear();
             }
             catch (Exception e)
             {
-                Debug.LogWarning("[Dskill] 수리 손실 계수 복구 실패(무시): " + e.Message);
+                Debug.LogWarning("[Dskill] 수리 손실 값 복구 실패(무시): " + e.Message);
             }
         }
 

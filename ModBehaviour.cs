@@ -53,6 +53,8 @@ namespace Dskill
 
         /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
         private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
+        // 수리 엘리트: 직전 스캔의 **최대 내구도**를 기억해 두고, 수리로 줄었으면 되돌린다 (2026-09-27)
+        private readonly Dictionary<Item, float> _lastMaxDurability = new Dictionary<Item, float>();
         private float _repairStorageNextScan;   // 창고(PlayerStorage) 수리 감지 스로틀
         private readonly List<Item> _itemBuffer = new List<Item>();
 
@@ -618,8 +620,22 @@ namespace Dskill
                 }
 
                 // 수리 손실 감소(수리 스킬)를 '이 아이템'에 걸어 둔다
-                //  — 게임은 수리하는 아이템이 가진 계수를 읽으므로 아이템마다 걸어야 한다 (2026-09-26 수정)
+                //  — 게임은 아이템의 `DurabilityLoss`(수리 시 깎이는 최대 내구도)를 읽는다 (2026-09-27 수정)
                 _skills.ApplyRepairLoss(item);
+
+                // 수리 엘리트: 수리로 **최대 내구도가 줄었으면** 직전 값으로 되돌린다(값이 이미 깎인 경우 대비)
+                float maxNow = item.MaxDurability;
+                float prevMax;
+                if (_lastMaxDurability.TryGetValue(item, out prevMax) && maxNow < prevMax - 0.01f)
+                {
+                    if (_skills.TryRestoreMaxDurability(item, prevMax))
+                    {
+                        Debug.Log("[Dskill] 수리 엘리트: 최대 내구도 감소를 복구했습니다 " +
+                                  maxNow.ToString("0.#") + " → " + item.MaxDurability.ToString("0.#") + " (수리 손실 없음)");
+                        maxNow = item.MaxDurability;
+                    }
+                }
+                _lastMaxDurability[item] = maxNow;
 
                 float current = item.Durability;
                 float previous;
@@ -644,6 +660,18 @@ namespace Dskill
                     if (key == null || !_itemBuffer.Contains(key))
                     {
                         _lastDurability.Remove(key);
+                        _lastMaxDurability.Remove(key);   // 최대 내구도 추적도 함께 정리
+                    }
+                }
+            }
+            if (_lastMaxDurability.Count > _itemBuffer.Count + 32)
+            {
+                List<Item> maxKeys = new List<Item>(_lastMaxDurability.Keys);
+                foreach (Item key in maxKeys)
+                {
+                    if (key == null || !_itemBuffer.Contains(key))
+                    {
+                        _lastMaxDurability.Remove(key);
                     }
                 }
             }
