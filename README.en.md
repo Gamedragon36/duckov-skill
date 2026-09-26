@@ -53,7 +53,7 @@ Shooting, sprinting, looting, fishing and crafting all grant **skill XP**, and e
 | ◎ | Marksmanship | hit targets **beyond 25 m** (**600** pts, headshot **+800**) | gun range **+30%**, spread **-20%** | headshot damage **+10%** |
 | ◀ | Melee | hit with melee weapons (45 pts, +90 on kill) | melee damage **+50%**, melee crit **+50%**, movement **+10%**, **melee attack speed +30%** | movement **+10%**, **melee attack speed +20%** more |
 | ▶ | Throwing | throw explosives | throw distance **+30%**, explosion damage **+50%** | distance **+20%**, **detonates instantly on ground contact** |
-| ◁ | Perception | hear sounds around you (12 pts, max once per 0.5 s) | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
+| ◁ | Perception | sound detected (12 pts, every 0.5 s) | view/sense range **+20%**, hearing **+30%** | **+10 / +10 / +20%** |
 
 ### Practical
 

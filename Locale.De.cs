@@ -128,7 +128,7 @@ skill.throwing.name|Wurfwaffen
 skill.throwing.trigger|Wenn du Sprengstoff wirfst (100 Pkt., 2 Pkt. pro Explosionsschaden)
 skill.throwing.elite|Reichweite +20% (zusätzlich), explodiert sofort beim Bodenkontakt
 skill.perception.name|Wahrnehmung
-skill.perception.trigger|Wenn du ein Geräusch bemerkst (12 Pkt., max. 1x pro 0.5 Sekunden)
+skill.perception.trigger|Geräusch bemerkt (12 Pkt., alle 0.5 s)
 skill.perception.elite|Sicht und Erkennung +10%, Gehör +20% (zusätzlich)
 skill.covert.name|Tarnbewegung
 skill.covert.trigger|Beim Gehen (Rennen ausgenommen, 1 Pkt./s + 0.7 Pkt./m)

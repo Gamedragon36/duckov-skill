@@ -311,7 +311,7 @@ namespace Dskill
             new SkillDef
             {
                 Id = "perception", NameKo = "인지/정찰", Icon = "◁", Category = "전투",
-                TriggerKo = "주변 소리를 감지할 때 (1회 12점, 0.5초에 최대 1번)",
+                TriggerKo = "소리 감지 (1회 12점, 0.5초 간격)",
                 EliteKo = "시야·감지 +10%, 청력 +20% 추가",
                 Effects = new[]
                 {

@@ -128,7 +128,7 @@ skill.throwing.name|投擲術
 skill.throwing.trigger|爆発物を投げたとき（1 回 100 点、爆発ダメージ 1 につき 2 点）
 skill.throwing.elite|距離 +20%（追加）、地面に触れると即時爆発
 skill.perception.name|認知・偵察
-skill.perception.trigger|周囲の音を感知したとき（1 回 12 点、0.5 秒に最大 1 回）
+skill.perception.trigger|周囲の音を感知（1 回 12 点、0.5 秒間隔）
 skill.perception.elite|視界・感知 +10%、聴力 +20%（追加）
 skill.covert.name|隠密移動
 skill.covert.trigger|歩いて移動したとき（走りは除く、毎秒 1 点 + 1m あたり 0.7 点）

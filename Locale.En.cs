@@ -128,7 +128,7 @@ skill.throwing.name|Throwables
 skill.throwing.trigger|When you throw an explosive (100 pts, 2 pts per explosion damage)
 skill.throwing.elite|Range +20% (extra), detonates instantly on ground contact
 skill.perception.name|Awareness
-skill.perception.trigger|When you notice a sound nearby (12 pts, at most once per 0.5 s)
+skill.perception.trigger|Sound nearby (12 pts, every 0.5 s)
 skill.perception.elite|View and detection +10%, hearing +20% (extra)
 skill.covert.name|Stealth Movement
 skill.covert.trigger|While walking (sprinting excluded, 1 pt/s + 0.7 pts/m)

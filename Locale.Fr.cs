@@ -128,7 +128,7 @@ skill.throwing.name|Lancers
 skill.throwing.trigger|En lançant un explosif (100 pts, 2 pts par dégât d'explosion)
 skill.throwing.elite|Portée +20% (supplémentaire), explose aussitôt au contact du sol
 skill.perception.name|Perception
-skill.perception.trigger|En remarquant un son proche (12 pts, au plus 1 fois par 0.5 s)
+skill.perception.trigger|Son proche (12 pts, toutes les 0.5 s)
 skill.perception.elite|Vision et détection +10%, ouïe +20% (supplémentaire)
 skill.covert.name|Déplacement furtif
 skill.covert.trigger|En marchant (course exclue, 1 pt/s + 0.7 pts/m)

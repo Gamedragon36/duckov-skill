@@ -128,7 +128,7 @@ skill.throwing.name|Метательное
 skill.throwing.trigger|При броске взрывчатки (100 очков, 2 очка за единицу урона взрыва)
 skill.throwing.elite|Дальность +20% (дополнительно), мгновенный взрыв при касании земли
 skill.perception.name|Восприятие
-skill.perception.trigger|При обнаружении звука рядом (12 очков, не чаще 1 раза в 0.5 секунды)
+skill.perception.trigger|Звук рядом (12 очков, каждые 0.5 с)
 skill.perception.elite|Обзор и обнаружение +10%, слух +20% (дополнительно)
 skill.covert.name|Скрытное движение
 skill.covert.trigger|При ходьбе (кроме бега, 1 очко/с + 0.7 очка/м)

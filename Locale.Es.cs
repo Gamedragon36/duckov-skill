@@ -128,7 +128,7 @@ skill.throwing.name|Lanzables
 skill.throwing.trigger|Al lanzar un explosivo (100 ptos, 2 ptos por punto de daño)
 skill.throwing.elite|Alcance +20% (extra), detona al instante al tocar el suelo
 skill.perception.name|Percepción
-skill.perception.trigger|Al notar un sonido cercano (12 ptos, máximo 1 vez por 0.5 s)
+skill.perception.trigger|Sonido cercano (12 ptos, cada 0.5 s)
 skill.perception.elite|Visión y detección +10%, oído +20% (extra)
 skill.covert.name|Movimiento sigiloso
 skill.covert.trigger|Al caminar (sin correr, 1 pto/s + 0.7 ptos/m)

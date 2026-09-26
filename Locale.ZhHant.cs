@@ -128,7 +128,7 @@ skill.throwing.name|投擲
 skill.throwing.trigger|投擲爆炸物時（每次 100 點，每點爆炸傷害 2 點）
 skill.throwing.elite|距離 +20%（額外），觸地即爆
 skill.perception.name|感知
-skill.perception.trigger|察覺到周圍聲響時（每次 12 點，每 0.5 秒最多 1 次）
+skill.perception.trigger|察覺周圍聲響（每次 12 點，每 0.5 秒）
 skill.perception.elite|視野與感知 +10%，聽力 +20%（額外）
 skill.covert.name|潛行移動
 skill.covert.trigger|走路移動時（不含奔跑，每秒 1 點 + 每公尺 0.7 點）
