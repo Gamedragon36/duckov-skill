@@ -17,10 +17,10 @@ namespace Dskill
     /// </summary>
     public partial class ModBehaviour : Duckov.Modding.ModBehaviour
     {
-        public const string Version = "0.0.10";
+        public const string Version = "0.0.11";
 
         /// <summary>창작마당 업로드 시 함께 기록되는 변경 메모 (릴리즈마다 갱신)</summary>
-        private const string ChangeNote = "0.0.10: +assault aim time -50% / +hold melee attack to keep swinging / dash 6 pts / marksmanship 600&800 at 25m / throwing elite instant on ground contact / perception 12 pts per 0.5s / crafting 10% no cap / endurance stamina -60% / armor +1.5 / reload 50 / barter 10 / fixes: melee-hold no longer hijacks left click, skill window clipping, upload config restore";
+        private const string ChangeNote = "0.0.11: assault aim time -50% now really applies (0.0.10 announced it but the stat key never worked) / awareness detection range +20% -> +50% total (renamed 'player detection range') / repair elite 'no max durability loss' now works - one repair fills to full / missing translations added (fishing effects, aim time)";
 
         private Config _config;
         private MetaProgress _meta;
