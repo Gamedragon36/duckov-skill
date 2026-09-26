@@ -53,7 +53,8 @@ namespace Dskill
 
         /// <summary>수리 경험치용: 아이템별 직전 내구도</summary>
         private readonly Dictionary<Item, float> _lastDurability = new Dictionary<Item, float>();
-        // 수리 손실 취소(엘리트): 직전 스캔의 `DurabilityLoss` 를 기억해, 수리로 늘어난 만큼을 되돌린다 (2026-09-27)
+        // 수리 손실 취소(엘리트): 아이템별 **가장 낮게 본 DurabilityLoss** 를 기준으로 삼고, 값이 커져 있으면 매 스캔마다 되돌린다 (2026-09-27)
+        private readonly Dictionary<Item, float> _bestRepairLoss = new Dictionary<Item, float>();
         private readonly Dictionary<Item, float> _lastRepairLoss = new Dictionary<Item, float>();
         private int _repairRestoreLogged;
         private float _repairStorageNextScan;   // 창고(PlayerStorage) 수리 감지 스로틀
@@ -624,30 +625,43 @@ namespace Dskill
 
                 // ⚠ 2026-09-27 진단 결과: 게임은 수리할 때마다 `DurabilityLoss`(최대 내구도 손실 '비율')를 올리고,
                 //   표시 최대치 = MaxDurability × (1 − DurabilityLoss)  ← 실측 2건으로 확인(100×0.9835=98.35, 150×0.9823=147.34).
-                //   → 그래서 **수리 전 값을 기억했다가, 수리로 늘어난 만큼을 되돌린다**(엘리트 = 100% 취소).
-                //   ⚠ 0 은 '손실 없음'이 맞지만(새 아이템의 값), 게임이 값을 다시 계산하는 경로가 있어 **추측해서 쓰지 않는다**.
+                //   엘리트 = **가장 낮게 본 값(보통 0)** 을 계속 유지 → 게임이 수리로 올리거나 되돌려 덮어써도 다음 스캔에서 다시 되돌린다.
                 float lossNow = item.DurabilityLoss;
-                float lossBefore;
-                if (_lastRepairLoss.TryGetValue(item, out lossBefore) && lossNow > lossBefore + 0.0001f)
+                float bestLoss;
+                if (!_bestRepairLoss.TryGetValue(item, out bestLoss) || lossNow < bestLoss - 0.0001f)
+                {
+                    bestLoss = lossNow;              // 더 낮은 값을 처음 봤다 → 그걸 기준으로 삼는다
+                    _bestRepairLoss[item] = bestLoss;
+                    _lastRepairLoss[item] = lossNow;
+                    lossNow = bestLoss;
+                }
+                else if (lossNow > bestLoss + 0.0001f)
                 {
                     float reduction = _skills.RepairLossReduction(_skills.GetLevel("repair"));
                     if (reduction > 0f)
                     {
-                        float restoredLoss = lossBefore + (lossNow - lossBefore) * (1f - reduction);
-                        if (Mathf.Abs(restoredLoss - lossNow) > 0.0001f)
+                        float gameValue = lossNow;   // 게임이 올려놓은 값(되돌리기 전)
+                        float target = bestLoss + (lossNow - bestLoss) * (1f - reduction);
+                        item.DurabilityLoss = target;
+                        lossNow = target;
+                        _lastRepairLoss[item] = target;
+                        if (_repairRestoreLogged++ < 5)
                         {
-                            item.DurabilityLoss = restoredLoss;
-                            lossNow = restoredLoss;
-                            if (_repairRestoreLogged++ == 0)
-                            {
-                                Debug.Log("[Dskill] 수리 손실 취소: TypeID " + item.TypeID +
-                                          " DurabilityLoss " + lossBefore.ToString("0.####") + " → " + lossNow.ToString("0.####") +
-                                          " (수리 손실 -" + (reduction * 100f).ToString("0.#") + "% 취소, 엘리트는 100% 취소)");
-                            }
+                            Debug.Log("[Dskill] 수리 손실 취소: TypeID " + item.TypeID +
+                                      " 게임값 " + gameValue.ToString("0.####") + " → 복구 " + target.ToString("0.####") +
+                                      " (기준 " + bestLoss.ToString("0.####") + ", 수리 손실 -" + (reduction * 100f).ToString("0.#") +
+                                      "% 취소 / 엘리트는 100% 취소)");
                         }
                     }
+                    else
+                    {
+                        _lastRepairLoss[item] = lossNow;
+                    }
                 }
-                _lastRepairLoss[item] = lossNow;
+                else
+                {
+                    _lastRepairLoss[item] = lossNow;
+                }
 
                 // 진단 프로브(읽기 전용): 수리(내구도 증가)가 감지되면 관련 값을 전부 남긴다.
                 //  → 어떤 값이 실제로 '최대 내구도'를 깎는지 로그로 확정한다 (2026-09-27, 값은 절대 쓰지 않음)
@@ -683,7 +697,19 @@ namespace Dskill
                     if (key == null || !_itemBuffer.Contains(key))
                     {
                         _lastDurability.Remove(key);
-                        _lastRepairLoss.Remove(key);   // 수리 손실 추적도 함께 정리
+                        _lastRepairLoss.Remove(key);     // 수리 손실 추적도 함께 정리
+                        _bestRepairLoss.Remove(key);     // 기준값도 정리(다시 보면 새로 기록)
+                    }
+                }
+            }
+            if (_bestRepairLoss.Count > _itemBuffer.Count + 32)
+            {
+                List<Item> bestKeys = new List<Item>(_bestRepairLoss.Keys);
+                foreach (Item key in bestKeys)
+                {
+                    if (key == null || !_itemBuffer.Contains(key))
+                    {
+                        _bestRepairLoss.Remove(key);
                     }
                 }
             }
