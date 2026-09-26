@@ -532,71 +532,11 @@ namespace Dskill
         private bool _meleeWeaponStatLogged;
         private readonly object _meleeSpeedToken = new object();   // 무기 AttackSpeed 수정자 토큰
 
-        // ---- 사격술: 조준(ADS) 시간 감소 (2026-09-26 사용자 요청) ----
-        //  조준 시간은 **총기(무기)가 읽는 스탯 `AdsTime`** 이라 캐릭터가 아니라 장착한 총에 건다
-        //  (근접 AttackSpeed 와 같은 방식 — 캐릭터에 걸면 거부된다).
-        private readonly object _adsTimeToken = new object();
-        private Item _adsTimeItem;
-        private int _appliedAdsTimeLevel = -1;
-        private bool _adsTimeStatLogged;
+        // ---- 사격술: 조준(ADS) 시간 감소 ----
+        //  2026-09-26 실측: 총기 아이템에 `AdsTime` 을 걸면 **게임이 거부**한다 →
+        //  캐릭터 스탯(EffectDef "AdsTime")으로 적용한다 (SkillDefs.cs 의 assault Effects 참조).
+        //  (무기 쪽 적용 코드는 거부되는 죽은 경로라 제거함)
 
-        /// <summary>사격술: 장착한 총의 조준 시간(AdsTime)을 레벨에 따라 줄인다 (만렙 -50%).</summary>
-        private void ApplyAssaultAdsTime()
-        {
-            if (_skills == null)
-            {
-                return;
-            }
-
-            Item gun = _gun != null ? _gun.Item : null;
-            int level = _skills.GetLevel("assault");
-            float reduction = level > 0 ? Specials.AssaultAdsTimePerLevel * level : 0f;
-
-            if (gun == _adsTimeItem && level == _appliedAdsTimeLevel)
-            {
-                return;   // 이미 같은 총·같은 레벨로 처리됨
-            }
-
-            try
-            {
-                // 총을 바꿨으면 이전 총에서 제거
-                if (_adsTimeItem != null && _adsTimeItem != gun)
-                {
-                    _adsTimeItem.RemoveAllModifiersFrom(_adsTimeToken);
-                }
-                _adsTimeItem = gun;
-                _appliedAdsTimeLevel = level;
-
-                if (gun == null)
-                {
-                    return;
-                }
-                gun.RemoveAllModifiersFrom(_adsTimeToken);
-                if (reduction <= 0f)
-                {
-                    return;
-                }
-
-                if (gun.AddModifier("AdsTime", new Modifier(ModifierType.PercentageMultiply, -reduction, _adsTimeToken)))
-                {
-                    if (!_adsTimeStatLogged)
-                    {
-                        _adsTimeStatLogged = true;
-                        Debug.Log("[Dskill] 사격술: 총기 AdsTime(조준 시간) -" + (reduction * 100f).ToString("0.#") +
-                                  "% 적용 성공 (무기 스탯, Lv." + level + ")");
-                    }
-                }
-                else if (!_adsTimeStatLogged)
-                {
-                    _adsTimeStatLogged = true;
-                    Debug.LogWarning("[Dskill] 총기에서 AdsTime 스탯이 거부되었습니다 — 조준 시간 감소가 적용되지 않습니다(다른 방식 필요).");
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning("[Dskill] 사격술 조준 시간 적용 실패(무시): " + e.Message);
-            }
-        }
         private bool _wasDashing;
 
         /// <summary>[미사용 — 0.0.8 실패] 근접 무기에는 UsageUtilities(사용 시간)가 없어 이 방식은 쓰지 않는다.

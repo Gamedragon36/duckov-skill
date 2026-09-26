@@ -243,7 +243,9 @@ namespace Dskill
                 EliteKo = "총기 치명타율 +10%",
                 Effects = new[]
                 {
-                    new EffectDef("GunDamageMultiplier", StatModKind.PercentMultiply, 0.0075f)  // 만렙 +15%
+                    new EffectDef("GunDamageMultiplier", StatModKind.PercentMultiply, 0.0075f),  // 만렙 +15%
+                    // 조준(ADS) 시간 감소 — 캐릭터 스탯으로 적용 (총기 아이템에서는 거부됨: 2026-09-26 실측)
+                    new EffectDef("AdsTime", StatModKind.PercentMultiply, -Specials.AssaultAdsTimePerLevel)  // 만렙 -50%
                 },
                 EliteEffects = new[]
                 {

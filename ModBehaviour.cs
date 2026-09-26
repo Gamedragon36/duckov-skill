@@ -480,7 +480,6 @@ namespace Dskill
             CheckPickups();
             ApplyDashSettings();
             ApplyMeleeSpeedSettings();
-            ApplyAssaultAdsTime();   // 사격술: 총기 조준 시간 감소 (2026-09-26)
             DetectHideoutTime(elapsed);
             ApplyHideoutEffects(elapsed);
             DetectNightTime(elapsed);
