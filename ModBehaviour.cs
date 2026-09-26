@@ -642,14 +642,29 @@ namespace Dskill
                     {
                         float gameValue = lossNow;   // 게임이 올려놓은 값(되돌리기 전)
                         float target = bestLoss + (lossNow - bestLoss) * (1f - reduction);
+
+                        // 게임은 수리할 때 '그 순간의(줄어든) 최대치'까지만 채운다 →
+                        //  되돌린 최대치까지 올려 주어야 **한 번 수리로 가득 찬다**(수리 키트를 두 번 쓰지 않게).
+                        //  실측(2026-09-27): 손실 0.0585 → 94.15 까지만 채워짐(= 100×(1−0.0585))
+                        float reducedMax = item.MaxDurability * (1f - gameValue);
+                        bool filledToReducedMax = Mathf.Abs(item.Durability - reducedMax) < 0.05f;
+
                         item.DurabilityLoss = target;
                         lossNow = target;
                         _lastRepairLoss[item] = target;
+
+                        if (filledToReducedMax)
+                        {
+                            item.Durability = item.MaxDurabilityWithLoss;   // 복구된 최대치까지 채운다
+                        }
                         NotifyDurabilityChanged(item);   // 게임 UI 가 듣는 이벤트를 직접 발생시켜 표시를 갱신
+
                         if (_repairRestoreLogged++ < 5)
                         {
                             Debug.Log("[Dskill] 수리 손실 취소: TypeID " + item.TypeID +
                                       " 게임값 " + gameValue.ToString("0.####") + " → 복구 " + target.ToString("0.####") +
+                                      " / 내구도 " + item.Durability.ToString("0.##") + " (최대 " + item.MaxDurabilityWithLoss.ToString("0.##") + ")" +
+                                      (filledToReducedMax ? " [가득 채움]" : "") +
                                       " (기준 " + bestLoss.ToString("0.####") + ", 수리 손실 -" + (reduction * 100f).ToString("0.#") +
                                       "% 취소 / 엘리트는 100% 취소)");
                         }
