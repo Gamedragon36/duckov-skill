@@ -132,12 +132,7 @@ namespace Dskill
                         Debug.Log("[Dskill] 정밀 사격 +" + gain.ToString("0.#") + " (" + distance.ToString("0.#") +
                                   "m" + (crit ? ", 치명타" : "") + " / 무기ID " + info.fromWeaponItemID + ")");
                     }
-                    else
-                    {
-                        // 검증용: 기준 미만일 때 실제로 잰 거리를 남긴다(가까운 거리 오지급 확인)
-                        Debug.Log("[Dskill] 사격 명중 " + distance.ToString("0.#") + "m — 정밀 사격 기준 " +
-                                  Rates.MarksmanshipMinDistance.ToString("0") + "m 미만이라 오르지 않음");
-                    }
+                    // 기준 미만은 로그를 남기지 않는다 — 명중마다 찍혀 로그가 폭증한다(2026-09-26 감사에서 제거)
                 }
             }
         }

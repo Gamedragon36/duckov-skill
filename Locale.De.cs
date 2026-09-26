@@ -30,7 +30,7 @@ meta.none|Vererbung: noch kein Eintrag aus anderen Spielständen
 meta.line|Vererbung {0} (andere Spielstände: {1} / Lv.{2}) -> EP +{3}%
 meta.notice|[Vererbung] EP +{0}% durch andere Spielstände ({1})
 # ==== Mitteilungen ====
-notify.levelup|[Skill] {0} Lv.{1}
+notify.levelup|[Fähigkeit] {0} Lv.{1}
 notify.elite|  ★Elite erreicht!
 # ==== Effekttexte ====
 eff.survival|Debuff-Widerstand {0}%, erlittener Feuer-/Giftschaden -{1}%

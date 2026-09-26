@@ -634,6 +634,7 @@ namespace Dskill
         private float _loggedDashCool = -1f;      // 쿨타임 로그 중복 방지
         private float _loggedDashStamina = -1f;   // 스태미나 로그 중복 방지(지구력 중첩 확인용)
         private float _lastDashLogTime = -10f;    // 구르기 간격 실측용
+        private float _lastDashGapLogTime = -10f; // 위 로그를 5초에 1번만 남기기 위한 시각
 
         /// <summary>구르기 스킬: 쿨타임과 스태미나 소모를 줄인다.</summary>
         private void ApplyDashSettings()
@@ -738,8 +739,13 @@ namespace Dskill
                 _lastDashStartTime = Time.time;
 
                 // 실측: 이전 구르기와의 간격을 로그로 남긴다(쿨타임 확인용)
-                float gap = Time.time - _lastDashLogTime;
-                Debug.Log("[Dskill] 구르기 사용 감지: 이전 사용과 " + gap.ToString("0.##") + "초 간격");
+                //  폭주 방지: 5초에 1번만 남긴다(감사에서 조정 — 구르기 1회마다 찍으면 로그가 수천 줄이 된다)
+                if (Time.time - _lastDashGapLogTime >= 5f)
+                {
+                    float gap = Time.time - _lastDashLogTime;
+                    _lastDashGapLogTime = Time.time;
+                    Debug.Log("[Dskill] 구르기 사용 감지: 이전 사용과 " + gap.ToString("0.##") + "초 간격");
+                }
                 _lastDashLogTime = Time.time;
             }
             _wasDashing = dashing;
