@@ -616,6 +616,11 @@ namespace Dskill
                 {
                     continue;
                 }
+
+                // 수리 손실 감소(수리 스킬)를 '이 아이템'에 걸어 둔다
+                //  — 게임은 수리하는 아이템이 가진 계수를 읽으므로 아이템마다 걸어야 한다 (2026-09-26 수정)
+                _skills.ApplyRepairLoss(item);
+
                 float current = item.Durability;
                 float previous;
                 if (_lastDurability.TryGetValue(item, out previous) && current > previous)
